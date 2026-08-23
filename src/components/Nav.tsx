@@ -117,17 +117,22 @@ export default function Nav() {
         <div className="flex items-center gap-2.5">
           <ThemeToggle />
 
-          <Magnetic className="hidden min-[900px]:inline-block">
-            <a
-              href={site.resume}
-              download
-              data-cursor
-              className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-bold text-on-ink transition-opacity hover:opacity-90"
-            >
-              <Icon name="download" className="h-4 w-4" />
-              Resume
-            </a>
-          </Magnetic>
+          {/* Visibility lives on this wrapper, not on Magnetic: Magnetic sets
+              `inline-block` itself, which would fight a `hidden` passed into it
+              and leave the button on screen at every width. */}
+          <span className="hidden min-[900px]:inline-block">
+            <Magnetic>
+              <a
+                href={site.resume}
+                download
+                data-cursor
+                className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-bold text-on-ink transition-opacity hover:opacity-90"
+              >
+                <Icon name="download" className="h-4 w-4" />
+                Resume
+              </a>
+            </Magnetic>
+          </span>
 
           <button
             ref={burgerRef}
