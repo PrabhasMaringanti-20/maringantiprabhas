@@ -7,7 +7,10 @@ export const site = {
   github: 'https://github.com/PrabhasMaringanti-20',
   linkedin: 'https://www.linkedin.com/in/prabhasmaringanti/',
   resume: '/Prabhas_Maringanti_Resume.pdf',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
+  // Overridable per environment; the default is the production origin so the
+  // sitemap, canonical URL and OpenGraph tags are right even if the env var
+  // is never set on the host.
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://maringantiprabhas.vercel.app',
   tagline: 'I build things that hold up.',
   summary:
     'Full-stack engineer working across backend systems and generative AI. The interesting ' +
