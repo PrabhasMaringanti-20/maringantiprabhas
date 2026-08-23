@@ -1,26 +1,388 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Daylight — design tokens
+   Light is the default. Dark is applied when the OS asks for it (unless the
+   visitor pinned light) and whenever [data-theme="dark"] is set explicitly.
+   Every colour below is referenced through a token; nothing is hard-coded in
+   a component, so both themes always resolve as a complete set.
+   ========================================================================== */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --bg: #fbfcfe;
+  --card: #ffffff;
+  --ink: #0a0d14;
+  --ink-2: #4a5266;
+  --ink-3: #69718a;
+  --line: #e7ebf3;
+  --line-2: #d5dbe8;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --accent: #2f5bff;
+  --accent-soft: rgb(47 91 255 / 0.09);
+  --accent-ring: rgb(47 91 255 / 0.5);
+  --accent-line: rgb(47 91 255 / 0.28);
+  --accent-wash: rgb(47 91 255 / 0.045);
+
+  --aqua: #12c7b4;
+  --warm: #ff9a5b;
+  --live: #00915f;
+
+  --on-ink: #ffffff;
+  --on-accent: #ffffff;
+
+  --glow-1: rgb(47 91 255 / 0.42);
+  --glow-2: rgb(18 199 180 / 0.38);
+  --glow-3: rgb(255 154 91 / 0.36);
+  --glow-track: rgb(47 91 255 / 0.28);
+  --dot-grid: rgb(47 91 255 / 0.09);
+  --blob-opacity: 0.85;
+  --band: linear-gradient(180deg, transparent, rgb(47 91 255 / 0.055) 18%, rgb(18 199 180 / 0.06) 82%, transparent);
+  --grad-1: #2f5bff;
+  --grad-2: #0b8378;
+  --grad-3: #b8541f;
+
+  --shadow: 0 1px 2px rgb(16 24 48 / 0.04), 0 8px 24px -12px rgb(16 24 48 / 0.14);
+  --shadow-lg: 0 2px 6px rgb(16 24 48 / 0.05), 0 24px 60px -24px rgb(16 24 48 / 0.24);
+  --btn-glow: 0 8px 22px -8px rgb(47 91 255 / 0.66);
+  --mg-bg: linear-gradient(140deg, #eef2ff, #e6fbf8);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme='light']) {
+    --bg: #0a0e18;
+    --card: #131a2a;
+    --ink: #eef2fb;
+    --ink-2: #a3aec6;
+    --ink-3: #808ca8;
+    --line: #212942;
+    --line-2: #323c57;
+
+    --accent: #6c8cff;
+    --accent-soft: rgb(108 140 255 / 0.14);
+    --accent-ring: rgb(108 140 255 / 0.6);
+    --accent-line: rgb(108 140 255 / 0.36);
+    --accent-wash: rgb(108 140 255 / 0.07);
+
+    --aqua: #2ad9c6;
+    --warm: #ffae79;
+    --live: #2dd69a;
+
+    --on-ink: #0a0e18;
+    --on-accent: #0a0e18;
+
+    --glow-1: rgb(76 110 255 / 0.46);
+    --glow-2: rgb(18 199 180 / 0.3);
+    --glow-3: rgb(255 154 91 / 0.24);
+    --glow-track: rgb(108 140 255 / 0.32);
+    --dot-grid: rgb(140 170 255 / 0.1);
+    --blob-opacity: 0.9;
+    --band: linear-gradient(180deg, transparent, rgb(108 140 255 / 0.07) 18%, rgb(42 217 198 / 0.06) 82%, transparent);
+  --grad-1: #6c8cff;
+  --grad-2: #2ad9c6;
+  --grad-3: #ffae79;
+    --grad-1: #6c8cff;
+    --grad-2: #2ad9c6;
+    --grad-3: #ffae79;
+
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.62);
+    --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.45), 0 24px 60px -24px rgb(0 0 0 / 0.8);
+    --btn-glow: 0 8px 26px -8px rgb(108 140 255 / 0.6);
+    --mg-bg: linear-gradient(140deg, #1b2540, #0f2e33);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root[data-theme='dark'] {
+  --bg: #0a0e18;
+  --card: #131a2a;
+  --ink: #eef2fb;
+  --ink-2: #a3aec6;
+  --ink-3: #808ca8;
+  --line: #212942;
+  --line-2: #323c57;
+
+  --accent: #6c8cff;
+  --accent-soft: rgb(108 140 255 / 0.14);
+  --accent-ring: rgb(108 140 255 / 0.6);
+  --accent-line: rgb(108 140 255 / 0.36);
+  --accent-wash: rgb(108 140 255 / 0.07);
+
+  --aqua: #2ad9c6;
+  --warm: #ffae79;
+  --live: #2dd69a;
+
+  --on-ink: #0a0e18;
+  --on-accent: #0a0e18;
+
+  --glow-1: rgb(76 110 255 / 0.46);
+  --glow-2: rgb(18 199 180 / 0.3);
+  --glow-3: rgb(255 154 91 / 0.24);
+  --glow-track: rgb(108 140 255 / 0.32);
+  --dot-grid: rgb(140 170 255 / 0.1);
+  --blob-opacity: 0.9;
+  --band: linear-gradient(180deg, transparent, rgb(108 140 255 / 0.07) 18%, rgb(42 217 198 / 0.06) 82%, transparent);
+  --grad-1: #6c8cff;
+  --grad-2: #2ad9c6;
+  --grad-3: #ffae79;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.62);
+  --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.45), 0 24px 60px -24px rgb(0 0 0 / 0.8);
+  --btn-glow: 0 8px 26px -8px rgb(108 140 255 / 0.6);
+  --mg-bg: linear-gradient(140deg, #1b2540, #0f2e33);
+}
+
+/* Expose the runtime tokens to Tailwind utilities (bg-card, text-ink-2, …). */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-accent-wash: var(--accent-wash);
+  --color-aqua: var(--aqua);
+  --color-warm: var(--warm);
+  --color-live: var(--live);
+  --color-on-ink: var(--on-ink);
+  --color-on-accent: var(--on-accent);
+
+  --font-sans: var(--font-satoshi), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-clash), system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Consolas, monospace;
+
+  --shadow-soft: var(--shadow);
+  --shadow-tall: var(--shadow-lg);
+}
+
+/* -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* the sticky nav must not cover the heading it scrolls to */
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 17.5px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background-color 0.45s ease, color 0.45s ease;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+}
+
+/* The custom cursor replaces the system one only on real pointer devices. */
+body.has-cursor,
+body.has-cursor a,
+body.has-cursor button {
+  cursor: none;
+}
+
+/* --------------------------------- motion --------------------------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal[data-in='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The cursor ring. Sizing lives here rather than in utility classes so the
+   hover state can't be dropped by the class scanner. */
+[data-ring] {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid var(--accent-ring);
+  background-color: transparent;
+  transition: width 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.22s ease;
+}
+[data-ring][data-wide='true'] {
+  width: 64px;
+  height: 64px;
+  background-color: var(--accent-soft);
+}
+
+/* one orchestrated entrance for the hero; everything else reveals on scroll */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Skill tiles: lift on hover, and stagger in when the category changes. */
+.skill-tile {
+  animation: tile-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+.skill-tile:hover {
+  transform: translateY(-7px);
+  border-color: var(--line-2);
+  box-shadow: var(--shadow-lg) !important;
+}
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill-tile {
+    animation: none;
+  }
+  .skill-tile:hover {
+    transform: none;
+  }
+}
+
+/* A single pulse travelling the architecture connector. */
+.flow-pulse {
+  animation: flow-travel 3.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+@keyframes flow-travel {
+  0% {
+    top: -10%;
+    opacity: 0;
+  }
+  15%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-pulse {
+    display: none;
+  }
+}
+
+/* Contact destination cards lift toward the pointer. */
+.contact-card {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease;
+}
+.contact-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-line);
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-card:hover {
+    transform: none;
+  }
+}
+
+/* ------------------------------ colour accents ----------------------------- */
+
+/* The one gradient on the page, on the phrase the headline turns on. */
+.gradient-text {
+  background: linear-gradient(100deg, var(--grad-1) 6%, var(--grad-2) 58%, var(--grad-3) 104%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* A full-bleed wash behind alternating sections, so the page is not one
+   uninterrupted sheet of white. */
+.band {
+  background: var(--band);
+}
+
+/* Each credential card carries its own hue rather than four identical whites. */
+.hued {
+  position: relative;
+  overflow: hidden;
+}
+.hued::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.09;
+  background: radial-gradient(150px 90px at 15% 0%, var(--hue), transparent 70%);
+  pointer-events: none;
+}
+
+/* Skill tiles keep a trace of their brand colour at rest, not only on hover. */
+.skill-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(130px 80px at 50% 0%, var(--tile-glow), transparent 72%);
+  pointer-events: none;
+}
+.skill-tile:hover::after {
+  opacity: 0.16;
 }
