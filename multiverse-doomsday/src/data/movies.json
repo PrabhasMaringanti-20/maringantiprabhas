@@ -18,6 +18,74 @@
     ]
   },
   {
+    "id": "incredible-hulk",
+    "title": "The Incredible Hulk",
+    "releaseYear": 2008,
+    "phase": 1,
+    "type": "movie",
+    "tmdbId": 1724,
+    "runtimeMinutes": 112,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Banner's first MCU outing and the origin of the Abomination, who returns decades later. Optional, but it is the only place the early gamma story is told.",
+    "keyCharacterIds": [
+      "hulk"
+    ]
+  },
+  {
+    "id": "iron-man-2",
+    "title": "Iron Man 2",
+    "releaseYear": 2010,
+    "phase": 1,
+    "type": "movie",
+    "tmdbId": 10138,
+    "runtimeMinutes": 124,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Introduces Black Widow and War Machine and widens Stark's world into a shared universe. Light prep, but the Stark legacy is what Doom's casting plays against.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "thor-1",
+    "title": "Thor",
+    "releaseYear": 2011,
+    "phase": 1,
+    "type": "movie",
+    "tmdbId": 10195,
+    "runtimeMinutes": 115,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Establishes Asgard, the Bifrost and the brothers whose rivalry runs through the whole saga. It is where Loki's grievance begins.",
+    "keyCharacterIds": [
+      "thor",
+      "loki"
+    ]
+  },
+  {
+    "id": "first-avenger",
+    "title": "Captain America: The First Avenger",
+    "releaseYear": 2011,
+    "phase": 1,
+    "type": "movie",
+    "tmdbId": 1771,
+    "runtimeMinutes": 124,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Steve Rogers, the serum and the Tesseract — the object that starts the cosmic thread. It also sets up the friendship that defines Bucky's arc.",
+    "keyCharacterIds": [
+      "captain-america",
+      "winter-soldier"
+    ]
+  },
+  {
     "id": "the-avengers",
     "title": "The Avengers",
     "releaseYear": 2012,
@@ -39,6 +107,73 @@
     ]
   },
   {
+    "id": "iron-man-3",
+    "title": "Iron Man 3",
+    "releaseYear": 2013,
+    "phase": 2,
+    "type": "movie",
+    "tmdbId": 68721,
+    "runtimeMinutes": 130,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Stark's post-New York trauma and the first fake Mandarin, a thread Shang-Chi later picks up. Optional for Doomsday, essential for the Stark arc.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "dark-world",
+    "title": "Thor: The Dark World",
+    "releaseYear": 2013,
+    "phase": 2,
+    "type": "movie",
+    "tmdbId": 76338,
+    "runtimeMinutes": 112,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Introduces the Aether and the Convergence, the saga's first look at realities bleeding together. It is also where Loki first fakes his own ending.",
+    "keyCharacterIds": [
+      "thor",
+      "loki"
+    ]
+  },
+  {
+    "id": "winter-soldier-film",
+    "title": "Captain America: The Winter Soldier",
+    "releaseYear": 2014,
+    "phase": 2,
+    "type": "movie",
+    "tmdbId": 100402,
+    "runtimeMinutes": 136,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "HYDRA hollows out SHIELD from the inside and Bucky comes back as a weapon. The trust it destroys never fully returns to the team.",
+    "keyCharacterIds": [
+      "captain-america",
+      "winter-soldier"
+    ]
+  },
+  {
+    "id": "guardians-1",
+    "title": "Guardians of the Galaxy",
+    "releaseYear": 2014,
+    "phase": 2,
+    "type": "movie",
+    "tmdbId": 118340,
+    "runtimeMinutes": 121,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Opens the cosmic side of the MCU and introduces the Infinity Stones as objects with rules. Essential context for how big the board actually is.",
+    "keyCharacterIds": []
+  },
+  {
     "id": "age-of-ultron",
     "title": "Avengers: Age of Ultron",
     "releaseYear": 2015,
@@ -55,6 +190,24 @@
     "keyCharacterIds": [
       "scarlet-witch",
       "hawkeye"
+    ]
+  },
+  {
+    "id": "ant-man-1",
+    "title": "Ant-Man",
+    "releaseYear": 2015,
+    "phase": 2,
+    "type": "movie",
+    "tmdbId": 102899,
+    "runtimeMinutes": 117,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "Introduces Pym Particles and the Quantum Realm — the doorway that later makes the time heist possible. Small film, enormous consequences.",
+    "keyCharacterIds": [
+      "ant-man"
     ]
   },
   {
@@ -93,6 +246,39 @@
     "whyItMatters": "Your primer on the Multiverse itself: dimensions, mirror realities and the rules Doomsday is about to break. Strange's arrogance here is the same arrogance that will cost the 616 dearly.",
     "keyCharacterIds": [
       "doctor-strange"
+    ]
+  },
+  {
+    "id": "guardians-2",
+    "title": "Guardians of the Galaxy Vol. 2",
+    "releaseYear": 2017,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 283995,
+    "runtimeMinutes": 136,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Ego establishes that Celestial-scale beings walk among the living. It also cements the found-family core the cosmic tier runs on.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "homecoming",
+    "title": "Spider-Man: Homecoming",
+    "releaseYear": 2017,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 315635,
+    "runtimeMinutes": 133,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Peter's first solo outing and the mentor relationship that defines his losses. Everything No Way Home takes away, this film builds.",
+    "keyCharacterIds": [
+      "spider-man"
     ]
   },
   {
@@ -155,6 +341,44 @@
     ]
   },
   {
+    "id": "ant-man-2",
+    "title": "Ant-Man and the Wasp",
+    "releaseYear": 2018,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 363088,
+    "runtimeMinutes": 118,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "Deepens the Quantum Realm and introduces Ghost, who resurfaces on the Thunderbolts roster. The post-credits scene ties it straight to Infinity War.",
+    "keyCharacterIds": [
+      "ant-man",
+      "ghost"
+    ]
+  },
+  {
+    "id": "captain-marvel",
+    "title": "Captain Marvel",
+    "releaseYear": 2019,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 299537,
+    "runtimeMinutes": 123,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Introduces the most powerful hero on Earth's rolodex and the cosmic politics she polices. When reality starts collapsing, Carol is the first call anyone makes.",
+    "keyCharacterIds": [
+      "captain-marvel",
+      "monica-rambeau"
+    ]
+  },
+  {
     "id": "endgame",
     "title": "Avengers: Endgame",
     "releaseYear": 2019,
@@ -176,25 +400,6 @@
       "loki",
       "hulk",
       "ant-man"
-    ]
-  },
-  {
-    "id": "captain-marvel",
-    "title": "Captain Marvel",
-    "releaseYear": 2019,
-    "phase": 3,
-    "type": "movie",
-    "tmdbId": 299537,
-    "runtimeMinutes": 123,
-    "isCrucial": false,
-    "pathTags": [
-      "avengers",
-      "completionist"
-    ],
-    "whyItMatters": "Introduces the most powerful hero on Earth's rolodex and the cosmic politics she polices. When reality starts collapsing, Carol is the first call anyone makes.",
-    "keyCharacterIds": [
-      "captain-marvel",
-      "monica-rambeau"
     ]
   },
   {
@@ -270,6 +475,26 @@
     "whyItMatters": "The single most important text in the saga: it explains the Sacred Timeline, the TVA, branching and what pruning costs. Nothing about an Incursion makes sense without it.",
     "keyCharacterIds": [
       "loki"
+    ]
+  },
+  {
+    "id": "black-widow",
+    "title": "Black Widow",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 497698,
+    "runtimeMinutes": 134,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Introduces Yelena, Red Guardian and Taskmaster — three-fifths of the team now branded as Earth's Avengers. It is the Thunderbolts' real origin story.",
+    "keyCharacterIds": [
+      "yelena-belova",
+      "red-guardian",
+      "taskmaster"
     ]
   },
   {
@@ -406,6 +631,23 @@
     ]
   },
   {
+    "id": "love-and-thunder",
+    "title": "Thor: Love and Thunder",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 616037,
+    "runtimeMinutes": 119,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Gorr proves gods can be killed and leaves Thor with something to protect. It sets his state of mind heading into the next assembly.",
+    "keyCharacterIds": [
+      "thor"
+    ]
+  },
+  {
     "id": "she-hulk",
     "title": "She-Hulk: Attorney at Law",
     "releaseYear": 2022,
@@ -425,6 +667,21 @@
     ]
   },
   {
+    "id": "werewolf-by-night",
+    "title": "Werewolf by Night",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 894205,
+    "runtimeMinutes": 53,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "A one-hour special that opens the monster corner of the MCU. Short, optional, and the fastest way to meet a tier Doomsday may well need.",
+    "keyCharacterIds": []
+  },
+  {
     "id": "wakanda-forever",
     "title": "Black Panther: Wakanda Forever",
     "releaseYear": 2022,
@@ -441,6 +698,21 @@
     "keyCharacterIds": [
       "shuri"
     ]
+  },
+  {
+    "id": "holiday-special",
+    "title": "The Guardians of the Galaxy Holiday Special",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 774752,
+    "runtimeMinutes": 44,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "A 44-minute cosmic breather that sets up the Guardians' final chapter. Pure optional fun.",
+    "keyCharacterIds": []
   },
   {
     "id": "no-way-home",
@@ -551,6 +823,25 @@
     ]
   },
   {
+    "id": "what-if-s2",
+    "title": "What If...? — Season 2",
+    "releaseYear": 2023,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 91363,
+    "runtimeMinutes": 279,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "More divergences, more variants, and a clearer picture of how the Watcher's multiverse behaves. Named an essential on most 2026 prep guides.",
+    "keyCharacterIds": [
+      "doctor-strange",
+      "captain-america"
+    ]
+  },
+  {
     "id": "echo",
     "title": "Echo",
     "releaseYear": 2024,
@@ -587,6 +878,24 @@
       "deadpool",
       "wolverine",
       "professor-x"
+    ]
+  },
+  {
+    "id": "what-if-s3",
+    "title": "What If...? — Season 3",
+    "releaseYear": 2024,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 91363,
+    "runtimeMinutes": 240,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "Closes the animated multiverse anthology and pushes its variants toward a crossover of their own. Useful grounding for how variants get recruited.",
+    "keyCharacterIds": [
+      "doctor-strange"
     ]
   },
   {
@@ -669,6 +978,71 @@
     ]
   },
   {
+    "id": "ironheart",
+    "title": "Ironheart",
+    "releaseYear": 2025,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 0,
+    "runtimeMinutes": 320,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Riri Williams builds the next generation of powered armour while magic pulls at her from the other side. She is one of the young heroes inheriting the board.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "eyes-of-wakanda",
+    "title": "Eyes of Wakanda",
+    "releaseYear": 2025,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 0,
+    "runtimeMinutes": 96,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "A four-part animated anthology on Wakanda's history and its vibranium artefacts across centuries. Optional, but it deepens the one nation that can answer a global threat.",
+    "keyCharacterIds": [
+      "shuri"
+    ]
+  },
+  {
+    "id": "marvel-zombies",
+    "title": "Marvel Zombies",
+    "releaseYear": 2025,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 0,
+    "runtimeMinutes": 160,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "A What If...? spin-off that takes one branch of the multiverse to its horror conclusion. It shows what an unchecked reality actually costs.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "wonder-man",
+    "title": "Wonder Man",
+    "releaseYear": 2025,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 0,
+    "runtimeMinutes": 240,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Simon Williams' Hollywood story sits at the seam between celebrity and superheroics. He is a comics Avenger being placed on the board now.",
+    "keyCharacterIds": []
+  },
+  {
     "id": "fantastic-four-first-steps",
     "title": "The Fantastic Four: First Steps",
     "releaseYear": 2025,
@@ -690,6 +1064,62 @@
       "ben-grimm",
       "franklin-richards",
       "galactus"
+    ]
+  },
+  {
+    "id": "daredevil-born-again-s2",
+    "title": "Daredevil: Born Again — Season 2",
+    "releaseYear": 2026,
+    "phase": 6,
+    "type": "series",
+    "tmdbId": 0,
+    "runtimeMinutes": 486,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Matt Murdock's fight for New York escalates as Fisk tightens his grip on the city. It sets the ground-level stakes Doomsday will disrupt.",
+    "keyCharacterIds": [
+      "daredevil"
+    ]
+  },
+  {
+    "id": "brand-new-day",
+    "title": "Spider-Man: Brand New Day",
+    "releaseYear": 2026,
+    "phase": 6,
+    "type": "movie",
+    "tmdbId": 0,
+    "runtimeMinutes": 130,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Peter Parker's first outing after the spell, rebuilding a life nobody remembers. It is the last check-in with him before the biggest crossover since Endgame.",
+    "keyCharacterIds": [
+      "spider-man"
+    ]
+  },
+  {
+    "id": "visionquest",
+    "title": "VisionQuest",
+    "releaseYear": 2026,
+    "phase": 6,
+    "type": "series",
+    "tmdbId": 0,
+    "runtimeMinutes": 320,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "The final chapter of the WandaVision trilogy, following White Vision's search for who he was. It lands two months before Doomsday and closes the saga's synthezoid thread.",
+    "keyCharacterIds": [
+      "vision",
+      "scarlet-witch"
     ]
   },
   {

@@ -61,7 +61,7 @@ export const ROADMAP_PATHS: RoadmapPath[] = [
     label: 'Completionist',
     tagline: 'Everything, in order',
     description:
-      'The full run in release order. No shortcuts, no gaps, roughly six days of screen time.',
+      'The full run in release order. No shortcuts, no gaps, about eight and a half days of screen time.',
     accent: 'infinity',
   },
 ];

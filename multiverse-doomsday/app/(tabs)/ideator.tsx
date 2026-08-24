@@ -16,8 +16,10 @@ import {
   useFavouriteMovie,
   useGlobalReadiness,
 } from '@/hooks/useRoadmapStore';
+import { REMINDER_TIMES, useNotificationStore } from '@/hooks/useNotificationStore';
 import { hasTmdbKey } from '@/hooks/useTMDB';
 import { usePalette, useThemeStore, type ThemeMode } from '@/hooks/useTheme';
+import { countdownLine, daysToDoomsday, quoteForDay, QUOTES } from '@/services/notifications';
 import { formatHours } from '@/utils/timeCalc';
 
 const INTERESTS = [
@@ -67,6 +69,14 @@ export default function IdeatorScreen() {
   const favourite = useFavouriteMovie();
   const mode = useThemeStore((state) => state.mode);
   const setMode = useThemeStore((state) => state.setMode);
+
+  const remindersOn = useNotificationStore((state) => state.enabled);
+  const reminderHour = useNotificationStore((state) => state.hour);
+  const reminderDenied = useNotificationStore((state) => state.denied);
+  const setRemindersEnabled = useNotificationStore((state) => state.setEnabled);
+  const setReminderTime = useNotificationStore((state) => state.setTime);
+
+  const previewQuote = quoteForDay(daysToDoomsday());
 
   const shareApp = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -202,6 +212,97 @@ export default function IdeatorScreen() {
               </MotiView>
             ))}
           </View>
+        </View>
+
+        {/* Daily reminders */}
+        <View className="mt-6 px-5">
+          <SectionTitle icon="notifications-outline" label="Daily reminder" />
+
+          <View className="overflow-hidden rounded-2xl border border-line bg-surface">
+            <Pressable
+              accessibilityRole="switch"
+              accessibilityState={{ checked: remindersOn }}
+              accessibilityLabel="Daily Marvel reminder"
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setRemindersEnabled(!remindersOn);
+              }}
+              className="flex-row items-center justify-between px-4 py-3.5"
+            >
+              <View className="flex-1 pr-3">
+                <Text className="text-sm font-bold text-ink">A line a day, plus the count</Text>
+                <Text className="mt-0.5 text-2xs leading-4 text-ink-faint">
+                  {remindersOn
+                    ? `On · ${REMINDER_TIMES.find((t) => t.hour === reminderHour)?.label ?? 'daily'}`
+                    : `${QUOTES.length} lines in rotation`}
+                </Text>
+              </View>
+
+              <View
+                className={`h-6 w-11 justify-center rounded-full px-0.5 ${
+                  remindersOn ? 'bg-accent' : 'bg-surface-raised'
+                }`}
+              >
+                <View
+                  className="h-5 w-5 rounded-full bg-white"
+                  style={{ transform: [{ translateX: remindersOn ? 20 : 0 }] }}
+                />
+              </View>
+            </Pressable>
+
+            {remindersOn ? (
+              <View className="flex-row gap-2 border-t border-line px-4 py-3">
+                {REMINDER_TIMES.map((time) => {
+                  const isActive = time.hour === reminderHour;
+                  return (
+                    <Pressable
+                      key={time.label}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected: isActive }}
+                      accessibilityLabel={`Remind me at ${time.label}`}
+                      onPress={() => {
+                        Haptics.selectionAsync();
+                        setReminderTime(time.hour, time.minute);
+                      }}
+                      className={`flex-1 items-center rounded-xl border py-2 ${
+                        isActive ? 'border-accent bg-accent/10' : 'border-line'
+                      }`}
+                    >
+                      <Text
+                        className={`text-2xs font-bold ${isActive ? 'text-accent' : 'text-ink-faint'}`}
+                      >
+                        {time.label}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : null}
+
+            {/* What one looks like */}
+            <View className="border-t border-line px-4 py-3">
+              <Text className="text-[13px] font-semibold leading-5 text-ink">
+                “{previewQuote.text}”
+              </Text>
+              <Text className="mt-1 text-2xs text-ink-faint">
+                {previewQuote.character} · {previewQuote.source}
+              </Text>
+              <Text className="mt-1.5 text-2xs font-bold uppercase tracking-wider text-accent">
+                {countdownLine(daysToDoomsday())}
+              </Text>
+            </View>
+          </View>
+
+          {reminderDenied ? (
+            <Text className="mt-2 text-2xs leading-4 text-crimson">
+              Notifications are switched off for this app. Enable them in system settings, then
+              try again.
+            </Text>
+          ) : (
+            <Text className="mt-2 text-2xs leading-4 text-ink-faint">
+              Scheduled on your device — no account, no server, works offline.
+            </Text>
+          )}
         </View>
 
         {/* Theme */}

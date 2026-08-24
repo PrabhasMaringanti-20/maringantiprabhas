@@ -1,0 +1,317 @@
+[
+  {
+    "text": "I am Iron Man.",
+    "character": "Tony Stark",
+    "source": "Iron Man"
+  },
+  {
+    "text": "I can do this all day.",
+    "character": "Steve Rogers",
+    "source": "Captain America: The First Avenger"
+  },
+  {
+    "text": "I am Groot.",
+    "character": "Groot",
+    "source": "Guardians of the Galaxy"
+  },
+  {
+    "text": "We have a Hulk.",
+    "character": "Tony Stark",
+    "source": "The Avengers"
+  },
+  {
+    "text": "Puny god.",
+    "character": "Hulk",
+    "source": "The Avengers"
+  },
+  {
+    "text": "I'm always angry.",
+    "character": "Bruce Banner",
+    "source": "The Avengers"
+  },
+  {
+    "text": "That's my secret, Captain.",
+    "character": "Bruce Banner",
+    "source": "The Avengers"
+  },
+  {
+    "text": "I am burdened with glorious purpose.",
+    "character": "Loki",
+    "source": "The Avengers"
+  },
+  {
+    "text": "Dread it. Run from it. Destiny arrives all the same.",
+    "character": "Thanos",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "I am inevitable.",
+    "character": "Thanos",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "And I... am... Iron Man.",
+    "character": "Tony Stark",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "Avengers — assemble.",
+    "character": "Steve Rogers",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "On your left.",
+    "character": "Sam Wilson",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "Whatever it takes.",
+    "character": "Steve Rogers",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "I love you three thousand.",
+    "character": "Morgan Stark",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "Part of the journey is the end.",
+    "character": "Tony Stark",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "We're in the endgame now.",
+    "character": "Doctor Strange",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "Mr. Stark, I don't feel so good.",
+    "character": "Peter Parker",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "Wakanda forever!",
+    "character": "T'Challa",
+    "source": "Black Panther"
+  },
+  {
+    "text": "The strong man who has known power all his life may lose respect for that power.",
+    "character": "T'Challa",
+    "source": "Black Panther"
+  },
+  {
+    "text": "He's a friend from work!",
+    "character": "Thor",
+    "source": "Thor: Ragnarok"
+  },
+  {
+    "text": "Asgard is not a place. It's a people.",
+    "character": "Odin",
+    "source": "Thor: Ragnarok"
+  },
+  {
+    "text": "Bring me Thanos!",
+    "character": "Thor",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "With great power there must also come great responsibility.",
+    "character": "Aunt May",
+    "source": "Spider-Man: No Way Home"
+  },
+  {
+    "text": "Everybody gets one shot.",
+    "character": "Peter Parker",
+    "source": "Spider-Man: No Way Home"
+  },
+  {
+    "text": "I'm something of a scientist myself.",
+    "character": "Norman Osborn",
+    "source": "Spider-Man: No Way Home"
+  },
+  {
+    "text": "It's not about how much we lost. It's about how much we have left.",
+    "character": "Tony Stark",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "The hardest choices require the strongest wills.",
+    "character": "Thanos",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "I'm not looking for forgiveness, and I'm way past asking permission.",
+    "character": "Steve Rogers",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "The bill comes due. Always.",
+    "character": "Ancient One",
+    "source": "Doctor Strange"
+  },
+  {
+    "text": "Dormammu, I've come to bargain.",
+    "character": "Doctor Strange",
+    "source": "Doctor Strange"
+  },
+  {
+    "text": "Death is only the beginning.",
+    "character": "Ancient One",
+    "source": "Doctor Strange"
+  },
+  {
+    "text": "Reality is often disappointing.",
+    "character": "Thanos",
+    "source": "Avengers: Infinity War"
+  },
+  {
+    "text": "What is grief, if not love persevering?",
+    "character": "Vision",
+    "source": "WandaVision"
+  },
+  {
+    "text": "The Sacred Timeline is fragile.",
+    "character": "Mobius",
+    "source": "Loki"
+  },
+  {
+    "text": "For all time. Always.",
+    "character": "TVA",
+    "source": "Loki"
+  },
+  {
+    "text": "I'm not a villain. I'm just very well prepared.",
+    "character": "Loki",
+    "source": "Loki"
+  },
+  {
+    "text": "A little chaos is a small price for order.",
+    "character": "Loki",
+    "source": "Loki"
+  },
+  {
+    "text": "Higher, further, faster, baby.",
+    "character": "Carol Danvers",
+    "source": "Captain Marvel"
+  },
+  {
+    "text": "I have nothing to prove to you.",
+    "character": "Carol Danvers",
+    "source": "Captain Marvel"
+  },
+  {
+    "text": "Freedom is life's great lie.",
+    "character": "Zemo",
+    "source": "The Falcon and the Winter Soldier"
+  },
+  {
+    "text": "The world is a mess.",
+    "character": "Sam Wilson",
+    "source": "The Falcon and the Winter Soldier"
+  },
+  {
+    "text": "Maximum effort.",
+    "character": "Deadpool",
+    "source": "Deadpool"
+  },
+  {
+    "text": "I'm the Marvel Jesus.",
+    "character": "Deadpool",
+    "source": "Deadpool & Wolverine"
+  },
+  {
+    "text": "Bub, I'm the worst X-Man you ever heard of.",
+    "character": "Wolverine",
+    "source": "Deadpool & Wolverine"
+  },
+  {
+    "text": "You're a man who has everything and nothing.",
+    "character": "Charles Xavier",
+    "source": "Logan"
+  },
+  {
+    "text": "Mutation: it is the key to our evolution.",
+    "character": "Charles Xavier",
+    "source": "X-Men"
+  },
+  {
+    "text": "You are a god among insects.",
+    "character": "Magneto",
+    "source": "X-Men: The Last Stand"
+  },
+  {
+    "text": "Peace was never an option.",
+    "character": "Magneto",
+    "source": "X-Men: First Class"
+  },
+  {
+    "text": "Doom does not ask. Doom takes.",
+    "character": "Doctor Doom",
+    "source": "Comics — Fantastic Four"
+  },
+  {
+    "text": "Reed Richards is the second smartest man alive.",
+    "character": "Doctor Doom",
+    "source": "Comics — Fantastic Four"
+  },
+  {
+    "text": "There is no Victor. Only Doom.",
+    "character": "Doctor Doom",
+    "source": "Comics — Secret Wars"
+  },
+  {
+    "text": "Flame on!",
+    "character": "Johnny Storm",
+    "source": "Fantastic Four"
+  },
+  {
+    "text": "It's clobberin' time!",
+    "character": "Ben Grimm",
+    "source": "Fantastic Four"
+  },
+  {
+    "text": "Nothing is impossible. I'm Reed Richards.",
+    "character": "Reed Richards",
+    "source": "Comics — Fantastic Four"
+  },
+  {
+    "text": "The end of everything is the beginning of Doom's reign.",
+    "character": "Doctor Doom",
+    "source": "Comics — Secret Wars"
+  },
+  {
+    "text": "Galactus hungers. Worlds answer.",
+    "character": "Silver Surfer",
+    "source": "Comics — Fantastic Four"
+  },
+  {
+    "text": "Everyone fails at who they're supposed to be.",
+    "character": "Thor's mother Frigga",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "No amount of money ever bought a second of time.",
+    "character": "Tony Stark",
+    "source": "Avengers: Endgame"
+  },
+  {
+    "text": "If you're nothing without the suit, then you shouldn't have it.",
+    "character": "Tony Stark",
+    "source": "Spider-Man: Homecoming"
+  },
+  {
+    "text": "Genius, billionaire, playboy, philanthropist.",
+    "character": "Tony Stark",
+    "source": "The Avengers"
+  },
+  {
+    "text": "We never lose our demons. We only learn to live above them.",
+    "character": "Ancient One",
+    "source": "Doctor Strange"
+  },
+  {
+    "text": "Sometimes you gotta run before you can walk.",
+    "character": "Tony Stark",
+    "source": "Iron Man"
+  }
+]

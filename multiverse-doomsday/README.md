@@ -22,7 +22,7 @@ open. Created by **PRABHAS.MAN**.
 | **Roadmap** | Animated readiness dashboard (circular meter, completion counters, hours remaining), five selectable watch paths, and a vertical connected timeline with tap-to-complete nodes, haptics and a micro particle burst. |
 | **Vault** | 45-character codex with live search (name, alias, actor, power), allegiance filter chips with counts, a staggered 2-column grid and a drag-dismissable detail sheet. |
 | **Tiers** | S/A/B/C/D board with long-press drag-and-drop between tiers, tap-to-assign, star ratings and a 9:16 branded story-card export. |
-| **Ideator** | Who built it and why, your live readiness numbers, what to argue about, the theme switcher and the app's own vitals. |
+| **Ideator** | Who built it and why, your live readiness numbers, what to argue about, daily reminders, the theme switcher and the app's own vitals. |
 | **Movie detail** (modal route) | Backdrop, runtime, synopsis, a prominent "Why It Matters for Doomsday" alert box, live "Where to Stream" widget, star rating, tier assigner and key players. |
 
 ### Watch paths
@@ -30,10 +30,10 @@ open. Created by **PRABHAS.MAN**.
 | Path | Titles | For |
 | --- | --- | --- |
 | **Express** | 9 | The shortest honest route to being Doomsday-ready. |
-| **Doom & F4 Lore** | 13 | Victor Von Doom, Marvel's First Family and cosmic scale. |
+| **Doom & F4 Lore** | 19 | Victor Von Doom, Marvel's First Family and cosmic scale. |
 | **Mutants & Incursions** | 12 | The Fox legacy timeline, anchor beings and collisions. |
-| **The New Avengers** | 17 | The roster forming right now and the vacuum it fills. |
-| **Completionist** | 43 | Everything, in release order. |
+| **The New Avengers** | 25 | The roster forming right now and the vacuum it fills. |
+| **Completionist** | 68 | Everything, in release order — about 202 hours. |
 
 ---
 
@@ -103,9 +103,10 @@ multiverse-doomsday/
 │   │   ├── roadmap/            # TimelineNode, PathSelector, ReadinessCard, StreamWidget
 │   │   ├── characters/         # CharacterCard, CharacterDetailModal, FilterChips, CharacterAvatar
 │   │   └── tierlist/           # TierRow, DraggableItem, ShareCard
-│   ├── data/                   # movies.json (43), characters.json (45)
-│   ├── hooks/                  # useRoadmapStore, useCharacters, useTMDB, useTheme
-│   ├── services/               # tmdbApi.ts
+│   ├── data/                   # movies.json (68), characters.json (45), quotes.json (63)
+│   ├── hooks/                  # useRoadmapStore, useCharacters, useTMDB, useTheme,
+│   │                           # useNotificationStore
+│   ├── services/               # tmdbApi.ts, notifications.ts
 │   ├── styles/                 # nativewindInterop.ts
 │   ├── types/                  # index.ts — all domain models
 │   └── utils/                  # timeCalc.ts, imageHelper.ts, countdown.ts
@@ -179,6 +180,17 @@ ways to add real posters.
 
 `src/data/characterImages.ts` is a generated static require map, because Metro
 resolves `require` at build time and cannot take a runtime path.
+
+### Daily reminders
+
+A local notification a day: a Marvel line, its speaker, and how many days are
+left. No account, no server, no push infrastructure — `expo-notifications`
+schedules them on the device and they fire offline.
+
+Each reminder carries its own quote and its own day count, so they are
+scheduled individually across a rolling 30-day horizon rather than as one
+repeating trigger, and the queue is topped up every time the app opens.
+`src/data/quotes.json` holds 63 lines.
 
 ### The roadmap feed
 
