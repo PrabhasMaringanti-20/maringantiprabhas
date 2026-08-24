@@ -185,6 +185,55 @@ list stay on their own phone.
 
 ---
 
+## Making changes later
+
+What it costs depends entirely on **what** you changed.
+
+### JavaScript, styling, text or data — seconds, no rebuild
+
+Anything inside `app/`, `src/` or the JSON data files: a new movie, a new
+quote, a colour, a layout tweak, copy changes.
+
+```powershell
+eas update --branch preview --message "what changed"
+```
+
+Takes about a minute. Everyone with the app installed gets it the next time
+they open it — no reinstall, no download link, no build queue, and **it does
+not touch your 15 monthly builds**.
+
+### Native changes — full rebuild, same as the first time
+
+Only these need `eas build` again:
+
+- adding a library with native code (a new `expo-*` package, for example)
+- the app icon, splash, name or package id
+- Android permissions
+- an Expo SDK upgrade
+
+```powershell
+eas build --platform android --profile preview
+```
+
+Then reinstall from the new link. Roughly 40 minutes including the free queue.
+
+### Testing before you ship either one
+
+```powershell
+npx expo start
+```
+
+Press `w` for the browser. With a development build installed
+(`eas build --profile development`), `npx expo start --dev-client` shows edits
+on the phone the instant you save.
+
+### Rule of thumb
+
+If you did not install a new package and did not touch `app.json`, it is an
+`eas update` — one minute. Otherwise it is a build.
+
+---
+
 ## iPhone
 
 Apple does not allow free sideloading of a build like this. Options:

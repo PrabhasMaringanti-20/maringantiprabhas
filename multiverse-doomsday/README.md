@@ -74,6 +74,14 @@ builds a month with no card on file. Expo Go works for a quick look but is
 unreliable for notifications. Step-by-step, from installing Node to sharing the
 APK: [docs/install.md](docs/install.md).
 
+### Shipping changes
+
+JS, styling and data changes go out with `eas update --branch preview` in about
+a minute, and reach installed apps on next launch without a rebuild or a
+reinstall. Only native changes — a new native package, the icon, permissions,
+an SDK bump — need `eas build` again. The runtime version policy is
+`appVersion`, so an update can never land on a build it does not match.
+
 ### Adding real posters
 
 The app ships no movie posters. Add a TMDB key for all 43 at once, or drop
