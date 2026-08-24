@@ -26,9 +26,9 @@ module.exports = {
           DEFAULT: token('accent'),
           soft: token('accent-soft'),
         },
-        gold: {
-          DEFAULT: token('gold'),
-          soft: token('gold-soft'),
+        marvel: {
+          DEFAULT: token('marvel'),
+          soft: token('marvel-soft'),
         },
         crimson: {
           DEFAULT: token('crimson'),

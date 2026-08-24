@@ -69,8 +69,8 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
           >
             {stats.percent}%
           </Text>
-          <View className="mt-1 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5">
-            <Text className="text-xs font-black uppercase tracking-[2px] text-gold">
+          <View className="mt-1 rounded-full border border-marvel/50 bg-marvel/10 px-4 py-1.5">
+            <Text className="text-xs font-black uppercase tracking-[2px] text-marvel">
               {rank.label}
             </Text>
           </View>

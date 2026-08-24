@@ -3,11 +3,11 @@ import { Text, View } from 'react-native';
 
 import { usePalette } from '@/hooks/useTheme';
 
-export type BadgeTone = 'accent' | 'gold' | 'crimson' | 'violet' | 'muted';
+export type BadgeTone = 'accent' | 'marvel' | 'crimson' | 'violet' | 'muted';
 
 const TONE_STYLES: Record<BadgeTone, { wrap: string; text: string }> = {
   accent: { wrap: 'bg-accent/10', text: 'text-accent' },
-  gold: { wrap: 'bg-gold/10', text: 'text-gold' },
+  marvel: { wrap: 'bg-marvel/10', text: 'text-marvel' },
   crimson: { wrap: 'bg-crimson/10', text: 'text-crimson' },
   violet: { wrap: 'bg-violet/10', text: 'text-violet' },
   muted: { wrap: 'bg-surface-raised', text: 'text-ink-faint' },
@@ -26,7 +26,7 @@ export function Badge({ label, tone = 'muted', icon, compact = false }: BadgePro
   const style = TONE_STYLES[tone];
   const iconColor = {
     accent: palette.accent,
-    gold: palette.gold,
+    marvel: palette.marvel,
     crimson: palette.crimson,
     violet: palette.violet,
     muted: palette.inkFaint,

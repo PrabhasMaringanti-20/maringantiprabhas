@@ -37,7 +37,7 @@ function acronym(title: string): string {
 /** Each era gets its own tint, so a scrolled feed reads as a spectrum. */
 function eraTint(phase: number | string, palette: ReturnType<typeof usePalette>): string {
   if (typeof phase === 'string') return palette.violet;
-  if (phase <= 3) return palette.gold;
+  if (phase <= 3) return palette.marvel;
   if (phase <= 5) return palette.accent;
   return palette.crimson;
 }

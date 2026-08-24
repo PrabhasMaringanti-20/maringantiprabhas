@@ -178,7 +178,7 @@ export function DoomIntro({ onFinish, onReady }: DoomIntroProps) {
               source={AVENGERS_MARK}
               style={{ width: markSize, height: markSize * 1.13 }}
               resizeMode="contain"
-              fadeDuration={0}
+              fadeDuration={220}
             />
           </Animated.View>
 
@@ -202,7 +202,7 @@ export function DoomIntro({ onFinish, onReady }: DoomIntroProps) {
                 source={DOOM_WORDMARK}
                 style={{ width: wordWidth, height: wordWidth * 0.33 }}
                 resizeMode="contain"
-                fadeDuration={0}
+                fadeDuration={220}
               />
             </Animated.View>
           </View>
@@ -240,7 +240,7 @@ export function DoomIntro({ onFinish, onReady }: DoomIntroProps) {
             source={DOOM_CHARACTER}
             style={{ width: '100%', height: '100%' }}
             resizeMode="contain"
-            fadeDuration={0}
+            fadeDuration={220}
           />
         </Animated.View>
 

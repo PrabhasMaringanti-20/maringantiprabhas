@@ -4,24 +4,16 @@ import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { usePalette } from '@/hooks/useTheme';
-import { enableClassName } from '@/styles/nativewindInterop';
 
-const AnimatedPressable = enableClassName(Animated.createAnimatedComponent(Pressable));
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-const VARIANTS: Record<ButtonVariant, { text: string }> = {
-  primary: { text: 'text-white' },
-  secondary: { text: 'text-ink' },
-  ghost: { text: 'text-ink-soft' },
-  danger: { text: 'text-crimson' },
-};
-
-const SIZES: Record<ButtonSize, { wrap: string; text: string; icon: number }> = {
-  sm: { wrap: 'px-3 py-2', text: 'text-xs', icon: 14 },
-  md: { wrap: 'px-4 py-3', text: 'text-sm', icon: 16 },
-  lg: { wrap: 'px-5 py-4', text: 'text-base', icon: 18 },
+const SIZES: Record<ButtonSize, { px: number; py: number; font: number; icon: number }> = {
+  sm: { px: 12, py: 8, font: 12, icon: 14 },
+  md: { px: 16, py: 12, font: 14, icon: 16 },
+  lg: { px: 20, py: 16, font: 16, icon: 18 },
 };
 
 interface CustomButtonProps {
@@ -38,6 +30,11 @@ interface CustomButtonProps {
   haptic?: Haptics.ImpactFeedbackStyle | null;
 }
 
+/**
+ * This component is deliberately styled through `style` alone — no `className`.
+ * The class-driven version rendered as white text on nothing in light mode on
+ * device, so every colour here is resolved in JS where it cannot be dropped.
+ */
 export function CustomButton({
   label,
   onPress,
@@ -52,25 +49,31 @@ export function CustomButton({
 }: CustomButtonProps) {
   const palette = usePalette();
   const scale = useSharedValue(1);
-  const style = VARIANTS[variant];
-
-  const iconColor = {
-    primary: '#FFFFFF',
-    secondary: palette.ink,
-    ghost: palette.inkSoft,
-    danger: palette.crimson,
-  }[variant];
-
-  // Colours go through `style` rather than `className`: the animated Pressable
-  // did not pick up the class-based background on device, which rendered
-  // primary buttons as white text on nothing.
-  const surface = {
-    primary: { backgroundColor: palette.accent, borderColor: palette.accent },
-    secondary: { backgroundColor: palette.raised, borderColor: palette.line },
-    ghost: { backgroundColor: 'transparent', borderColor: palette.line },
-    danger: { backgroundColor: `${palette.crimson}1A`, borderColor: `${palette.crimson}66` },
-  }[variant];
   const sizing = SIZES[size];
+
+  const skin = {
+    primary: {
+      background: palette.accent,
+      border: palette.accent,
+      // The accent is a mid-dark green in both themes, so white always reads.
+      content: '#FFFFFF',
+    },
+    secondary: {
+      background: palette.raised,
+      border: palette.line,
+      content: palette.ink,
+    },
+    ghost: {
+      background: 'transparent',
+      border: palette.line,
+      content: palette.inkSoft,
+    },
+    danger: {
+      background: `${palette.crimson}1A`,
+      border: `${palette.crimson}66`,
+      content: palette.crimson,
+    },
+  }[variant];
 
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
@@ -81,12 +84,13 @@ export function CustomButton({
   };
 
   const iconNode = icon ? (
-    <Ionicons name={icon} size={sizing.icon} color={iconColor} />
+    <Ionicons name={icon} size={sizing.icon} color={skin.content} />
   ) : null;
 
   return (
     <AnimatedPressable
       accessibilityRole="button"
+      accessibilityLabel={label}
       accessibilityState={{ disabled: disabled || loading }}
       onPressIn={() => {
         scale.value = withSpring(0.96, { damping: 18, stiffness: 320 });
@@ -95,18 +99,43 @@ export function CustomButton({
         scale.value = withSpring(1, { damping: 15, stiffness: 260 });
       }}
       onPress={handlePress}
-      style={[animatedStyle, surface, { borderWidth: 1, borderRadius: 16 }]}
-      className={`flex-row items-center justify-center ${sizing.wrap} ${
-        fullWidth ? 'w-full' : ''
-      } ${disabled ? 'opacity-40' : ''}`}
+      style={[
+        animatedStyle,
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: sizing.px,
+          paddingVertical: sizing.py,
+          borderWidth: 1,
+          borderRadius: 16,
+          backgroundColor: skin.background,
+          borderColor: skin.border,
+          opacity: disabled ? 0.4 : 1,
+          ...(fullWidth ? { width: '100%' as const } : null),
+        },
+      ]}
     >
       {loading ? (
-        <ActivityIndicator size="small" color={iconColor} />
+        <ActivityIndicator size="small" color={skin.content} />
       ) : (
-        <View className="flex-row items-center">
-          {iconPosition === 'left' && iconNode ? <View className="mr-2">{iconNode}</View> : null}
-          <Text className={`font-bold tracking-wide ${style.text} ${sizing.text}`}>{label}</Text>
-          {iconPosition === 'right' && iconNode ? <View className="ml-2">{iconNode}</View> : null}
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {iconPosition === 'left' && iconNode ? (
+            <View style={{ marginRight: 8 }}>{iconNode}</View>
+          ) : null}
+          <Text
+            style={{
+              fontSize: sizing.font,
+              fontWeight: '700',
+              letterSpacing: 0.4,
+              color: skin.content,
+            }}
+          >
+            {label}
+          </Text>
+          {iconPosition === 'right' && iconNode ? (
+            <View style={{ marginLeft: 8 }}>{iconNode}</View>
+          ) : null}
         </View>
       )}
     </AnimatedPressable>

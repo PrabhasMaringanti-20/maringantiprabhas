@@ -42,7 +42,7 @@ export function StarRating({ value, onChange, size = 26, readOnly = false }: Sta
               <Ionicons
                 name={filled ? 'star' : 'star-outline'}
                 size={size}
-                color={filled ? palette.gold : palette.inkFaint}
+                color={filled ? palette.marvel : palette.inkFaint}
               />
             </MotiView>
           </Pressable>

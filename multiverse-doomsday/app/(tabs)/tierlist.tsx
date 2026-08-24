@@ -24,11 +24,13 @@ import { TIERS, type MovieItem, type Tier } from '@/types';
 
 import { CountdownBar } from '@/components/common/CountdownBar';
 import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
+import { useTabBarHeight } from '@/utils/layout';
 import { usePalette } from '@/hooks/useTheme';
 
 export default function TierStudioScreen() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
+  const tabBarHeight = useTabBarHeight();
   const { tiers, unranked } = useTierBoard();
   const stats = useGlobalReadiness();
   const favourite = useFavouriteMovie();
@@ -95,7 +97,7 @@ export default function TierStudioScreen() {
       <ScrollView
         contentContainerStyle={{
           paddingTop: insets.top + 8,
-          paddingBottom: insets.bottom + 40,
+          paddingBottom: tabBarHeight + 24,
         }}
         showsVerticalScrollIndicator={false}
       >
@@ -198,7 +200,7 @@ export default function TierStudioScreen() {
         <View className="mt-7 px-5">
           <View className="rounded-2xl border border-line bg-surface p-4">
             <View className="flex-row items-center">
-              <Ionicons name="share-social-outline" size={16} color={palette.gold} />
+              <Ionicons name="share-social-outline" size={16} color={palette.marvel} />
               <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
                 Social export studio
               </Text>

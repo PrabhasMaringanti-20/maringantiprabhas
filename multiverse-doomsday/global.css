@@ -22,10 +22,10 @@
 
     --color-accent: 5 150 105;
     --color-accent-soft: 209 250 229;
-    --color-gold: 180 83 9;
-    --color-gold-soft: 254 243 199;
-    --color-crimson: 220 38 38;
-    --color-crimson-soft: 254 226 226;
+    --color-marvel: 193 18 31;
+    --color-marvel-soft: 255 228 230;
+    --color-crimson: 190 18 60;
+    --color-crimson-soft: 255 228 236;
     --color-violet: 109 40 217;
     --color-violet-soft: 237 233 254;
 
@@ -33,7 +33,7 @@
   }
 
   .dark:root {
-    /* Dark — deep cosmic void, neon doom green, infinity gold */
+    /* Dark — deep cosmic void, neon doom green, Marvel red */
     --color-canvas: 11 8 19;
     --color-surface: 22 17 36;
     --color-raised: 33 26 53;
@@ -44,10 +44,10 @@
 
     --color-accent: 16 185 129;
     --color-accent-soft: 6 78 59;
-    --color-gold: 245 158 11;
-    --color-gold-soft: 69 39 8;
-    --color-crimson: 239 68 68;
-    --color-crimson-soft: 69 10 10;
+    --color-marvel: 236 29 36;
+    --color-marvel-soft: 76 10 14;
+    --color-crimson: 244 63 94;
+    --color-crimson-soft: 76 5 25;
     --color-violet: 167 139 250;
     --color-violet-soft: 46 16 101;
 

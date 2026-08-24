@@ -5,7 +5,7 @@ import { Asset } from 'expo-asset';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -13,52 +13,33 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DoomIntro, INTRO_ASSETS, INTRO_BACKDROP } from '@/components/common/DoomIntro';
 import { usePalette, useThemeStore } from '@/hooks/useTheme';
 
-// Hold the native splash until the cold open has its artwork decoded, so the
-// handoff is one continuous image rather than a flash of empty screen.
+// The cold open paints its own backdrop, so the native splash only needs to
+// cover the very first frame. It is dismissed unconditionally on mount below —
+// nothing about the intro is allowed to gate it, because a stalled asset decode
+// once left people staring at the splash forever.
 SplashScreen.preventAutoHideAsync().catch(() => {});
+SplashScreen.setOptions({ fade: true, duration: 260 });
 
 export default function RootLayout() {
   const palette = usePalette();
   useThemeStore((state) => state.mode);
 
-  const [assetsReady, setAssetsReady] = useState(false);
   const [introDone, setIntroDone] = useState(false);
 
+  // Warm the intro artwork in the background. The intro renders immediately
+  // either way; the images simply fade in as they decode.
   useEffect(() => {
-    let cancelled = false;
-
-    Asset.loadAsync(INTRO_ASSETS)
-      .catch(() => {
-        // A decode failure must not strand the user on the splash screen.
-      })
-      .finally(() => {
-        if (!cancelled) setAssetsReady(true);
-      });
-
-    return () => {
-      cancelled = true;
-    };
+    Asset.loadAsync(INTRO_ASSETS).catch(() => {});
   }, []);
 
-  const handleIntroLayout = useCallback(() => {
-    SplashScreen.hideAsync().catch(() => {});
-  }, []);
-
-  // Belt and braces: never leave someone stranded on the native splash if the
-  // intro's first layout pass does not fire.
+  // One unconditional hand-off from the native splash to the cold open.
   useEffect(() => {
-    if (!assetsReady) return;
-    const timer = setTimeout(() => SplashScreen.hideAsync().catch(() => {}), 900);
+    const timer = setTimeout(() => SplashScreen.hideAsync().catch(() => {}), 80);
     return () => clearTimeout(timer);
-  }, [assetsReady]);
-
-  // Until the intro can paint, keep the screen on its exact background colour.
-  if (!assetsReady) {
-    return <View style={{ flex: 1, backgroundColor: INTRO_BACKDROP }} />;
-  }
+  }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1, backgroundColor: palette.canvas }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: INTRO_BACKDROP }}>
       <SafeAreaProvider>
         <StatusBar style={introDone ? (palette.isDark ? 'light' : 'dark') : 'light'} />
         <View style={{ flex: 1, backgroundColor: palette.canvas }}>
@@ -81,9 +62,7 @@ export default function RootLayout() {
             />
           </Stack>
 
-          {!introDone ? (
-            <DoomIntro onFinish={() => setIntroDone(true)} onReady={handleIntroLayout} />
-          ) : null}
+          {!introDone ? <DoomIntro onFinish={() => setIntroDone(true)} /> : null}
         </View>
       </SafeAreaProvider>
     </GestureHandlerRootView>

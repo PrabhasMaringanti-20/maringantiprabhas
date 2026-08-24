@@ -140,7 +140,7 @@ export function DoomAtmosphere({
   const { width, height } = useWindowDimensions();
 
   const accent = forceDark ? '#10B981' : palette.accent;
-  const gold = forceDark ? '#F59E0B' : palette.gold;
+  const marvel = forceDark ? '#EC1D24' : palette.marvel;
   const smoke: [string, string] = forceDark ? ['#10B981', '#064E3B'] : palette.smoke;
 
   const particles = useMemo(
@@ -153,9 +153,9 @@ export function DoomAtmosphere({
         duration: 10_000 + ((index * 1700) % 10_000),
         drift: 10 + ((index * 7) % 30),
         travel: height * 0.8,
-        color: index % 5 === 0 ? gold : accent,
+        color: index % 5 === 0 ? marvel : accent,
       })),
-    [particleCount, width, height, accent, gold],
+    [particleCount, width, height, accent, marvel],
   );
 
   const blooms = useMemo(

@@ -21,6 +21,15 @@ interface CharacterDetailModalProps {
   onShowAppearances: (character: MarvelCharacter) => void;
 }
 
+const PORTRAIT_W = 104;
+
+/**
+ * Character sheet.
+ *
+ * Colours come from the JS palette via `style`, never from Tailwind classes:
+ * this renders inside a native `Modal`, which is its own window, and the
+ * class-driven version came out transparent with overlapping text on device.
+ */
 export function CharacterDetailModal({
   character,
   visible,
@@ -36,71 +45,126 @@ export function CharacterDetailModal({
   const gradient = AFFILIATION_GRADIENT[character.affiliation];
   const hasPortrait = Boolean(characterPortrait(character.id));
 
+  const label = {
+    fontSize: 10,
+    fontWeight: '700' as const,
+    letterSpacing: 1.6,
+    textTransform: 'uppercase' as const,
+    color: palette.inkFaint,
+  };
+
+  const factBox = {
+    flex: 1,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: palette.line,
+    backgroundColor: palette.surface,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  };
+
   return (
     <BottomSheet visible={visible} onClose={onClose}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 32 }}
+        contentContainerStyle={{ paddingBottom: 36 }}
       >
-        {/* Portrait header */}
+        {/* Header */}
         <LinearGradient
-          colors={[`${gradient[0]}${palette.isDark ? '55' : '22'}`, palette.surface]}
+          colors={[`${gradient[0]}${palette.isDark ? '55' : '1F'}`, palette.surface]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={{ paddingHorizontal: 20, paddingTop: 12, paddingBottom: 20 }}
+          style={{ paddingHorizontal: 20, paddingTop: 14, paddingBottom: 20 }}
         >
-          <View className="flex-row items-center">
-            {/* A comic portrait is 2:3, so show it at full height rather than
-                cropping the face into a square. */}
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
             <View
-              className="rounded-2xl p-[3px]"
-              style={{ borderWidth: 2, borderColor: `${accent}88`, borderRadius: 20 }}
+              style={{
+                borderWidth: 2,
+                borderColor: `${accent}99`,
+                borderRadius: 20,
+                padding: 3,
+              }}
             >
               <CharacterAvatar
                 character={character}
-                size={96}
-                rounded={16}
+                size={PORTRAIT_W}
+                rounded={15}
                 showFullPortrait={hasPortrait}
               />
             </View>
 
-            <View className="ml-4 flex-1">
-              <Text className="text-2xl font-black leading-7 text-ink">{character.alias}</Text>
-              <Text className="mt-0.5 text-sm font-semibold text-ink-soft">{character.name}</Text>
+            <View style={{ flex: 1, marginLeft: 16, paddingTop: 2 }}>
+              <Text
+                style={{ fontSize: 23, lineHeight: 27, fontWeight: '900', color: palette.ink }}
+              >
+                {character.alias}
+              </Text>
+              <Text
+                style={{
+                  marginTop: 3,
+                  fontSize: 13,
+                  fontWeight: '600',
+                  color: palette.inkSoft,
+                }}
+              >
+                {character.name}
+              </Text>
 
-              <View className="mt-2 flex-row items-center">
+              <View
+                style={{
+                  marginTop: 10,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
                 <View
-                  className="mr-1.5 h-2 w-2 rounded-full"
-                  style={{ backgroundColor: STATUS_COLOR[character.status] }}
+                  style={{
+                    height: 7,
+                    width: 7,
+                    borderRadius: 999,
+                    marginRight: 6,
+                    backgroundColor: STATUS_COLOR[character.status],
+                  }}
                 />
-                <Text
-                  className="text-2xs font-bold uppercase tracking-[2px]"
-                  style={{ color: STATUS_COLOR[character.status] }}
-                >
+                <Text style={{ ...label, color: STATUS_COLOR[character.status] }}>
                   {character.status}
                 </Text>
-                <Text className="mx-2 text-2xs text-ink-faint">•</Text>
-                <Text className="flex-1 text-2xs font-bold uppercase tracking-wider" style={{ color: accent }}>
-                  {character.affiliation}
-                </Text>
+              </View>
+
+              <View
+                style={{
+                  marginTop: 8,
+                  alignSelf: 'flex-start',
+                  borderRadius: 999,
+                  borderWidth: 1,
+                  borderColor: `${accent}66`,
+                  backgroundColor: `${accent}1A`,
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                }}
+              >
+                <Text style={{ ...label, color: accent }}>{character.affiliation}</Text>
               </View>
             </View>
           </View>
 
-          <View className="mt-4 flex-row gap-2">
-            <View className="flex-1 rounded-xl border border-line bg-surface/80 px-3 py-2">
-              <Text className="text-2xs font-bold uppercase tracking-wider text-ink-faint">
-                Portrayed by
-              </Text>
-              <Text className="mt-0.5 text-sm font-bold text-ink" numberOfLines={2}>
+          <View style={{ marginTop: 18, flexDirection: 'row', gap: 10 }}>
+            <View style={factBox}>
+              <Text style={label}>Portrayed by</Text>
+              <Text
+                numberOfLines={2}
+                style={{ marginTop: 3, fontSize: 13, fontWeight: '700', color: palette.ink }}
+              >
                 {character.actor}
               </Text>
             </View>
-            <View className="flex-1 rounded-xl border border-line bg-surface/80 px-3 py-2">
-              <Text className="text-2xs font-bold uppercase tracking-wider text-ink-faint">
-                MCU debut
-              </Text>
-              <Text className="mt-0.5 text-sm font-bold text-ink" numberOfLines={2}>
+            <View style={factBox}>
+              <Text style={label}>MCU debut</Text>
+              <Text
+                numberOfLines={2}
+                style={{ marginTop: 3, fontSize: 13, fontWeight: '700', color: palette.ink }}
+              >
                 {character.mcuDebut}
               </Text>
             </View>
@@ -108,53 +172,77 @@ export function CharacterDetailModal({
         </LinearGradient>
 
         {/* Comic origins vs MCU role */}
-        <View className="px-5 pt-5">
-          <View className="flex-row items-center">
+        <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Ionicons name="book-outline" size={15} color={accent} />
-            <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
+            <Text style={{ ...label, marginLeft: 8, color: palette.ink, letterSpacing: 2 }}>
               Comic origins vs MCU role
             </Text>
           </View>
 
-          <View className="mt-3 rounded-2xl border border-line bg-surface-raised p-4">
+          <View
+            style={{
+              marginTop: 12,
+              borderRadius: 18,
+              borderWidth: 1,
+              borderColor: palette.line,
+              backgroundColor: palette.raised,
+              padding: 16,
+            }}
+          >
             {character.comicBio.map((line, index) => (
-              <View key={index} className={`flex-row ${index > 0 ? 'mt-3' : ''}`}>
-                <View
-                  className="mr-3 mt-[7px] h-1.5 w-1.5 rounded-full"
-                  style={{ backgroundColor: accent }}
-                />
-                <Text className="flex-1 text-[13px] leading-5 text-ink-soft">{line}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/* Powers */}
-        <View className="px-5 pt-5">
-          <View className="flex-row items-center">
-            <Ionicons name="flash-outline" size={15} color={palette.gold} />
-            <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
-              Key powers & abilities
-            </Text>
-          </View>
-
-          <View className="mt-3 flex-row flex-wrap gap-2">
-            {character.powers.map((power) => (
               <View
-                key={power}
-                className="rounded-full border px-3 py-1.5"
-                style={{ borderColor: `${accent}55`, backgroundColor: `${accent}12` }}
+                key={index}
+                style={{ flexDirection: 'row', marginTop: index > 0 ? 12 : 0 }}
               >
-                <Text className="text-xs font-semibold" style={{ color: accent }}>
-                  {power}
+                <View
+                  style={{
+                    marginRight: 12,
+                    marginTop: 7,
+                    height: 6,
+                    width: 6,
+                    borderRadius: 999,
+                    backgroundColor: accent,
+                  }}
+                />
+                <Text style={{ flex: 1, fontSize: 13, lineHeight: 20, color: palette.inkSoft }}>
+                  {line}
                 </Text>
               </View>
             ))}
           </View>
         </View>
 
+        {/* Powers */}
+        <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Ionicons name="flash-outline" size={15} color={palette.marvel} />
+            <Text style={{ ...label, marginLeft: 8, color: palette.ink, letterSpacing: 2 }}>
+              Key powers & abilities
+            </Text>
+          </View>
+
+          <View style={{ marginTop: 12, flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            {character.powers.map((power) => (
+              <View
+                key={power}
+                style={{
+                  borderRadius: 999,
+                  borderWidth: 1,
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  borderColor: `${accent}55`,
+                  backgroundColor: `${accent}14`,
+                }}
+              >
+                <Text style={{ fontSize: 12, fontWeight: '600', color: accent }}>{power}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
         {/* Key appearances */}
-        <View className="px-5 pt-6">
+        <View style={{ paddingHorizontal: 20, paddingTop: 24 }}>
           <CustomButton
             label={`Key appearances (${appearances.length})`}
             icon="git-branch-outline"
@@ -164,7 +252,14 @@ export function CharacterDetailModal({
             disabled={appearances.length === 0}
             onPress={() => onShowAppearances(character)}
           />
-          <Text className="mt-2 text-center text-2xs text-ink-faint">
+          <Text
+            style={{
+              marginTop: 10,
+              textAlign: 'center',
+              fontSize: 11,
+              color: palette.inkFaint,
+            }}
+          >
             Filters the Roadmap to every entry this character appears in.
           </Text>
         </View>

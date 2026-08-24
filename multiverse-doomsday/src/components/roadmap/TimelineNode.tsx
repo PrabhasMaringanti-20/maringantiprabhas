@@ -88,7 +88,7 @@ export function TimelineNode({ movie, status, index, onPress, onToggleWatched }:
   };
 
   const stripeColor =
-    status === 'completed' ? palette.gold : status === 'next' ? palette.accent : palette.line;
+    status === 'completed' ? palette.marvel : status === 'next' ? palette.accent : palette.line;
 
   const stepLabel = (index + 1).toString().padStart(2, '0');
 
@@ -188,8 +188,8 @@ export function TimelineNode({ movie, status, index, onPress, onToggleWatched }:
                     style={{
                       width: 34,
                       height: 34,
-                      borderColor: movie.isWatched ? palette.gold : stripeColor,
-                      backgroundColor: movie.isWatched ? palette.gold : 'transparent',
+                      borderColor: movie.isWatched ? palette.marvel : stripeColor,
+                      backgroundColor: movie.isWatched ? palette.marvel : 'transparent',
                     }}
                   >
                     <Animated.View style={checkStyle}>

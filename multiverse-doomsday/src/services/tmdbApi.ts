@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NativeModules } from 'react-native';
 
 import type {
   StreamingAvailability,
@@ -12,7 +13,39 @@ const CACHE_PREFIX = 'tmdb-cache:';
 const CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 7; // one week — posters do not move
 
 export const TMDB_API_KEY = process.env.EXPO_PUBLIC_TMDB_API_KEY ?? '';
-export const TMDB_REGION = process.env.EXPO_PUBLIC_TMDB_REGION ?? 'US';
+/**
+ * Streaming availability is per-country, so the region has to match where the
+ * user actually is. An explicit env var wins; otherwise we read it off the
+ * device locale ("en_IN" -> "IN") and only fall back to US when there is
+ * nothing to go on. Hardcoding US was telling Indian users that films sitting
+ * on their own Hotstar subscription were unavailable.
+ */
+function detectRegion(): string {
+  const configured = process.env.EXPO_PUBLIC_TMDB_REGION;
+  if (configured && /^[A-Za-z]{2}$/.test(configured)) return configured.toUpperCase();
+
+  const candidates: (string | undefined)[] = [];
+  try {
+    const settings = NativeModules?.SettingsManager?.settings;
+    candidates.push(settings?.AppleLocale, settings?.AppleLanguages?.[0]);
+    candidates.push(NativeModules?.I18nManager?.localeIdentifier);
+  } catch {
+    // Not every platform exposes these — the Intl probe below still applies.
+  }
+  try {
+    candidates.push(Intl.DateTimeFormat().resolvedOptions().locale);
+  } catch {
+    // Hermes without full-icu; fall through to the default.
+  }
+
+  for (const locale of candidates) {
+    const match = locale?.match(/[-_]([A-Za-z]{2})\b/);
+    if (match) return match[1].toUpperCase();
+  }
+  return 'US';
+}
+
+export const TMDB_REGION = detectRegion();
 
 /** The whole app degrades gracefully when this is false. */
 export const hasTmdbKey = TMDB_API_KEY.length > 0;
@@ -49,6 +82,62 @@ async function writeCache<T>(key: string, data: T): Promise<void> {
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * Request gate
+ *
+ * The roadmap mounts every title at once, which fired well over a hundred
+ * simultaneous fetches. Android drops connections under a burst that size and
+ * TMDB rate-limits it, so most posters came back empty and never recovered.
+ * Requests now queue behind a small window and retry once on a network error.
+ * ------------------------------------------------------------------ */
+
+const MAX_CONCURRENT = 6;
+let active = 0;
+const queue: (() => void)[] = [];
+
+function acquire(): Promise<void> {
+  if (active < MAX_CONCURRENT) {
+    active += 1;
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => queue.push(resolve));
+}
+
+function release(): void {
+  const next = queue.shift();
+  if (next) {
+    next();
+    return;
+  }
+  active -= 1;
+}
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** One attempt. Returns the parsed body, or null when the response is unusable. */
+async function attempt<T>(url: string): Promise<{ ok: true; data: T } | { ok: false; retry: boolean }> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12_000);
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { accept: 'application/json' },
+    });
+    if (response.status === 429 || response.status >= 500) {
+      return { ok: false, retry: true };
+    }
+    if (!response.ok) {
+      // 401/404 are answers, not failures — retrying cannot change them.
+      return { ok: false, retry: false };
+    }
+    return { ok: true, data: (await response.json()) as T };
+  } catch {
+    return { ok: false, retry: true }; // timeout or dropped connection
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function request<T>(path: string, params: Record<string, string> = {}): Promise<T | null> {
   if (!hasTmdbKey) return null;
 
@@ -62,21 +151,21 @@ async function request<T>(path: string, params: Record<string, string> = {}): Pr
   if (pending) return pending;
 
   const promise = (async (): Promise<T | null> => {
+    const url = `${BASE_URL}${path}?${query}`;
+    await acquire();
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 12_000);
-      const response = await fetch(`${BASE_URL}${path}?${query}`, {
-        signal: controller.signal,
-        headers: { accept: 'application/json' },
-      });
-      clearTimeout(timeout);
-      if (!response.ok) return null;
-      const json = (await response.json()) as T;
-      await writeCache(cacheKey, json);
-      return json;
-    } catch {
+      for (let tries = 0; tries < 3; tries += 1) {
+        const result = await attempt<T>(url);
+        if (result.ok) {
+          await writeCache(cacheKey, result.data);
+          return result.data;
+        }
+        if (!result.retry) return null;
+        if (tries < 2) await sleep(400 * (tries + 1));
+      }
       return null; // offline-first: callers fall back to bundled data
     } finally {
+      release();
       inflight.delete(cacheKey);
     }
   })();

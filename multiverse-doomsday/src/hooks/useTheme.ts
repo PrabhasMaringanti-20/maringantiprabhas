@@ -53,7 +53,7 @@ export interface Palette {
   inkFaint: string;
   accent: string;
   accentSoft: string;
-  gold: string;
+  marvel: string;
   crimson: string;
   violet: string;
   /** Two-stop wash behind cards and headers. */
@@ -72,8 +72,8 @@ const LIGHT: Palette = {
   inkFaint: '#8C899C',
   accent: '#059669',
   accentSoft: '#D1FAE5',
-  gold: '#B45309',
-  crimson: '#DC2626',
+  marvel: '#C1121F',
+  crimson: '#BE123C',
   violet: '#6D28D9',
   gradient: ['#FFFFFF', '#F2F2F7'],
   smoke: ['#059669', '#0EA5E9'],
@@ -89,8 +89,8 @@ const DARK: Palette = {
   inkFaint: '#5C5378',
   accent: '#10B981',
   accentSoft: '#064E3B',
-  gold: '#F59E0B',
-  crimson: '#EF4444',
+  marvel: '#EC1D24',
+  crimson: '#F43F5E',
   violet: '#A78BFA',
   gradient: ['#211A35', '#161124'],
   smoke: ['#10B981', '#064E3B'],

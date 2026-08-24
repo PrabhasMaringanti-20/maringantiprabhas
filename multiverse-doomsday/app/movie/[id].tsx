@@ -24,6 +24,12 @@ import { TIERS, type Tier } from '@/types';
 
 import { usePalette } from '@/hooks/useTheme';
 
+/** Full-bleed when there is real artwork; a shallow colour wash when there is not. */
+const HERO_WITH_ART = 268;
+const HERO_NO_ART = 172;
+/** How far the poster overlaps the base of the hero. */
+const POSTER_LIFT = 64;
+
 export default function MovieDetailScreen() {
   const palette = usePalette();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -54,6 +60,9 @@ export default function MovieDetailScreen() {
 
   const cast = charactersForMovie(movie).slice(0, 10);
   const backdrop = backdropUrl(details?.backdropPath, 'w780');
+  // Without a backdrop the hero still needs a colour — borrow the era tint.
+  const heroTint = typeof movie.phase === 'number' && movie.phase >= 6 ? palette.crimson : palette.marvel;
+  const heroHeight = backdrop ? HERO_WITH_ART : HERO_NO_ART;
 
   const handleToggle = () => {
     const nowWatched = toggleWatched(movie.id);
@@ -71,8 +80,8 @@ export default function MovieDetailScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
       >
-        {/* Backdrop */}
-        <View className={`w-full bg-surface-raised ${backdrop ? 'h-56' : 'h-36'}`}>
+        {/* Hero — backdrop, scrim, and the poster riding the fold */}
+        <View style={{ width: '100%', height: heroHeight }}>
           {backdrop ? (
             <Image
               source={{ uri: backdrop }}
@@ -82,11 +91,24 @@ export default function MovieDetailScreen() {
               cachePolicy="disk"
             />
           ) : (
-            <LinearGradient colors={[palette.raised, palette.canvas]} style={{ flex: 1 }} />
+            <LinearGradient
+              colors={[`${heroTint}${palette.isDark ? '55' : '26'}`, palette.canvas]}
+              start={{ x: 0.2, y: 0 }}
+              end={{ x: 0.8, y: 1 }}
+              style={{ flex: 1 }}
+            />
           )}
+
+          {/* Two scrims: one to seat the artwork into the page, one to keep
+              the title legible over whatever the backdrop happens to be. */}
           <LinearGradient
-            colors={['transparent', palette.canvas]}
-            style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 120 }}
+            colors={['transparent', `${palette.canvas}CC`, palette.canvas]}
+            locations={[0, 0.62, 1]}
+            style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: heroHeight * 0.8 }}
+          />
+          <LinearGradient
+            colors={[`${palette.canvas}E6`, 'transparent']}
+            style={{ position: 'absolute', left: 0, right: 0, top: 0, height: insets.top + 64 }}
           />
 
           <Pressable
@@ -94,39 +116,97 @@ export default function MovieDetailScreen() {
             accessibilityLabel="Close"
             onPress={router.back}
             hitSlop={12}
-            style={{ top: insets.top + 8 }}
-            className="absolute left-4 h-9 w-9 items-center justify-center rounded-full border border-line bg-canvas/80"
+            style={{
+              position: 'absolute',
+              left: 16,
+              top: insets.top + 8,
+              height: 38,
+              width: 38,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 999,
+              borderWidth: 1,
+              borderColor: palette.line,
+              backgroundColor: `${palette.canvas}D9`,
+            }}
           >
             <Ionicons name="chevron-down" size={20} color={palette.ink} />
           </Pressable>
         </View>
 
-        {/* Title block */}
-        <View className="-mt-12 flex-row px-5">
-          <Poster movie={movie} width={92} hideCaption />
+        {/* Title block, lifted over the base of the hero */}
+        <View style={{ marginTop: -POSTER_LIFT, flexDirection: 'row', paddingHorizontal: 20 }}>
+          <View
+            style={{
+              borderRadius: 14,
+              overflow: 'hidden',
+              borderWidth: 1,
+              borderColor: palette.line,
+              backgroundColor: palette.raised,
+              // Lifts the poster off the backdrop rather than letting it float.
+              shadowColor: '#000',
+              shadowOpacity: 0.45,
+              shadowRadius: 16,
+              shadowOffset: { width: 0, height: 8 },
+              elevation: 8,
+            }}
+          >
+            <Poster movie={movie} width={104} hideCaption />
+          </View>
 
-          <View className="ml-4 flex-1 justify-end pb-1">
-            <Text className="text-2xl font-black leading-7 text-ink">{movie.title}</Text>
-            <View className="mt-1.5 flex-row flex-wrap items-center gap-1.5">
-              <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-soft">
-                {movie.releaseYear}
-              </Text>
-              <Text className="text-2xs text-ink-faint">•</Text>
-              <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-soft">
-                {typeof movie.phase === 'number' ? `Phase ${movie.phase}` : movie.phase}
-              </Text>
-              <Text className="text-2xs text-ink-faint">•</Text>
-              <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-soft">
-                {formatRuntime(details?.runtimeMinutes ?? movie.runtimeMinutes)}
-              </Text>
+          <View style={{ flex: 1, marginLeft: 16, justifyContent: 'flex-end', paddingBottom: 4 }}>
+            <Text style={{ fontSize: 25, lineHeight: 29, fontWeight: '900', color: palette.ink }}>
+              {movie.title}
+            </Text>
+
+            <View
+              style={{
+                marginTop: 7,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              {[
+                String(movie.releaseYear),
+                typeof movie.phase === 'number' ? `Phase ${movie.phase}` : movie.phase,
+                formatRuntime(details?.runtimeMinutes ?? movie.runtimeMinutes),
+              ].map((meta, index) => (
+                <View key={meta} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {index > 0 ? (
+                    <View
+                      style={{
+                        height: 3,
+                        width: 3,
+                        borderRadius: 999,
+                        marginRight: 6,
+                        backgroundColor: palette.inkFaint,
+                      }}
+                    />
+                  ) : null}
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      fontWeight: '600',
+                      letterSpacing: 0.8,
+                      textTransform: 'uppercase',
+                      color: palette.inkSoft,
+                    }}
+                  >
+                    {meta}
+                  </Text>
+                </View>
+              ))}
             </View>
-            <View className="mt-2 flex-row flex-wrap gap-1.5">
+
+            <View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
               {movie.isCrucial ? <Badge label="Essential" tone="accent" compact /> : null}
               {movie.type === 'series' ? <Badge label="Series" tone="violet" compact /> : null}
               {details?.voteAverage ? (
                 <Badge
                   label={`TMDB ${details.voteAverage.toFixed(1)}`}
-                  tone="gold"
+                  tone="marvel"
                   icon="star"
                   compact
                 />
@@ -264,6 +344,9 @@ export default function MovieDetailScreen() {
                 </View>
               ))}
             </ScrollView>
+          </View>
+        ) : null}
+      </ScrollView>
 
       {/* Opaque strip so scrolled content never runs under the status bar */}
       <View
@@ -277,9 +360,6 @@ export default function MovieDetailScreen() {
           backgroundColor: palette.canvas,
         }}
       />
-          </View>
-        ) : null}
-      </ScrollView>
     </View>
   );
 }

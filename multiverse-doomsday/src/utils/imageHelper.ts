@@ -24,18 +24,18 @@ export function profileUrl(path: string | null | undefined): string | null {
 /** Two-stop gradient used by the generated emblem avatar, keyed by allegiance. */
 export const AFFILIATION_GRADIENT: Record<Affiliation, [string, string]> = {
   'Fantastic Four': ['#1D4ED8', '#0EA5E9'],
-  Avengers: ['#B45309', '#F59E0B'],
+  Avengers: ['#7F1D1D', '#EC1D24'],
   'Doom Allegiance': ['#065F46', '#10B981'],
-  'X-Men / Mutants': ['#7C2D12', '#EF4444'],
+  'X-Men / Mutants': ['#7C2D12', '#FB923C'],
   Thunderbolts: ['#4C1D95', '#8B5CF6'],
   Cosmic: ['#5B21B6', '#EC4899'],
 };
 
 export const AFFILIATION_ACCENT: Record<Affiliation, string> = {
   'Fantastic Four': '#38BDF8',
-  Avengers: '#F59E0B',
+  Avengers: '#EC1D24',
   'Doom Allegiance': '#10B981',
-  'X-Men / Mutants': '#EF4444',
+  'X-Men / Mutants': '#FB923C',
   Thunderbolts: '#A78BFA',
   Cosmic: '#F472B6',
 };

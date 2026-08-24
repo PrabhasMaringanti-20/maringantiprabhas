@@ -14,6 +14,7 @@ import type { MarvelCharacter } from '@/types';
 
 import { CountdownBar } from '@/components/common/CountdownBar';
 import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
+import { useTabBarHeight } from '@/utils/layout';
 import { usePalette } from '@/hooks/useTheme';
 
 export default function CharactersScreen() {
@@ -25,6 +26,7 @@ export default function CharactersScreen() {
   const palette = usePalette();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const tabBarHeight = useTabBarHeight();
   const { query, setQuery, filter, setFilter, characters, counts, total } = useCharacters();
   const setCharacterFilter = useRoadmapStore((state) => state.setCharacterFilter);
 
@@ -53,7 +55,7 @@ export default function CharactersScreen() {
         columnWrapperStyle={{ gap: 12, paddingHorizontal: 20 }}
         contentContainerStyle={{
           paddingTop: insets.top + 8,
-          paddingBottom: insets.bottom + 32,
+          paddingBottom: tabBarHeight + 24,
           gap: 12,
         }}
         showsVerticalScrollIndicator={false}

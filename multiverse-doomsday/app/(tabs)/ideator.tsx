@@ -22,6 +22,7 @@ import { hasTmdbKey } from '@/hooks/useTMDB';
 import { usePalette, useThemeStore, type ThemeMode } from '@/hooks/useTheme';
 import { countdownLine, daysToDoomsday, quoteForDay, QUOTES } from '@/services/notifications';
 import { formatHours } from '@/utils/timeCalc';
+import { useTabBarHeight } from '@/utils/layout';
 
 const PROFILE_PHOTO = require('../../assets/images/prabhas.jpg');
 
@@ -68,6 +69,7 @@ function Stat({ value, label }: { value: string; label: string }) {
 export default function IdeatorScreen() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
+  const tabBarHeight = useTabBarHeight();
   const stats = useGlobalReadiness();
   const favourite = useFavouriteMovie();
   const mode = useThemeStore((state) => state.mode);
@@ -102,7 +104,7 @@ export default function IdeatorScreen() {
       <ScrollView
         contentContainerStyle={{
           paddingTop: insets.top + 8,
-          paddingBottom: insets.bottom + 40,
+          paddingBottom: tabBarHeight + 24,
         }}
         showsVerticalScrollIndicator={false}
       >
@@ -168,7 +170,7 @@ export default function IdeatorScreen() {
 
                 <View className="mt-5 flex-row flex-wrap justify-center gap-1.5">
                   <Badge label="Theories" tone="accent" icon="bulb-outline" compact />
-                  <Badge label="Rumours" tone="gold" icon="ear-outline" compact />
+                  <Badge label="Rumours" tone="marvel" icon="ear-outline" compact />
                   <Badge label="Comic lore" tone="violet" icon="book-outline" compact />
                 </View>
               </View>

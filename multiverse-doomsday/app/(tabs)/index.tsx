@@ -20,12 +20,14 @@ import { CHARACTER_CATALOGUE, usePathMovies, useRoadmapStore } from '@/hooks/use
 import { computeReadiness } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
 
+import { useTabBarHeight } from '@/utils/layout';
 import { usePalette } from '@/hooks/useTheme';
 
 export default function RoadmapScreen() {
   const palette = usePalette();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const tabBarHeight = useTabBarHeight();
 
   const movies = usePathMovies();
   const toggleWatched = useRoadmapStore((state) => state.toggleWatched);
@@ -77,7 +79,7 @@ export default function RoadmapScreen() {
         keyExtractor={(movie) => movie.id}
         contentContainerStyle={{
           paddingTop: insets.top + 8,
-          paddingBottom: insets.bottom + 32,
+          paddingBottom: tabBarHeight + 24,
         }}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
