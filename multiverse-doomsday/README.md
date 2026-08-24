@@ -66,6 +66,13 @@ Without a key nothing errors: posters fall back to typographic cards, portraits
 fall back to generated allegiance emblems, and the stream widget explains how to
 switch it on.
 
+### Installing it on a phone
+
+`eas build --platform android --profile preview` produces an installable APK
+with a public download link — no Play Store, no developer fee. Expo Go works
+for a quick look but is unreliable for notifications. Full instructions:
+[docs/install.md](docs/install.md).
+
 ### Adding real posters
 
 The app ships no movie posters. Add a TMDB key for all 43 at once, or drop
