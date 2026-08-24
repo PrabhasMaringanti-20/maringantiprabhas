@@ -19,15 +19,15 @@ interface CountdownBarProps {
 
 function Segment({ value, label }: { value: string; label: string }) {
   return (
-    <View className="items-center">
-      <Text className="text-lg font-black tabular-nums text-ink">{value}</Text>
-      <Text className="text-2xs font-bold uppercase tracking-widest text-ink-faint">{label}</Text>
+    <View className="flex-row items-baseline">
+      <Text className="text-base font-bold tabular-nums text-ink">{value}</Text>
+      <Text className="ml-0.5 text-2xs font-semibold text-ink-faint">{label}</Text>
     </View>
   );
 }
 
-function Colon() {
-  return <Text className="px-1 pb-3 text-base font-black text-ink-faint">:</Text>;
+function Gap() {
+  return <View className="w-3" />;
 }
 
 /** Live countdown to Avengers: Doomsday, ticking once a second. */
@@ -55,31 +55,29 @@ export function CountdownBar({ compact = false }: CountdownBarProps) {
     <View className="overflow-hidden rounded-2xl border border-line bg-surface px-4 py-3">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center">
-          <Animated.View
-            className="mr-2 h-1.5 w-1.5 rounded-full bg-accent"
-            style={dotStyle}
-          />
-          <Text className="text-2xs font-bold uppercase tracking-[2px] text-ink-soft">
-            {time.released ? 'Doomsday has landed' : 'Doomsday countdown'}
+          <Animated.View className="mr-2 h-1.5 w-1.5 rounded-full bg-accent" style={dotStyle} />
+          <Text className="text-2xs font-semibold uppercase tracking-[2px] text-ink-faint">
+            {time.released ? 'Doomsday has landed' : 'Doomsday in'}
           </Text>
         </View>
-        {!compact && (
-          <View className="flex-row items-center">
-            <Ionicons name="calendar-outline" size={11} color={palette.inkFaint} />
-            <Text className="ml-1 text-2xs font-semibold text-ink-faint">{releaseDateLabel()}</Text>
-          </View>
-        )}
+
+        <View className="flex-row items-baseline">
+          <Segment value={time.days.toString()} label="d" />
+          <Gap />
+          <Segment value={pad(time.hours)} label="h" />
+          <Gap />
+          <Segment value={pad(time.minutes)} label="m" />
+          <Gap />
+          <Segment value={pad(time.seconds)} label="s" />
+        </View>
       </View>
 
-      <View className="mt-2 flex-row items-end">
-        <Segment value={time.days.toString()} label="days" />
-        <Colon />
-        <Segment value={pad(time.hours)} label="hrs" />
-        <Colon />
-        <Segment value={pad(time.minutes)} label="min" />
-        <Colon />
-        <Segment value={pad(time.seconds)} label="sec" />
-      </View>
+      {!compact ? (
+        <View className="mt-1.5 flex-row items-center">
+          <Ionicons name="calendar-outline" size={11} color={palette.inkFaint} />
+          <Text className="ml-1.5 text-2xs font-medium text-ink-faint">{releaseDateLabel()}</Text>
+        </View>
+      ) : null}
     </View>
   );
 }

@@ -11,7 +11,7 @@ Two themes: a minimal light mode for daylight, and **Doom mode** — smoky green
 atmosphere with drifting embers, a live countdown to release, and a DOOM cold
 open. Created by **PRABHAS.MAN**.
 
-![Cold open](docs/screenshots/00-intro.png)
+![Roadmap](docs/screenshots/01-roadmap-dark.png)
 
 ---
 
@@ -132,6 +132,19 @@ live next to the store, so screens never reach into raw state.
 - a 12-second abort timeout,
 - `null` on every failure path, so the UI degrades instead of throwing.
 
+### Restraint rules
+
+The interface leans on hierarchy rather than colour:
+
+- **One accent.** Green marks the current selection and the next thing to
+  watch. Nothing else competes — the five watch paths share a single accent
+  instead of one hue each.
+- **Type carries the structure.** 27px black titles, 11px tracked uppercase
+  section labels, 13px body. Weight and spacing do the work that borders and
+  chips used to.
+- **Hairlines, not outlines.** One-pixel borders, badges tinted rather than
+  outlined, and no glow on anything that is not deliberately glowing.
+
 ### Design tokens and theming
 
 `global.css` declares one set of semantic tokens twice — once for light, once
@@ -222,15 +235,15 @@ plays the DOOM cold open once per launch and signs off with the creator credit.
 
 **Doom mode** — green smoke, drifting embers, neon wordmark.
 
-| Cold open | Timeline | Vault | Character |
-| --- | --- | --- | --- |
-| ![](docs/screenshots/00-intro.png) | ![](docs/screenshots/01-timeline-dark.png) | ![](docs/screenshots/02-vault-dark.png) | ![](docs/screenshots/04-character-dark.png) |
+| Roadmap | Timeline | Vault |
+| --- | --- | --- |
+| ![](docs/screenshots/01-roadmap-dark.png) | ![](docs/screenshots/02-timeline-dark.png) | ![](docs/screenshots/03-vault-dark.png) |
 
 **Light mode** — minimal, professional, built for daylight reading.
 
-| Timeline | Vault |
-| --- | --- |
-| ![](docs/screenshots/07-timeline-light.png) | ![](docs/screenshots/06-vault-light.png) |
+| Roadmap | Timeline | Tiers |
+| --- | --- | --- |
+| ![](docs/screenshots/04-roadmap-light.png) | ![](docs/screenshots/05-timeline-light.png) | ![](docs/screenshots/06-tiers-light.png) |
 
 Captured from the running app at 390×844 @3x, with no TMDB key configured —
 all artwork here is the bundled comic set.

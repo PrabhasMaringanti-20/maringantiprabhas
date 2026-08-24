@@ -56,10 +56,10 @@ export default function CharactersScreen() {
         ListHeaderComponent={
           <View className="pb-3">
             <View className="px-5">
-              <Text className="text-2xs font-bold uppercase tracking-[3px] text-accent">
+              <Text className="text-2xs font-semibold uppercase tracking-[3px] text-ink-faint">
                 Multiverse Vault
               </Text>
-              <Text className="mt-1 text-[32px] font-black leading-9 tracking-tight text-ink">
+              <Text className="mt-1.5 text-[27px] font-black leading-8 tracking-tight text-ink">
                 Character Codex
               </Text>
               <Text className="mt-1 text-xs text-ink-soft">

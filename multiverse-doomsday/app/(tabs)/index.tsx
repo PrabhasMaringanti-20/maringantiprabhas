@@ -86,10 +86,10 @@ export default function RoadmapScreen() {
         ListHeaderComponent={
           <View>
             <View className="px-5 pb-4">
-              <Text className="text-2xs font-bold uppercase tracking-[3px] text-accent">
+              <Text className="text-2xs font-semibold uppercase tracking-[3px] text-ink-faint">
                 Multiverse Roadmap
               </Text>
-              <Text className="mt-1 text-[32px] font-black leading-9 tracking-tight text-ink">
+              <Text className="mt-1.5 text-[27px] font-black leading-8 tracking-tight text-ink">
                 Guide to Doomsday
               </Text>
             </View>
@@ -133,8 +133,8 @@ export default function RoadmapScreen() {
               </View>
             ) : null}
 
-            <View className="mb-2 mt-6 flex-row items-center justify-between px-5">
-              <Text className="text-xs font-bold uppercase tracking-[2px] text-ink">
+            <View className="mb-3 mt-7 flex-row items-center justify-between px-5">
+              <Text className="text-2xs font-semibold uppercase tracking-[2px] text-ink-faint">
                 Timeline
               </Text>
               <Badge

@@ -115,9 +115,6 @@ export function Poster({
 
           <Text className="mt-1 text-2xs font-bold text-ink-faint">{movie.releaseYear}</Text>
         </View>
-
-        {/* Era bar along the foot of the card */}
-        <View style={{ height: 3, backgroundColor: tint }} />
       </LinearGradient>
     </View>
   );

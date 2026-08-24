@@ -94,8 +94,10 @@ export default function IdeatorScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View className="px-5 pb-4">
-          <Text className="text-2xs font-bold uppercase tracking-[3px] text-accent">Ideator</Text>
-          <Text className="mt-1 text-[32px] font-black leading-9 tracking-tight text-ink">
+          <Text className="text-2xs font-semibold uppercase tracking-[3px] text-ink-faint">
+            Ideator
+          </Text>
+          <Text className="mt-1.5 text-[27px] font-black leading-8 tracking-tight text-ink">
             The one behind it
           </Text>
         </View>

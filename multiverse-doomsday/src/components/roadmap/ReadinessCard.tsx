@@ -1,25 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   Easing,
-  runOnJS,
   useAnimatedProps,
-  useAnimatedReaction,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import Svg, { Circle, Defs, LinearGradient as SvgGradient, Stop } from 'react-native-svg';
+import Svg, { Circle } from 'react-native-svg';
 
-import { Badge } from '@/components/common/Badge';
 import { usePalette } from '@/hooks/useTheme';
 import { eveningsRemaining, formatHours, readinessRank } from '@/utils/timeCalc';
 import type { ReadinessStats } from '@/types';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const SIZE = 132;
-const STROKE = 11;
+const SIZE = 104;
+const STROKE = 6;
 const RADIUS = (SIZE - STROKE) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
@@ -28,17 +24,62 @@ interface ReadinessCardProps {
   pathLabel: string;
 }
 
-/** Header dashboard: animated ring, completion counters and remaining watch time. */
+/**
+ * Counts up to `target` on the JS thread.
+ *
+ * Reanimated can drive a Text's `text` prop through animatedProps, but that
+ * path discards the element's own colour — so the readable option is a plain
+ * Text fed by a short rAF loop that only runs when the number changes.
+ */
+function useCountUp(target: number, duration = 1000): number {
+  const [value, setValue] = useState(target);
+  const frame = useRef<number | null>(null);
+
+  useEffect(() => {
+    const from = 0;
+    const start = Date.now();
+
+    const tick = () => {
+      const elapsed = Date.now() - start;
+      const t = Math.min(1, elapsed / duration);
+      // Matches the ring's ease-out cubic.
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(from + (target - from) * eased));
+      if (t < 1) frame.current = requestAnimationFrame(tick);
+    };
+
+    frame.current = requestAnimationFrame(tick);
+    return () => {
+      if (frame.current !== null) cancelAnimationFrame(frame.current);
+    };
+  }, [target, duration]);
+
+  return value;
+}
+
+function Stat({ value, label, last = false }: { value: string; label: string; last?: boolean }) {
+  return (
+    <View className={`flex-1 px-3 ${last ? '' : 'border-r border-line'}`}>
+      <Text className="text-[15px] font-bold tabular-nums text-ink" numberOfLines={1}>
+        {value}
+      </Text>
+      <Text className="mt-0.5 text-2xs font-semibold uppercase tracking-wider text-ink-faint">
+        {label}
+      </Text>
+    </View>
+  );
+}
+
+/** Readiness dashboard: one ring, one rank, three numbers. */
 export function ReadinessCard({ stats, pathLabel }: ReadinessCardProps) {
   const palette = usePalette();
   const progress = useSharedValue(0);
-  const [displayPercent, setDisplayPercent] = useState(0);
   const rank = readinessRank(stats.percent);
   const evenings = eveningsRemaining(stats.minutesRemaining);
 
   useEffect(() => {
     progress.value = withTiming(stats.percent / 100, {
-      duration: 1100,
+      duration: 1000,
       easing: Easing.out(Easing.cubic),
     });
   }, [stats.percent, progress]);
@@ -47,42 +88,19 @@ export function ReadinessCard({ stats, pathLabel }: ReadinessCardProps) {
     strokeDashoffset: CIRCUMFERENCE * (1 - progress.value),
   }));
 
-  // The counter climbs with the ring instead of snapping to the final value.
-  useAnimatedReaction(
-    () => Math.round(progress.value * 100),
-    (value, previous) => {
-      if (value !== previous) runOnJS(setDisplayPercent)(value);
-    },
-    [],
-  );
+  // The counter climbs alongside the ring rather than snapping to its value.
+  const displayPercent = useCountUp(stats.percent);
 
   return (
-    <LinearGradient
-      colors={palette.gradient}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={{
-        borderRadius: 24,
-        overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: palette.line,
-      }}
-    >
+    <View className="overflow-hidden rounded-2xl border border-line bg-surface">
       <View className="flex-row items-center p-5">
         <View style={{ width: SIZE, height: SIZE }} className="items-center justify-center">
           <Svg width={SIZE} height={SIZE}>
-            <Defs>
-              <SvgGradient id="readinessRing" x1="0" y1="0" x2="1" y2="1">
-                <Stop offset="0" stopColor={palette.accent} />
-                <Stop offset="0.6" stopColor={palette.accent} stopOpacity="0.75" />
-                <Stop offset="1" stopColor={palette.gold} />
-              </SvgGradient>
-            </Defs>
             <Circle
               cx={SIZE / 2}
               cy={SIZE / 2}
               r={RADIUS}
-              stroke={palette.raised}
+              stroke={palette.line}
               strokeWidth={STROKE}
               fill="none"
             />
@@ -90,7 +108,7 @@ export function ReadinessCard({ stats, pathLabel }: ReadinessCardProps) {
               cx={SIZE / 2}
               cy={SIZE / 2}
               r={RADIUS}
-              stroke="url(#readinessRing)"
+              stroke={palette.accent}
               strokeWidth={STROKE}
               strokeLinecap="round"
               fill="none"
@@ -101,45 +119,30 @@ export function ReadinessCard({ stats, pathLabel }: ReadinessCardProps) {
           </Svg>
 
           <View className="absolute items-center justify-center">
-            <Text className="text-3xl font-black text-ink">{`${displayPercent}%`}</Text>
-            <Text className="text-2xs font-bold uppercase tracking-[2px] text-accent">Ready</Text>
+            <Text className="text-[28px] font-black tracking-tight tabular-nums text-ink">
+              {displayPercent}%
+            </Text>
           </View>
         </View>
 
         <View className="ml-5 flex-1">
-          <Text className="text-2xs font-bold uppercase tracking-[2px] text-ink-soft">
-            Doomsday Readiness
+          <Text className="text-2xs font-semibold uppercase tracking-[2px] text-ink-faint">
+            {pathLabel}
           </Text>
-          <Text className="mt-1 text-xl font-black leading-6 text-ink">{rank.label}</Text>
-          <Text className="mt-1 text-xs leading-4 text-ink-soft">{rank.blurb}</Text>
-
-          <View className="mt-3 flex-row flex-wrap gap-1.5">
-            <Badge
-              label={`${stats.watched} of ${stats.total} done`}
-              tone="gold"
-              icon="checkmark-done"
-              compact
-            />
-            <Badge
-              label={`${formatHours(stats.minutesRemaining)} left`}
-              tone="accent"
-              icon="time-outline"
-              compact
-            />
-          </View>
+          <Text className="mt-1.5 text-lg font-bold leading-6 text-ink">{rank.label}</Text>
+          <Text className="mt-1 text-[13px] leading-5 text-ink-soft">
+            {stats.minutesRemaining === 0
+              ? 'Path complete.'
+              : `About ${evenings} evening${evenings === 1 ? '' : 's'} to go.`}
+          </Text>
         </View>
       </View>
 
-      <View className="flex-row items-center justify-between border-t border-line/70 px-5 py-3">
-        <Text className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
-          {pathLabel}
-        </Text>
-        <Text className="text-[11px] font-semibold text-ink-soft">
-          {stats.minutesRemaining === 0
-            ? 'Path complete — go rewatch something'
-            : `≈ ${evenings} evening${evenings === 1 ? '' : 's'} at 2 hrs a night`}
-        </Text>
+      <View className="flex-row border-t border-line py-3">
+        <Stat value={`${stats.watched}/${stats.total}`} label="Logged" />
+        <Stat value={formatHours(stats.minutesRemaining)} label="Left" />
+        <Stat value={formatHours(stats.minutesWatched)} label="Watched" last />
       </View>
-    </LinearGradient>
+    </View>
   );
 }

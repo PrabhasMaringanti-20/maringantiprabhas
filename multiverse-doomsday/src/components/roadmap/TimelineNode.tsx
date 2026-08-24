@@ -13,7 +13,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { Badge } from '@/components/common/Badge';
 import { Confetti } from '@/components/common/Confetti';
 import { Poster } from '@/components/common/Poster';
 import { usePalette } from '@/hooks/useTheme';
@@ -119,33 +118,30 @@ export function TimelineNode({ movie, status, index, onPress, onToggleWatched }:
             {/* Status stripe — the whole progress language, in three pixels */}
             <View style={{ width: 3, backgroundColor: stripeColor }} />
 
-            <View className="flex-1 p-3.5">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-[11px] font-black tracking-wide text-ink-faint">
-                  {stepLabel}
-                </Text>
-                <View className="flex-row items-center gap-1.5">
-                  {movie.type === 'series' ? <Badge label="Series" tone="violet" compact /> : null}
-                  {movie.tier ? <Badge label={`Tier ${movie.tier}`} tone="crimson" compact /> : null}
-                  {movie.isCrucial ? <Badge label="Crucial" tone="accent" compact /> : null}
-                </View>
-              </View>
-
-              <View className="mt-2.5 flex-row">
-                <Poster movie={movie} width={54} rounded="rounded-xl" hideCaption />
+            <View className="flex-1 p-4">
+              <View className="flex-row">
+                <Poster movie={movie} width={50} rounded="rounded-lg" hideCaption />
 
                 <View className="ml-3 flex-1 justify-center">
-                  <Text
-                    className={`text-[15px] font-bold leading-5 ${
-                      movie.isWatched ? 'text-ink-soft' : 'text-ink'
-                    }`}
-                    numberOfLines={2}
-                  >
-                    {movie.title}
-                  </Text>
-                  <Text className="mt-1 text-2xs font-semibold uppercase tracking-wider text-ink-faint">
+                  <View className="flex-row items-baseline">
+                    <Text className="mr-2 text-2xs font-bold tabular-nums text-ink-faint">
+                      {stepLabel}
+                    </Text>
+                    <Text
+                      className={`flex-1 text-[15px] font-bold leading-5 ${
+                        movie.isWatched ? 'text-ink-soft' : 'text-ink'
+                      }`}
+                      numberOfLines={2}
+                    >
+                      {movie.title}
+                    </Text>
+                  </View>
+
+                  <Text className="mt-1 text-2xs font-medium text-ink-faint">
                     {movie.releaseYear} · {typeof movie.phase === 'number' ? `Phase ${movie.phase}` : movie.phase} ·{' '}
                     {formatRuntime(movie.runtimeMinutes)}
+                    {movie.type === 'series' ? ' · Series' : ''}
+                    {movie.tier ? ` · Tier ${movie.tier}` : ''}
                   </Text>
                 </View>
 
@@ -193,17 +189,14 @@ export function TimelineNode({ movie, status, index, onPress, onToggleWatched }:
                 </View>
               </View>
 
-              <Text className="mt-2.5 text-xs leading-[18px] text-ink-soft" numberOfLines={2}>
+              <Text className="mt-3 text-[13px] leading-5 text-ink-soft" numberOfLines={2}>
                 {movie.whyItMatters}
               </Text>
 
               {status === 'next' ? (
-                <View className="mt-2.5 flex-row items-center">
-                  <Ionicons name="play" size={10} color={palette.accent} />
-                  <Text className="ml-1.5 text-2xs font-black uppercase tracking-[2px] text-accent">
-                    Start here
-                  </Text>
-                </View>
+                <Text className="mt-3 text-2xs font-bold uppercase tracking-[2px] text-accent">
+                  Start here
+                </Text>
               ) : null}
             </View>
           </View>

@@ -6,11 +6,11 @@ import { usePalette } from '@/hooks/useTheme';
 export type BadgeTone = 'accent' | 'gold' | 'crimson' | 'violet' | 'muted';
 
 const TONE_STYLES: Record<BadgeTone, { wrap: string; text: string }> = {
-  accent: { wrap: 'bg-accent/10 border-accent/30', text: 'text-accent' },
-  gold: { wrap: 'bg-gold/10 border-gold/30', text: 'text-gold' },
-  crimson: { wrap: 'bg-crimson/10 border-crimson/30', text: 'text-crimson' },
-  violet: { wrap: 'bg-violet/10 border-violet/30', text: 'text-violet' },
-  muted: { wrap: 'bg-surface-raised border-line', text: 'text-ink-faint' },
+  accent: { wrap: 'bg-accent/10', text: 'text-accent' },
+  gold: { wrap: 'bg-gold/10', text: 'text-gold' },
+  crimson: { wrap: 'bg-crimson/10', text: 'text-crimson' },
+  violet: { wrap: 'bg-violet/10', text: 'text-violet' },
+  muted: { wrap: 'bg-surface-raised', text: 'text-ink-faint' },
 };
 
 interface BadgeProps {
@@ -33,7 +33,7 @@ export function Badge({ label, tone = 'muted', icon, compact = false }: BadgePro
   }[tone];
   return (
     <View
-      className={`flex-row items-center rounded-full border ${style.wrap} ${
+      className={`flex-row items-center rounded-full ${style.wrap} ${
         compact ? 'px-2 py-0.5' : 'px-2.5 py-1'
       }`}
     >
@@ -41,7 +41,7 @@ export function Badge({ label, tone = 'muted', icon, compact = false }: BadgePro
         <Ionicons name={icon} size={compact ? 10 : 12} color={iconColor} style={{ marginRight: 4 }} />
       ) : null}
       <Text
-        className={`${style.text} font-semibold uppercase tracking-wider ${
+        className={`${style.text} font-bold uppercase tracking-wider ${
           compact ? 'text-2xs' : 'text-[11px]'
         }`}
         numberOfLines={1}
