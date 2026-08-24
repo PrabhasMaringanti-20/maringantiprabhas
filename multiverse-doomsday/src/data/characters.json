@@ -1,0 +1,1220 @@
+[
+  {
+    "id": "doctor-doom",
+    "name": "Victor Von Doom",
+    "alias": "Doctor Doom",
+    "actor": "Robert Downey Jr.",
+    "affiliation": "Doom Allegiance",
+    "status": "Incoming",
+    "mcuDebut": "Avengers: Doomsday (2026)",
+    "comicBio": [
+      "Latverian monarch, sorcerer and scientist — the rare Marvel villain who is a head of state first and a supervillain second.",
+      "His obsession begins with Reed Richards: a lab accident he blames on Reed scars his face and defines a lifetime of rivalry.",
+      "In Secret Wars (1984) he steals the Beyonder's power; in Jonathan Hickman's 2015 Secret Wars he becomes God Emperor Doom, stitching dead universes into Battleworld and ruling it as a god.",
+      "That Battleworld conceit — surviving fragments of collapsed realities fused into one patchwork world — is the comic spine Doomsday is built on."
+    ],
+    "powers": [
+      "Master of sorcery",
+      "Genius-level intellect",
+      "Powered battle armour",
+      "Time platform",
+      "Absolute rule of Latveria"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps",
+      "iron-man",
+      "multiverse-of-madness"
+    ]
+  },
+  {
+    "id": "reed-richards",
+    "name": "Reed Richards",
+    "alias": "Mister Fantastic",
+    "actor": "Pedro Pascal",
+    "affiliation": "Fantastic Four",
+    "status": "Incoming",
+    "mcuDebut": "The Fantastic Four: First Steps (2025)",
+    "comicBio": [
+      "The smartest man in his universe, transformed by cosmic rays on an unsanctioned space flight he talked his friends into taking.",
+      "Founder of the Illuminati in the comics — the secret council that meets whenever a threat is too big to admit publicly.",
+      "In Hickman's run it is Reed who first detects Incursions and builds the machines meant to stop two Earths from colliding.",
+      "His failure to save every universe is what hands the endgame to Doom."
+    ],
+    "powers": [
+      "Total body elasticity",
+      "Supergenius intellect",
+      "Multiversal engineering",
+      "Strategic foresight"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps"
+    ]
+  },
+  {
+    "id": "sue-storm",
+    "name": "Susan Storm",
+    "alias": "Invisible Woman",
+    "actor": "Vanessa Kirby",
+    "affiliation": "Fantastic Four",
+    "status": "Incoming",
+    "mcuDebut": "The Fantastic Four: First Steps (2025)",
+    "comicBio": [
+      "The team's most powerful member and its emotional centre — the one who holds the family together when Reed disappears into a problem.",
+      "Her force fields scale from a bullet screen to a shield that can hold back a Celestial-tier assault.",
+      "In Secret Wars lore she is the moral counterweight to both Reed's calculation and Doom's tyranny.",
+      "As Franklin's mother she is directly tied to the most dangerous power in the multiverse."
+    ],
+    "powers": [
+      "Invisibility",
+      "Psionic force fields",
+      "Field manipulation",
+      "Tactical leadership"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps"
+    ]
+  },
+  {
+    "id": "johnny-storm",
+    "name": "Johnny Storm",
+    "alias": "Human Torch",
+    "actor": "Joseph Quinn",
+    "affiliation": "Fantastic Four",
+    "status": "Incoming",
+    "mcuDebut": "The Fantastic Four: First Steps (2025)",
+    "comicBio": [
+      "The hot-headed youngest of the four, able to ignite his entire body and fly at supersonic speeds.",
+      "His rivalry-turned-friendship with Ben Grimm is the longest-running double act in Marvel comics.",
+      "He has repeatedly wielded the Power Cosmic on loan, most famously when standing in for the Silver Surfer.",
+      "In cosmic arcs he is the F4 member most likely to end up on the wrong side of a Galactus negotiation."
+    ],
+    "powers": [
+      "Pyrokinesis",
+      "Plasma immersion",
+      "Supersonic flight",
+      "Nova burst"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps"
+    ]
+  },
+  {
+    "id": "ben-grimm",
+    "name": "Benjamin Grimm",
+    "alias": "The Thing",
+    "actor": "Ebon Moss-Bachrach",
+    "affiliation": "Fantastic Four",
+    "status": "Incoming",
+    "mcuDebut": "The Fantastic Four: First Steps (2025)",
+    "comicBio": [
+      "Test pilot and Reed's oldest friend, permanently transformed into an orange rock-skinned powerhouse.",
+      "The tragedy of the character is that he is the only one who cannot change back and pass as human.",
+      "In Battleworld-era stories his sheer durability makes him one of the few beings able to survive reality shearing.",
+      "His loyalty is the reason the family survives Doom over and over again."
+    ],
+    "powers": [
+      "Superhuman strength",
+      "Rock-like invulnerability",
+      "Extreme durability",
+      "Combat piloting"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps"
+    ]
+  },
+  {
+    "id": "franklin-richards",
+    "name": "Franklin Richards",
+    "alias": "Powerhouse",
+    "actor": "TBA",
+    "affiliation": "Fantastic Four",
+    "status": "Incoming",
+    "mcuDebut": "The Fantastic Four: First Steps (2025)",
+    "comicBio": [
+      "Son of Reed and Sue, and canonically one of the most powerful mutants ever born — an omega-level reality warper.",
+      "As a child he has created entire pocket universes, including one used to rebuild a destroyed Earth.",
+      "In Hickman's Secret Wars, Franklin and Molecule Man are literally the tools used to remake existence.",
+      "Any Doomsday endgame that restores a broken multiverse runs through a power source like his."
+    ],
+    "powers": [
+      "Reality warping",
+      "Universe creation",
+      "Energy projection",
+      "Precognitive dreams"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps"
+    ]
+  },
+  {
+    "id": "galactus",
+    "name": "Galan of Taa",
+    "alias": "Galactus",
+    "actor": "Ralph Ineson",
+    "affiliation": "Cosmic",
+    "status": "Incoming",
+    "mcuDebut": "The Fantastic Four: First Steps (2025)",
+    "comicBio": [
+      "The last survivor of the universe before ours, reborn as a cosmic force that consumes worlds to stay alive.",
+      "Not a villain so much as a natural law with a face — the Fantastic Four's defining antagonist since 1966.",
+      "His arrival always comes with a herald, and his hunger is what first proves Earth is worth defending on a cosmic scale.",
+      "In Incursion-era stories, world-eaters and world-collisions are two sides of the same extinction event."
+    ],
+    "powers": [
+      "Power Cosmic",
+      "Planetary consumption",
+      "Matter transmutation",
+      "Effective immortality"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps"
+    ]
+  },
+  {
+    "id": "silver-surfer",
+    "name": "Shalla-Bal",
+    "alias": "Silver Surfer",
+    "actor": "Julia Garner",
+    "affiliation": "Cosmic",
+    "status": "Incoming",
+    "mcuDebut": "The Fantastic Four: First Steps (2025)",
+    "comicBio": [
+      "A herald granted the Power Cosmic in exchange for leading Galactus to inhabited worlds.",
+      "The Surfer's defining story is the moment the herald refuses and turns on their master.",
+      "In the comics the herald's conscience is the first crack in Galactus's inevitability.",
+      "Heralds are also the multiverse's best scouts — the ones who see an Incursion coming."
+    ],
+    "powers": [
+      "Power Cosmic",
+      "Faster-than-light travel",
+      "Cosmic awareness",
+      "Energy manipulation"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "fantastic-four-first-steps"
+    ]
+  },
+  {
+    "id": "doctor-strange",
+    "name": "Stephen Strange",
+    "alias": "Doctor Strange",
+    "actor": "Benedict Cumberbatch",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Doctor Strange (2016)",
+    "comicBio": [
+      "A surgeon whose ruined hands send him to Kamar-Taj, where he becomes Earth's foremost sorcerer.",
+      "As Sorcerer Supreme he is the multiverse's border guard — the one who knows what crossing over costs.",
+      "In the comics he is a founding member of the Illuminati and votes on the unthinkable when Incursions begin.",
+      "His willingness to break rules 'for the greater good' is exactly the flaw Doom exploits."
+    ],
+    "powers": [
+      "Mystic arts",
+      "Dimensional travel",
+      "Astral projection",
+      "Time manipulation",
+      "Eldritch shielding"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "doctor-strange",
+      "infinity-war",
+      "endgame",
+      "no-way-home",
+      "multiverse-of-madness",
+      "what-if-s1"
+    ]
+  },
+  {
+    "id": "spider-man",
+    "name": "Peter Parker",
+    "alias": "Spider-Man",
+    "actor": "Tom Holland",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Captain America: Civil War (2016)",
+    "comicBio": [
+      "Bitten by a radioactive spider, driven by the single most quoted line in comics about power and responsibility.",
+      "The MCU's Peter is the youngest Avenger and the one with the least institutional protection.",
+      "Spider-Verse stories established that Spider-heroes exist in nearly every reality — and that some universes need theirs.",
+      "He is the emotional entry point for audiences into multiversal stakes."
+    ],
+    "powers": [
+      "Wall-crawling",
+      "Spider-sense",
+      "Superhuman agility",
+      "Web-shooters",
+      "Improvised engineering"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "civil-war",
+      "infinity-war",
+      "endgame",
+      "far-from-home",
+      "no-way-home"
+    ]
+  },
+  {
+    "id": "thor",
+    "name": "Thor Odinson",
+    "alias": "Thor",
+    "actor": "Chris Hemsworth",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Thor (2011)",
+    "comicBio": [
+      "The Asgardian god of thunder, exiled to Earth to learn humility and never entirely successful at it.",
+      "One of the few Avengers whose lifespan is measured in millennia, giving him memory of older cosmic wars.",
+      "In Secret Wars-adjacent arcs, Thors serve as Battleworld's police force under God Emperor Doom.",
+      "That image — hammers deputised to a tyrant — is one of the sharpest visuals in the source material."
+    ],
+    "powers": [
+      "Storm and lightning control",
+      "Asgardian strength",
+      "Stormbreaker",
+      "Bifrost travel",
+      "Near-immortality"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "the-avengers",
+      "age-of-ultron",
+      "thor-ragnarok",
+      "infinity-war",
+      "endgame"
+    ]
+  },
+  {
+    "id": "captain-america",
+    "name": "Sam Wilson",
+    "alias": "Captain America",
+    "actor": "Anthony Mackie",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Captain America: The Winter Soldier (2014)",
+    "comicBio": [
+      "A pararescue veteran who becomes the Falcon, then inherits the shield from Steve Rogers.",
+      "Unlike Steve, Sam carries the mantle without a super-soldier serum — the shield is a choice, not an upgrade.",
+      "Comic Sam repeatedly clashes with a government that wants Captain America to be an instrument of policy.",
+      "With no standing Avengers roster, he is the closest thing Earth has to a chairman when Doomsday hits."
+    ],
+    "powers": [
+      "Redwing drone",
+      "Vibranium shield",
+      "Aerial combat",
+      "Peak human conditioning",
+      "Leadership"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "civil-war",
+      "endgame",
+      "falcon-winter-soldier",
+      "brave-new-world"
+    ]
+  },
+  {
+    "id": "winter-soldier",
+    "name": "James Buchanan Barnes",
+    "alias": "Winter Soldier",
+    "actor": "Sebastian Stan",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Captain America: The First Avenger (2011)",
+    "comicBio": [
+      "Steve Rogers' oldest friend, presumed dead and rebuilt by HYDRA into a brainwashed assassin.",
+      "His arc is about earning an identity back from the people who programmed it out of him.",
+      "In the comics he has carried the shield himself and led black-ops teams as a Thunderbolt.",
+      "He now sits at the seam between the old Avengers and the government's new team."
+    ],
+    "powers": [
+      "Vibranium arm",
+      "Master assassin",
+      "Enhanced strength",
+      "Tactical espionage"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "civil-war",
+      "endgame",
+      "falcon-winter-soldier",
+      "brave-new-world",
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "loki",
+    "name": "Loki Laufeyson",
+    "alias": "Loki",
+    "actor": "Tom Hiddleston",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Thor (2011)",
+    "comicBio": [
+      "The God of Mischief, an adopted Frost Giant whose every scheme is really about being taken seriously.",
+      "His series turned him from the MCU's first villain into the load-bearing pillar of the timeline itself.",
+      "Comic Loki has died, been reborn as a child, and repeatedly chosen a better story over a written destiny.",
+      "Everything the audience knows about branching, pruning and Incursions was taught by his show."
+    ],
+    "powers": [
+      "Illusion casting",
+      "Shapeshifting",
+      "Temporal manipulation",
+      "Frost Giant physiology",
+      "Magic"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "the-avengers",
+      "thor-ragnarok",
+      "endgame",
+      "loki-s1",
+      "loki-s2"
+    ]
+  },
+  {
+    "id": "scarlet-witch",
+    "name": "Wanda Maximoff",
+    "alias": "Scarlet Witch",
+    "actor": "Elizabeth Olsen",
+    "affiliation": "Avengers",
+    "status": "Unknown",
+    "mcuDebut": "Avengers: Age of Ultron (2015)",
+    "comicBio": [
+      "Sokovian volunteer turned reality-warper, powered by the Mind Stone and an innate gift for chaos magic.",
+      "House of M is her signature comic story: three words that rewrite mutantkind out of existence.",
+      "The Darkhold's promise — that a mother can reach across realities for her children — drives her darkest turn.",
+      "She proved Incursions are possible by walking between universes without a machine."
+    ],
+    "powers": [
+      "Chaos magic",
+      "Reality warping",
+      "Telekinesis",
+      "Mind control",
+      "Dreamwalking"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "age-of-ultron",
+      "infinity-war",
+      "wandavision",
+      "multiverse-of-madness",
+      "agatha-all-along"
+    ]
+  },
+  {
+    "id": "ant-man",
+    "name": "Scott Lang",
+    "alias": "Ant-Man",
+    "actor": "Paul Rudd",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Ant-Man (2015)",
+    "comicBio": [
+      "A thief with an engineering degree who inherits the Pym Particle suit and, with it, a second chance.",
+      "The Quantum Realm he travels through is the MCU's most reliable back door between realities.",
+      "It was Scott's rat-and-a-van accident that made the time heist — and the branched timelines — possible.",
+      "In the comics he is the everyman whose ordinary stakes make cosmic events legible."
+    ],
+    "powers": [
+      "Size manipulation",
+      "Quantum Realm travel",
+      "Pym Particles",
+      "Insect communication"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "endgame",
+      "quantumania"
+    ]
+  },
+  {
+    "id": "shang-chi",
+    "name": "Shaun / Shang-Chi",
+    "alias": "Shang-Chi",
+    "actor": "Simu Liu",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Shang-Chi and the Legend of the Ten Rings (2021)",
+    "comicBio": [
+      "Raised as an assassin by his father and defined by the choice to walk away from that inheritance.",
+      "The Ten Rings are older than any Earth power on the board and their origin is still unexplained.",
+      "Comic Shang-Chi is Marvel's master of kung fu, unrivalled in unarmed combat even among enhanced beings.",
+      "The beacon his rings sent at the end of his film has never been answered on screen."
+    ],
+    "powers": [
+      "Ten Rings",
+      "Peerless martial artist",
+      "Chi manipulation",
+      "Enhanced reflexes"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "shang-chi"
+    ]
+  },
+  {
+    "id": "hawkeye",
+    "name": "Clint Barton",
+    "alias": "Hawkeye",
+    "actor": "Jeremy Renner",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Thor (2011)",
+    "comicBio": [
+      "The Avenger with no powers, only an impossible aim and a very high tolerance for consequences.",
+      "His post-Blip story is about handing the bow to Kate Bishop and getting out alive.",
+      "Comic Clint has led the Thunderbolts and the West Coast Avengers, usually badly and always memorably.",
+      "He is the yardstick for what an unenhanced human is worth in a war over reality."
+    ],
+    "powers": [
+      "Master archer",
+      "Trick arrows",
+      "Expert marksman",
+      "Close-quarters combat"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "the-avengers",
+      "age-of-ultron",
+      "endgame",
+      "hawkeye"
+    ]
+  },
+  {
+    "id": "hulk",
+    "name": "Bruce Banner",
+    "alias": "Hulk",
+    "actor": "Mark Ruffalo",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "The Incredible Hulk (2008)",
+    "comicBio": [
+      "A gamma physicist whose anger became a separate, indestructible person living in his body.",
+      "'Smart Hulk' merged the two, but the comics insist the truce is always temporary.",
+      "World War Hulk and Maestro show what he becomes when the restraints come off across timelines.",
+      "He also has a son, Skaar, waiting in the wings for the next global emergency."
+    ],
+    "powers": [
+      "Limitless strength",
+      "Gamma regeneration",
+      "Genius intellect",
+      "Durability"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "the-avengers",
+      "age-of-ultron",
+      "thor-ragnarok",
+      "infinity-war",
+      "endgame",
+      "she-hulk",
+      "shang-chi"
+    ]
+  },
+  {
+    "id": "shuri",
+    "name": "Shuri",
+    "alias": "Black Panther",
+    "actor": "Letitia Wright",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Black Panther (2018)",
+    "comicBio": [
+      "Wakandan princess, engineering prodigy, and now the bearer of the Black Panther mantle.",
+      "Wakanda's vibranium reserves and tech make it a sovereign superpower, not a national ally.",
+      "Comic Shuri has held the mantle before and communes with the ancestral Djalia plane.",
+      "In a war over reality, Wakanda's science is one of the few Earth-side answers available."
+    ],
+    "powers": [
+      "Vibranium tech",
+      "Panther habit",
+      "Genius engineering",
+      "Combat training"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "black-panther",
+      "infinity-war",
+      "endgame",
+      "wakanda-forever"
+    ]
+  },
+  {
+    "id": "captain-marvel",
+    "name": "Carol Danvers",
+    "alias": "Captain Marvel",
+    "actor": "Brie Larson",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Captain Marvel (2019)",
+    "comicBio": [
+      "An Air Force pilot infused with Tesseract energy, making her the most powerful being on Earth's contact list.",
+      "She spends most of her time off-world managing the fallout of an empire she helped destabilise.",
+      "In the comics she has punched through dimensional barriers and survived unfiltered cosmic energy.",
+      "A hero who can travel between systems unaided is exactly who you send toward a collapsing universe."
+    ],
+    "powers": [
+      "Binary energy absorption",
+      "Photon blasts",
+      "Interstellar flight",
+      "Superhuman durability"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "captain-marvel",
+      "endgame",
+      "ms-marvel",
+      "the-marvels",
+      "shang-chi"
+    ]
+  },
+  {
+    "id": "moon-knight",
+    "name": "Marc Spector",
+    "alias": "Moon Knight",
+    "actor": "Oscar Isaac",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Moon Knight (2022)",
+    "comicBio": [
+      "A mercenary revived by the Egyptian god Khonshu, sharing his body with at least two other identities.",
+      "His stories are Marvel's most direct exploration of dissociative identity as both wound and weapon.",
+      "Because his power comes from a god outside the usual cosmology, he answers to no Earth authority.",
+      "The moment reality frays, unaligned assets like Marc get pulled in whether they consent or not."
+    ],
+    "powers": [
+      "Khonshu's avatar",
+      "Ceremonial armour",
+      "Crescent darts",
+      "Multiple identities",
+      "Resurrection"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "moon-knight"
+    ]
+  },
+  {
+    "id": "daredevil",
+    "name": "Matt Murdock",
+    "alias": "Daredevil",
+    "actor": "Charlie Cox",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Daredevil (2015)",
+    "comicBio": [
+      "Blinded as a child by radioactive chemicals that hyper-charged every remaining sense.",
+      "Lawyer by day, vigilante by night — Marvel's most explicitly Catholic hero and its most guilt-driven.",
+      "Born Again is the comic benchmark for stripping a hero down to nothing and rebuilding him.",
+      "When the sky opens, someone has to be holding the block-level line in New York."
+    ],
+    "powers": [
+      "Radar sense",
+      "Enhanced hearing",
+      "Master martial artist",
+      "Billy club",
+      "Legal mind"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "she-hulk",
+      "echo",
+      "daredevil-born-again"
+    ]
+  },
+  {
+    "id": "vision",
+    "name": "Vision",
+    "alias": "Vision",
+    "actor": "Paul Bettany",
+    "affiliation": "Avengers",
+    "status": "Unknown",
+    "mcuDebut": "Avengers: Age of Ultron (2015)",
+    "comicBio": [
+      "A synthezoid built from Ultron's body, JARVIS's mind and the Mind Stone's power.",
+      "White Vision, reactivated without memory or emotion, is still unaccounted for.",
+      "Comic Vision's arc is a machine repeatedly asking whether it is allowed to be a person.",
+      "A synthetic Avenger with density control is one of the few beings who can survive a phase-shifted reality."
+    ],
+    "powers": [
+      "Density manipulation",
+      "Solar beam",
+      "Flight",
+      "Android durability",
+      "Data processing"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "age-of-ultron",
+      "infinity-war",
+      "wandavision"
+    ]
+  },
+  {
+    "id": "wong",
+    "name": "Wong",
+    "alias": "Sorcerer Supreme",
+    "actor": "Benedict Wong",
+    "affiliation": "Avengers",
+    "status": "Active",
+    "mcuDebut": "Doctor Strange (2016)",
+    "comicBio": [
+      "Master of the mystic arts, librarian of Kamar-Taj and current holder of the Sorcerer Supreme title.",
+      "The MCU's most consistently competent adult in a room full of reckless geniuses.",
+      "Comic Wong is the anchor who keeps the Sanctums standing when Strange oversteps.",
+      "Sanctum security is literally multiverse border control."
+    ],
+    "powers": [
+      "Mystic arts",
+      "Sling Ring travel",
+      "Sanctum wards",
+      "Bands of Cyttorak"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "doctor-strange",
+      "no-way-home",
+      "multiverse-of-madness",
+      "she-hulk",
+      "shang-chi"
+    ]
+  },
+  {
+    "id": "blade",
+    "name": "Eric Brooks",
+    "alias": "Blade",
+    "actor": "Mahershala Ali",
+    "affiliation": "Avengers",
+    "status": "Incoming",
+    "mcuDebut": "Eternals (2021, voice)",
+    "comicBio": [
+      "A dhampir — born with vampire strengths and none of the weaknesses — who hunts his own kind.",
+      "Wesley Snipes' 1998 film is the reason the modern superhero movie exists at all.",
+      "Comic Blade operates outside every superhuman registry, which makes him useful and unaccountable.",
+      "Supernatural threats scale badly during reality collapse, and Blade is Earth's specialist."
+    ],
+    "powers": [
+      "Dhampir physiology",
+      "Regeneration",
+      "Master swordsman",
+      "Occult expertise"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "eternals"
+    ]
+  },
+  {
+    "id": "val-de-fontaine",
+    "name": "Valentina Allegra de Fontaine",
+    "alias": "Madame Hydra",
+    "actor": "Julia Louis-Dreyfus",
+    "affiliation": "Thunderbolts",
+    "status": "Active",
+    "mcuDebut": "The Falcon and the Winter Soldier (2021)",
+    "comicBio": [
+      "A CIA power broker quietly assembling deniable operatives across half a dozen MCU projects.",
+      "In the comics Val is revealed as Madame Hydra — the ally you should never have briefed.",
+      "She is the reason the government has a superhero team on retainer and the Avengers do not.",
+      "Whoever controls the branding when Doomsday starts controls the public's version of events."
+    ],
+    "powers": [
+      "Intelligence networks",
+      "Political leverage",
+      "Black-ops command",
+      "Manipulation"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "falcon-winter-soldier",
+      "brave-new-world",
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "yelena-belova",
+    "name": "Yelena Belova",
+    "alias": "Black Widow",
+    "actor": "Florence Pugh",
+    "affiliation": "Thunderbolts",
+    "status": "Active",
+    "mcuDebut": "Black Widow (2021)",
+    "comicBio": [
+      "A Red Room graduate freed from chemical conditioning, and Natasha's chosen sister.",
+      "Comic Yelena has worn the Widow name as rival, successor and occasional villain.",
+      "She is the reluctant centre of the government's new team — the one with a conscience and a body count.",
+      "Her arc asks whether a weapon can choose what it is pointed at."
+    ],
+    "powers": [
+      "Elite espionage",
+      "Peak human combat",
+      "Widow's Bite",
+      "Tactical marksmanship"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "hawkeye",
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "sentry",
+    "name": "Robert Reynolds",
+    "alias": "Sentry / The Void",
+    "actor": "Lewis Pullman",
+    "affiliation": "Thunderbolts",
+    "status": "Active",
+    "mcuDebut": "Thunderbolts* (2025)",
+    "comicBio": [
+      "The power of a million exploding suns, wrapped around a man with severe mental illness.",
+      "Every Sentry story is really about the Void — the destroyer that shares his mind and undoes his good.",
+      "In the comics he is the single most powerful being the Avengers have ever had on the roster, and the most dangerous.",
+      "Against a universe-level threat, Sentry is the only Earth-side asset in the correct weight class."
+    ],
+    "powers": [
+      "Solar energy",
+      "Molecular manipulation",
+      "Flight",
+      "Immortality",
+      "The Void"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "red-guardian",
+    "name": "Alexei Shostakov",
+    "alias": "Red Guardian",
+    "actor": "David Harbour",
+    "affiliation": "Thunderbolts",
+    "status": "Active",
+    "mcuDebut": "Black Widow (2021)",
+    "comicBio": [
+      "The Soviet Union's answer to Captain America, decades past his prime and still telling the stories.",
+      "Comic Alexei was Natasha's husband before the state erased the marriage from both their records.",
+      "He is the team's comic relief and its most sincere believer in the idea of being a hero.",
+      "In a lineup of assets, he is the one who wants a family more than a mission."
+    ],
+    "powers": [
+      "Super-soldier serum",
+      "Vibranium-alloy shield",
+      "Superhuman durability",
+      "Unshakeable morale"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "us-agent",
+    "name": "John Walker",
+    "alias": "U.S. Agent",
+    "actor": "Wyatt Russell",
+    "affiliation": "Thunderbolts",
+    "status": "Active",
+    "mcuDebut": "The Falcon and the Winter Soldier (2021)",
+    "comicBio": [
+      "A decorated soldier handed the shield by a government that wanted a more obedient Captain America.",
+      "Comic Walker is the cautionary version of the ideal: same serum, no restraint, state supervision.",
+      "Stripped of the title, he becomes the enforcer Val keeps on a very short leash.",
+      "He embodies what happens when a symbol is nationalised."
+    ],
+    "powers": [
+      "Super-soldier serum",
+      "Combat mastery",
+      "Shield proficiency",
+      "Military command"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "falcon-winter-soldier",
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "taskmaster",
+    "name": "Antonia Dreykov",
+    "alias": "Taskmaster",
+    "actor": "Olga Kurylenko",
+    "affiliation": "Thunderbolts",
+    "status": "Active",
+    "mcuDebut": "Black Widow (2021)",
+    "comicBio": [
+      "Photographic reflexes: she reproduces any fighting style after seeing it once.",
+      "Comic Taskmaster is a mercenary instructor who trains the henchmen of half the Marvel villain roster.",
+      "The trade-off is memory — every skill learned pushes a piece of her own life out.",
+      "A fighter who can copy an Avenger's technique is a cheap counter to almost any hero."
+    ],
+    "powers": [
+      "Photographic reflexes",
+      "Combat mimicry",
+      "Master tactician",
+      "Weapons expertise"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "ghost",
+    "name": "Ava Starr",
+    "alias": "Ghost",
+    "actor": "Hannah John-Kamen",
+    "affiliation": "Thunderbolts",
+    "status": "Active",
+    "mcuDebut": "Ant-Man and the Wasp (2018)",
+    "comicBio": [
+      "A quantum accident left her permanently phasing between states, in constant pain and out of sync with reality.",
+      "Comic Ghost is a corporate saboteur; the MCU rewrote her as a victim of the same science that made Ant-Man.",
+      "Her phasing is quantum-realm adjacent, which makes her useful where physics is already failing.",
+      "She is the team member most literally caught between two realities."
+    ],
+    "powers": [
+      "Quantum phasing",
+      "Intangibility",
+      "Molecular disequilibrium",
+      "Stealth infiltration"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "quantumania",
+      "thunderbolts"
+    ]
+  },
+  {
+    "id": "wolverine",
+    "name": "James Howlett / Logan",
+    "alias": "Wolverine",
+    "actor": "Hugh Jackman",
+    "affiliation": "X-Men / Mutants",
+    "status": "Variant",
+    "mcuDebut": "Deadpool & Wolverine (2024)",
+    "comicBio": [
+      "A mutant with a healing factor, heightened senses and a skeleton laced with adamantium by the Weapon X programme.",
+      "Two centuries of memory, most of it taken from him and slowly recovered.",
+      "In Secret Wars' Battleworld, Old Man Logan crosses from a ruined timeline into the patchwork world and refuses to accept it as real.",
+      "That exact move — a legacy variant walking into a stitched-together reality — is the Doomsday playbook."
+    ],
+    "powers": [
+      "Adamantium claws",
+      "Accelerated healing",
+      "Enhanced senses",
+      "Berserker rage",
+      "Combat experience"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "x-men-2000",
+      "x2",
+      "days-of-future-past",
+      "logan",
+      "deadpool-and-wolverine"
+    ]
+  },
+  {
+    "id": "deadpool",
+    "name": "Wade Wilson",
+    "alias": "Deadpool",
+    "actor": "Ryan Reynolds",
+    "affiliation": "X-Men / Mutants",
+    "status": "Active",
+    "mcuDebut": "Deadpool (2016)",
+    "comicBio": [
+      "A terminal cancer patient given a corrupted healing factor that keeps him alive and disfigured.",
+      "The only Marvel character who knows he is in a comic and negotiates with the reader about it.",
+      "Comic Deadpool has killed the Marvel Universe, joined X-Force, and been trusted with far too much cosmic hardware.",
+      "He is the audience's translator for the rules of anchor beings, the Void and TVA salvage."
+    ],
+    "powers": [
+      "Regenerative healing",
+      "Fourth-wall awareness",
+      "Master assassin",
+      "Dual katanas",
+      "Immortality"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "deadpool",
+      "deadpool-2",
+      "deadpool-and-wolverine"
+    ]
+  },
+  {
+    "id": "professor-x",
+    "name": "Charles Xavier",
+    "alias": "Professor X",
+    "actor": "Patrick Stewart",
+    "affiliation": "X-Men / Mutants",
+    "status": "Variant",
+    "mcuDebut": "Doctor Strange in the Multiverse of Madness (2022)",
+    "comicBio": [
+      "The world's most powerful telepath and founder of the school that gives mutants somewhere to be children.",
+      "Cerebro extends his mind across a planet — and, in some stories, across realities.",
+      "He is a founding Illuminati member: the man who erases memories when the council votes to hide something.",
+      "His Earth-838 appearance is proof that multiple Xaviers exist and can be summoned."
+    ],
+    "powers": [
+      "Omega-level telepathy",
+      "Mind control",
+      "Astral projection",
+      "Cerebro amplification"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "x-men-2000",
+      "x2",
+      "x-men-first-class",
+      "days-of-future-past",
+      "logan",
+      "multiverse-of-madness",
+      "deadpool-and-wolverine"
+    ]
+  },
+  {
+    "id": "magneto",
+    "name": "Erik Lehnsherr",
+    "alias": "Magneto",
+    "actor": "Ian McKellen / Michael Fassbender",
+    "affiliation": "X-Men / Mutants",
+    "status": "Variant",
+    "mcuDebut": "X-Men (2000)",
+    "comicBio": [
+      "Holocaust survivor turned master of magnetism, convinced that coexistence is a story humans tell before the camps.",
+      "The most persuasive villain in Marvel comics precisely because his history keeps proving him partly right.",
+      "In Secret Wars-era stories he has ruled, protected and abandoned mutantkind by turns.",
+      "Any incoming X-Men era needs its Erik, and two actors have already played him."
+    ],
+    "powers": [
+      "Magnetic field control",
+      "Metal manipulation",
+      "Force fields",
+      "Electromagnetic flight"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "x-men-2000",
+      "x2",
+      "x-men-first-class",
+      "days-of-future-past"
+    ]
+  },
+  {
+    "id": "cyclops",
+    "name": "Scott Summers",
+    "alias": "Cyclops",
+    "actor": "James Marsden",
+    "affiliation": "X-Men / Mutants",
+    "status": "Variant",
+    "mcuDebut": "X-Men (2000)",
+    "comicBio": [
+      "Field leader of the X-Men, firing uncontrollable optic force beams behind a ruby-quartz visor.",
+      "His discipline is the reason the team functions and the reason nobody likes him at first.",
+      "Comic Scott eventually leads a mutant revolution, becoming the movement's most divisive figure.",
+      "Legacy-timeline X-Men are prime candidates for salvage when their universe destabilises."
+    ],
+    "powers": [
+      "Optic force blasts",
+      "Tactical genius",
+      "Field leadership",
+      "Aerial piloting"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "x-men-2000",
+      "x2"
+    ]
+  },
+  {
+    "id": "jean-grey",
+    "name": "Jean Grey",
+    "alias": "Phoenix",
+    "actor": "Famke Janssen",
+    "affiliation": "X-Men / Mutants",
+    "status": "Variant",
+    "mcuDebut": "X-Men (2000)",
+    "comicBio": [
+      "Omega-level telepath and telekinetic, bonded with the cosmic Phoenix Force.",
+      "The Dark Phoenix Saga is the genre's original 'hero becomes extinction event' story.",
+      "The Phoenix operates above individual universes, making Jean one of few mutants with multiversal reach.",
+      "Reality-warpers of her class are exactly who gets drafted when the walls come down."
+    ],
+    "powers": [
+      "Omega telekinesis",
+      "Telepathy",
+      "Phoenix Force",
+      "Psionic flame"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "x-men-2000",
+      "x2"
+    ]
+  },
+  {
+    "id": "beast",
+    "name": "Hank McCoy",
+    "alias": "Beast",
+    "actor": "Kelsey Grammer",
+    "affiliation": "X-Men / Mutants",
+    "status": "Variant",
+    "mcuDebut": "X-Men: The Last Stand (2006)",
+    "comicBio": [
+      "A brilliant geneticist whose own experiments turned him blue, furred and superhumanly agile.",
+      "The X-Men's scientist, diplomat and the one most likely to break the timeline trying to fix it.",
+      "Comic Hank has pulled the original five X-Men out of the past — a canonical timeline violation.",
+      "A Beast variant has already surfaced in the 616's neighbourhood."
+    ],
+    "powers": [
+      "Superhuman agility",
+      "Genius intellect",
+      "Enhanced strength",
+      "Genetic science"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "days-of-future-past",
+      "the-marvels"
+    ]
+  },
+  {
+    "id": "gambit",
+    "name": "Remy LeBeau",
+    "alias": "Gambit",
+    "actor": "Channing Tatum",
+    "affiliation": "X-Men / Mutants",
+    "status": "Variant",
+    "mcuDebut": "Deadpool & Wolverine (2024)",
+    "comicBio": [
+      "A Louisiana thief who charges objects with kinetic energy — most famously a deck of cards.",
+      "Raised by the Thieves Guild, permanently untrustworthy and permanently forgiven.",
+      "Comic Remy has served both the X-Men and Mister Sinister, which makes his loyalty an open question.",
+      "He is one of the Void's stranded survivors, already proven salvageable across realities."
+    ],
+    "powers": [
+      "Kinetic charging",
+      "Bo staff mastery",
+      "Hypnotic charm",
+      "Thief's agility"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "deadpool-and-wolverine"
+    ]
+  },
+  {
+    "id": "clea",
+    "name": "Clea Strange",
+    "alias": "Clea",
+    "actor": "Charlize Theron",
+    "affiliation": "Cosmic",
+    "status": "Incoming",
+    "mcuDebut": "Doctor Strange in the Multiverse of Madness (2022)",
+    "comicBio": [
+      "Ruler of the Dark Dimension and Dormammu's niece, raised inside a reality with different physics.",
+      "In the comics she is Strange's wife and eventually Sorcerer Supreme in her own right.",
+      "She specialises in the exact problem the MCU now has: repairing an Incursion.",
+      "Her arrival is a plot device with a scalpel — she came to fix something Strange broke."
+    ],
+    "powers": [
+      "Dark Dimension magic",
+      "Incursion repair",
+      "Dimensional travel",
+      "Sorcery"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "multiverse-of-madness"
+    ]
+  },
+  {
+    "id": "america-chavez",
+    "name": "America Chavez",
+    "alias": "Miss America",
+    "actor": "Xochitl Gomez",
+    "affiliation": "Cosmic",
+    "status": "Active",
+    "mcuDebut": "Doctor Strange in the Multiverse of Madness (2022)",
+    "comicBio": [
+      "Born in a pocket universe, able to punch star-shaped holes between realities.",
+      "The only character in the MCU with native, unassisted multiversal travel.",
+      "Comic America is a founding Young Avenger and one of Marvel's most prominent Latina heroes.",
+      "Her power is the single most strategically valuable asset in a war fought across universes."
+    ],
+    "powers": [
+      "Multiversal portals",
+      "Superhuman strength",
+      "Flight",
+      "Invulnerability"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "multiverse-of-madness"
+    ]
+  },
+  {
+    "id": "monica-rambeau",
+    "name": "Monica Rambeau",
+    "alias": "Photon",
+    "actor": "Teyonah Parris",
+    "affiliation": "Avengers",
+    "status": "Variant",
+    "mcuDebut": "WandaVision (2021)",
+    "comicBio": [
+      "S.W.O.R.D. agent transformed by passing through Wanda's Hex, able to convert her body into any energy on the spectrum.",
+      "Comic Monica led the Avengers under the Captain Marvel name long before Carol did.",
+      "Her powers make her a walking sensor array for electromagnetic and dimensional anomalies.",
+      "She ended her last appearance on the wrong side of a reality — and someone there recognised her."
+    ],
+    "powers": [
+      "Energy transduction",
+      "Light-speed travel",
+      "Intangibility",
+      "Spectrum sensing"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "wandavision",
+      "the-marvels",
+      "captain-marvel"
+    ]
+  },
+  {
+    "id": "namor",
+    "name": "Namor McKenzie",
+    "alias": "Namor the Sub-Mariner",
+    "actor": "Tenoch Huerta Mejía",
+    "affiliation": "X-Men / Mutants",
+    "status": "Active",
+    "mcuDebut": "Black Panther: Wakanda Forever (2022)",
+    "comicBio": [
+      "King of an undersea civilisation and, in the comics, Marvel's very first mutant.",
+      "Founding Illuminati member — and the one who advocates destroying other Earths to save his own.",
+      "In Hickman's Incursion arc he does exactly that, forming the Cabal when the others hesitate.",
+      "No character is more directly tied to the moral logic of an Incursion than Namor."
+    ],
+    "powers": [
+      "Aquatic physiology",
+      "Superhuman strength",
+      "Winged flight",
+      "Ocean command"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "wakanda-forever"
+    ]
+  }
+]

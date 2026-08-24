@@ -1,0 +1,834 @@
+[
+  {
+    "id": "iron-man",
+    "title": "Iron Man",
+    "releaseYear": 2008,
+    "phase": 1,
+    "type": "movie",
+    "tmdbId": 1726,
+    "runtimeMinutes": 126,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "The film that built the face Doomsday now wears, establishing the armoured-genius archetype the Multiverse Saga keeps reflecting back at us. Watching it first makes the casting echo behind Doctor Doom land far harder.",
+    "keyCharacterIds": [
+      "doctor-doom"
+    ]
+  },
+  {
+    "id": "the-avengers",
+    "title": "The Avengers",
+    "releaseYear": 2012,
+    "phase": 1,
+    "type": "movie",
+    "tmdbId": 24428,
+    "runtimeMinutes": 143,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "The original assembly that defines what the word 'Avengers' is supposed to mean before Doomsday redefines it. It also plants the Battle of New York, the exact timeline knot that later branches the Sacred Timeline apart.",
+    "keyCharacterIds": [
+      "loki",
+      "thor",
+      "hulk",
+      "hawkeye"
+    ]
+  },
+  {
+    "id": "age-of-ultron",
+    "title": "Avengers: Age of Ultron",
+    "releaseYear": 2015,
+    "phase": 2,
+    "type": "movie",
+    "tmdbId": 99861,
+    "runtimeMinutes": 141,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Introduces Wanda Maximoff, whose reality-warping becomes the hinge of every multiversal crisis that follows. It is also the first time the team is broken from inside rather than outside.",
+    "keyCharacterIds": [
+      "scarlet-witch",
+      "hawkeye"
+    ]
+  },
+  {
+    "id": "civil-war",
+    "title": "Captain America: Civil War",
+    "releaseYear": 2016,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 271110,
+    "runtimeMinutes": 147,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Establishes the fracture lines and personal grudges that Doomsday's enormous ensemble will be forced to reconcile. It is also the clearest statement of why heroes lose to each other long before they lose to a villain.",
+    "keyCharacterIds": [
+      "winter-soldier",
+      "captain-america",
+      "spider-man"
+    ]
+  },
+  {
+    "id": "doctor-strange",
+    "title": "Doctor Strange",
+    "releaseYear": 2016,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 284052,
+    "runtimeMinutes": 115,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "Your primer on the Multiverse itself: dimensions, mirror realities and the rules Doomsday is about to break. Strange's arrogance here is the same arrogance that will cost the 616 dearly.",
+    "keyCharacterIds": [
+      "doctor-strange"
+    ]
+  },
+  {
+    "id": "thor-ragnarok",
+    "title": "Thor: Ragnarok",
+    "releaseYear": 2017,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 284053,
+    "runtimeMinutes": 130,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Strips Thor down to the last Asgardian and sets his standing in the Doomsday line-up. It also closes the loop on Loki's loyalties right before the timeline splits him in two.",
+    "keyCharacterIds": [
+      "thor",
+      "loki",
+      "hulk"
+    ]
+  },
+  {
+    "id": "black-panther",
+    "title": "Black Panther",
+    "releaseYear": 2018,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 284054,
+    "runtimeMinutes": 134,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Wakanda is one of the few powers on Earth able to answer an Incursion-level threat, and this is its foundation. Shuri's arc starts here and ends up on the Doomsday board.",
+    "keyCharacterIds": [
+      "shuri"
+    ]
+  },
+  {
+    "id": "infinity-war",
+    "title": "Avengers: Infinity War",
+    "releaseYear": 2018,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 299536,
+    "runtimeMinutes": 149,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "The benchmark for what a single villain can cost the universe, and the bar Doom is written to clear. Every alliance Doomsday tests was forged or shattered in these two films.",
+    "keyCharacterIds": [
+      "thor",
+      "doctor-strange",
+      "spider-man",
+      "scarlet-witch"
+    ]
+  },
+  {
+    "id": "endgame",
+    "title": "Avengers: Endgame",
+    "releaseYear": 2019,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 299534,
+    "runtimeMinutes": 181,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "The time heist is the original sin of the Multiverse Saga: branched realities created and abandoned in the name of saving one. Doomsday is, in the plainest terms, the bill arriving for that choice.",
+    "keyCharacterIds": [
+      "captain-america",
+      "thor",
+      "loki",
+      "hulk",
+      "ant-man"
+    ]
+  },
+  {
+    "id": "captain-marvel",
+    "title": "Captain Marvel",
+    "releaseYear": 2019,
+    "phase": 3,
+    "type": "movie",
+    "tmdbId": 299537,
+    "runtimeMinutes": 123,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Introduces the most powerful hero on Earth's rolodex and the cosmic politics she polices. When reality starts collapsing, Carol is the first call anyone makes.",
+    "keyCharacterIds": [
+      "captain-marvel",
+      "monica-rambeau"
+    ]
+  },
+  {
+    "id": "far-from-home",
+    "title": "Spider-Man: Far From Home",
+    "releaseYear": 2019,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 429617,
+    "runtimeMinutes": 129,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Introduces the idea of a 'multiverse' to the public as a lie before it becomes the truth. It also leaves Peter in the exact position that forces him to ask Strange for the spell.",
+    "keyCharacterIds": [
+      "spider-man"
+    ]
+  },
+  {
+    "id": "wandavision",
+    "title": "WandaVision",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 85271,
+    "runtimeMinutes": 350,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "Wanda's grief becomes the most dangerous force on Earth and sets her on the path to the Darkhold. It also delivers the first real mutant-adjacent misdirection of the saga.",
+    "keyCharacterIds": [
+      "scarlet-witch",
+      "monica-rambeau"
+    ]
+  },
+  {
+    "id": "falcon-winter-soldier",
+    "title": "The Falcon and the Winter Soldier",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 88396,
+    "runtimeMinutes": 300,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Hands the shield to Sam Wilson, the Captain America who will be standing at the front of the Doomsday roster. It also introduces John Walker, now a Thunderbolt with a grudge.",
+    "keyCharacterIds": [
+      "captain-america",
+      "winter-soldier",
+      "us-agent"
+    ]
+  },
+  {
+    "id": "loki-s1",
+    "title": "Loki — Season 1",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 84958,
+    "runtimeMinutes": 293,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "The single most important text in the saga: it explains the Sacred Timeline, the TVA, branching and what pruning costs. Nothing about an Incursion makes sense without it.",
+    "keyCharacterIds": [
+      "loki"
+    ]
+  },
+  {
+    "id": "what-if-s1",
+    "title": "What If...? — Season 1",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 91363,
+    "runtimeMinutes": 300,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "The clearest illustration of how small divergences produce wildly different variants of familiar heroes. It teaches the visual grammar Doomsday's variant cast will rely on.",
+    "keyCharacterIds": [
+      "doctor-strange",
+      "captain-america"
+    ]
+  },
+  {
+    "id": "shang-chi",
+    "title": "Shang-Chi and the Legend of the Ten Rings",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 566525,
+    "runtimeMinutes": 132,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Adds a mystical power source older than the Avengers and a hero already being scouted for the next team. The Ten Rings' signal in the finale is still an open thread heading into Doomsday.",
+    "keyCharacterIds": [
+      "shang-chi",
+      "hulk",
+      "captain-marvel"
+    ]
+  },
+  {
+    "id": "eternals",
+    "title": "Eternals",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 524434,
+    "runtimeMinutes": 156,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Reveals the Celestial machinery underneath Earth and the beings who out-scale every Avenger. It is the closest the 616 has come to a Galactus-tier threat before First Steps.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "hawkeye",
+    "title": "Hawkeye",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 88329,
+    "runtimeMinutes": 300,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Establishes the street-level bench of the next Avengers and Clint's reluctant mentor role. It also introduces Yelena Belova's grudge, which carries straight into the Thunderbolts.",
+    "keyCharacterIds": [
+      "hawkeye",
+      "yelena-belova"
+    ]
+  },
+  {
+    "id": "moon-knight",
+    "title": "Moon Knight",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 92749,
+    "runtimeMinutes": 300,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Widens the board to gods and afterlives — powers that operate outside the TVA's paperwork. Marc Spector is exactly the kind of unaffiliated asset a war for reality drags in.",
+    "keyCharacterIds": [
+      "moon-knight"
+    ]
+  },
+  {
+    "id": "multiverse-of-madness",
+    "title": "Doctor Strange in the Multiverse of Madness",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 453395,
+    "runtimeMinutes": 126,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "The film that names Incursions on screen and shows a dead universe consumed by one. It also debuts America Chavez, the Illuminati and the mutants standing on the far side of the wall.",
+    "keyCharacterIds": [
+      "doctor-strange",
+      "scarlet-witch",
+      "america-chavez",
+      "professor-x"
+    ]
+  },
+  {
+    "id": "ms-marvel",
+    "title": "Ms. Marvel",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 92782,
+    "runtimeMinutes": 300,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "Quietly drops the word 'mutation' into the 616 for the first time, opening the door the X-Men will walk through. Kamala's ClanDestine arc also plays with dimensional travel.",
+    "keyCharacterIds": [
+      "captain-marvel"
+    ]
+  },
+  {
+    "id": "she-hulk",
+    "title": "She-Hulk: Attorney at Law",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "series",
+    "tmdbId": 92783,
+    "runtimeMinutes": 270,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Re-establishes the Hulk bloodline and the legal-civilian texture of a superhero Earth. It also returns Daredevil to the board ahead of his Doomsday-era role.",
+    "keyCharacterIds": [
+      "hulk",
+      "daredevil"
+    ]
+  },
+  {
+    "id": "wakanda-forever",
+    "title": "Black Panther: Wakanda Forever",
+    "releaseYear": 2022,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 505642,
+    "runtimeMinutes": 161,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Puts Shuri in the mantle and Namor's Talokan on the geopolitical map as a second unaligned superpower. Both are pieces the Doomsday conflict cannot ignore.",
+    "keyCharacterIds": [
+      "shuri"
+    ]
+  },
+  {
+    "id": "no-way-home",
+    "title": "Spider-Man: No Way Home",
+    "releaseYear": 2021,
+    "phase": 4,
+    "type": "movie",
+    "tmdbId": 634649,
+    "runtimeMinutes": 148,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "The first time the MCU physically pulls people across universes and shows what it costs to send them back. It is the proof of concept for everything Doomsday attempts at scale.",
+    "keyCharacterIds": [
+      "spider-man",
+      "doctor-strange"
+    ]
+  },
+  {
+    "id": "quantumania",
+    "title": "Ant-Man and the Wasp: Quantumania",
+    "releaseYear": 2023,
+    "phase": 5,
+    "type": "movie",
+    "tmdbId": 640146,
+    "runtimeMinutes": 124,
+    "isCrucial": false,
+    "pathTags": [
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "Shows the Quantum Realm as a doorway between realities and the scale of a multiversal war council. Scott Lang's ordinary-guy stakes are the emotional yardstick Doomsday will use.",
+    "keyCharacterIds": [
+      "ant-man"
+    ]
+  },
+  {
+    "id": "guardians-vol-3",
+    "title": "Guardians of the Galaxy Vol. 3",
+    "releaseYear": 2023,
+    "phase": 5,
+    "type": "movie",
+    "tmdbId": 447365,
+    "runtimeMinutes": 150,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Clears the cosmic table and explains why certain heroes are off-world when Earth's sky tears open. It also closes the Guardians roster that Doomsday inherits.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "secret-invasion",
+    "title": "Secret Invasion",
+    "releaseYear": 2023,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 114472,
+    "runtimeMinutes": 300,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Establishes that Earth's defences can be compromised from the inside without a single punch thrown. It also reshapes Nick Fury's standing right before the biggest assembly of his career.",
+    "keyCharacterIds": []
+  },
+  {
+    "id": "loki-s2",
+    "title": "Loki — Season 2",
+    "releaseYear": 2023,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 84958,
+    "runtimeMinutes": 300,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "Resolves who is holding the timeline together and at what personal cost, which is the precondition for every Incursion to come. This is the closest the saga has to a rulebook for Doomsday.",
+    "keyCharacterIds": [
+      "loki"
+    ]
+  },
+  {
+    "id": "the-marvels",
+    "title": "The Marvels",
+    "releaseYear": 2023,
+    "phase": 5,
+    "type": "movie",
+    "tmdbId": 609681,
+    "runtimeMinutes": 105,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Punches a literal hole between realities and lands one of its heroes somewhere very familiar to X-Men fans. That mid-credits moment is a load-bearing beam of the Incursion storyline.",
+    "keyCharacterIds": [
+      "captain-marvel",
+      "monica-rambeau",
+      "beast"
+    ]
+  },
+  {
+    "id": "echo",
+    "title": "Echo",
+    "releaseYear": 2024,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 122226,
+    "runtimeMinutes": 250,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Grounds the ancestral-power side of the MCU and keeps the Kingpin/Daredevil thread alive. It is optional prep, but it explains where the New York street tier stands.",
+    "keyCharacterIds": [
+      "daredevil"
+    ]
+  },
+  {
+    "id": "deadpool-and-wolverine",
+    "title": "Deadpool & Wolverine",
+    "releaseYear": 2024,
+    "phase": 5,
+    "type": "movie",
+    "tmdbId": 533535,
+    "runtimeMinutes": 128,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "Canonises the Fox universe as a real, dying timeline and explains anchor beings, the Void and how variants get salvaged. It is the bridge that lets legacy mutants stand in a Doomsday line-up at all.",
+    "keyCharacterIds": [
+      "deadpool",
+      "wolverine",
+      "professor-x"
+    ]
+  },
+  {
+    "id": "agatha-all-along",
+    "title": "Agatha All Along",
+    "releaseYear": 2024,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 138501,
+    "runtimeMinutes": 320,
+    "isCrucial": false,
+    "pathTags": [
+      "completionist"
+    ],
+    "whyItMatters": "Keeps the magical tier warm and moves the Maximoff bloodline forward while Wanda is off the board. Useful context for anyone tracking who can still bend reality.",
+    "keyCharacterIds": [
+      "scarlet-witch"
+    ]
+  },
+  {
+    "id": "brave-new-world",
+    "title": "Captain America: Brave New World",
+    "releaseYear": 2025,
+    "phase": 5,
+    "type": "movie",
+    "tmdbId": 822119,
+    "runtimeMinutes": 118,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Sets Sam Wilson's Captain America against a hostile White House and a world with no Avengers to call. That political vacuum is exactly what Doom will walk into.",
+    "keyCharacterIds": [
+      "captain-america",
+      "winter-soldier"
+    ]
+  },
+  {
+    "id": "daredevil-born-again",
+    "title": "Daredevil: Born Again",
+    "releaseYear": 2025,
+    "phase": 5,
+    "type": "series",
+    "tmdbId": 202555,
+    "runtimeMinutes": 486,
+    "isCrucial": false,
+    "pathTags": [
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Restores Matt Murdock as a frontline defender of New York under an authoritarian city hall. Doomsday's ground war needs someone holding Hell's Kitchen.",
+    "keyCharacterIds": [
+      "daredevil"
+    ]
+  },
+  {
+    "id": "thunderbolts",
+    "title": "Thunderbolts*",
+    "releaseYear": 2025,
+    "phase": 5,
+    "type": "movie",
+    "tmdbId": 986056,
+    "runtimeMinutes": 127,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "avengers",
+      "completionist"
+    ],
+    "whyItMatters": "Assembles the disposable, government-branded team that the world is calling its Avengers when Doomsday begins. It also introduces the single most dangerous power level currently walking the 616.",
+    "keyCharacterIds": [
+      "yelena-belova",
+      "sentry",
+      "red-guardian",
+      "us-agent",
+      "ghost",
+      "winter-soldier"
+    ]
+  },
+  {
+    "id": "fantastic-four-first-steps",
+    "title": "The Fantastic Four: First Steps",
+    "releaseYear": 2025,
+    "phase": 6,
+    "type": "movie",
+    "tmdbId": 617126,
+    "runtimeMinutes": 115,
+    "isCrucial": true,
+    "pathTags": [
+      "express",
+      "doom-f4",
+      "completionist"
+    ],
+    "whyItMatters": "Introduces Marvel's First Family and the retro-futurist universe they call home, along with the cosmic scale of Galactus. Doomsday is, at heart, a Fantastic Four story — this is chapter one.",
+    "keyCharacterIds": [
+      "reed-richards",
+      "sue-storm",
+      "johnny-storm",
+      "ben-grimm",
+      "franklin-richards",
+      "galactus"
+    ]
+  },
+  {
+    "id": "x-men-2000",
+    "title": "X-Men",
+    "releaseYear": 2000,
+    "phase": "Fox Legacy",
+    "type": "movie",
+    "tmdbId": 36657,
+    "runtimeMinutes": 104,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "The origin point of the legacy mutant timeline whose survivors keep reappearing in the MCU. Meet Xavier, Magneto and Wolverine as the 616 will inherit them.",
+    "keyCharacterIds": [
+      "professor-x",
+      "magneto",
+      "wolverine",
+      "cyclops",
+      "jean-grey"
+    ]
+  },
+  {
+    "id": "x2",
+    "title": "X2: X-Men United",
+    "releaseYear": 2003,
+    "phase": "Fox Legacy",
+    "type": "movie",
+    "tmdbId": 36658,
+    "runtimeMinutes": 134,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "The high-water mark of the original team and the definitive statement of Xavier's dream. It frames the sacrifice logic that legacy mutants bring into an Incursion.",
+    "keyCharacterIds": [
+      "professor-x",
+      "magneto",
+      "wolverine",
+      "jean-grey",
+      "cyclops"
+    ]
+  },
+  {
+    "id": "x-men-first-class",
+    "title": "X-Men: First Class",
+    "releaseYear": 2011,
+    "phase": "Fox Legacy",
+    "type": "movie",
+    "tmdbId": 49538,
+    "runtimeMinutes": 132,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "Rebuilds Xavier and Magneto's friendship from the ground up and gives you the second face each actor wears. Essential if you want the returning cast's history to make sense.",
+    "keyCharacterIds": [
+      "professor-x",
+      "magneto"
+    ]
+  },
+  {
+    "id": "days-of-future-past",
+    "title": "X-Men: Days of Future Past",
+    "releaseYear": 2014,
+    "phase": "Fox Legacy",
+    "type": "movie",
+    "tmdbId": 127585,
+    "runtimeMinutes": 132,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "The Fox saga's own timeline-rewrite story, and the template for how a franchise erases and restores its cast. Read it as the dress rehearsal for what Doomsday does across studios.",
+    "keyCharacterIds": [
+      "professor-x",
+      "magneto",
+      "wolverine",
+      "beast"
+    ]
+  },
+  {
+    "id": "deadpool",
+    "title": "Deadpool",
+    "releaseYear": 2016,
+    "phase": "Fox Legacy",
+    "type": "movie",
+    "tmdbId": 293660,
+    "runtimeMinutes": 108,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "Establishes Wade Wilson's voice, healing factor and fourth-wall awareness — the reason he can narrate a multiversal crisis. Light prep, but it makes his MCU crossing far funnier.",
+    "keyCharacterIds": [
+      "deadpool"
+    ]
+  },
+  {
+    "id": "deadpool-2",
+    "title": "Deadpool 2",
+    "releaseYear": 2018,
+    "phase": "Fox Legacy",
+    "type": "movie",
+    "tmdbId": 383498,
+    "runtimeMinutes": 119,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "Adds time travel and the X-Force bench to Wade's toolkit and ends on a timeline edit of its own. It sets up the exact status quo Deadpool & Wolverine picks apart.",
+    "keyCharacterIds": [
+      "deadpool"
+    ]
+  },
+  {
+    "id": "logan",
+    "title": "Logan",
+    "releaseYear": 2017,
+    "phase": "Fox Legacy",
+    "type": "movie",
+    "tmdbId": 263115,
+    "runtimeMinutes": 137,
+    "isCrucial": false,
+    "pathTags": [
+      "xmen-incursions",
+      "completionist"
+    ],
+    "whyItMatters": "The elegy for the original Wolverine and Xavier, and the emotional weight every legacy-mutant return now carries. Watch it before any reunion so you know what is being undone.",
+    "keyCharacterIds": [
+      "wolverine",
+      "professor-x"
+    ]
+  }
+]
