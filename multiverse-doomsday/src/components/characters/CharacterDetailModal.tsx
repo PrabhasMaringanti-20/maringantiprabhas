@@ -10,6 +10,8 @@ import { useCharacterAppearances } from '@/hooks/useCharacters';
 import { AFFILIATION_ACCENT, AFFILIATION_GRADIENT } from '@/utils/imageHelper';
 import type { MarvelCharacter } from '@/types';
 
+import { usePalette } from '@/hooks/useTheme';
+
 interface CharacterDetailModalProps {
   character: MarvelCharacter | null;
   visible: boolean;
@@ -24,6 +26,7 @@ export function CharacterDetailModal({
   onClose,
   onShowAppearances,
 }: CharacterDetailModalProps) {
+  const palette = usePalette();
   const appearances = useCharacterAppearances(character ?? undefined);
 
   if (!character) return null;
@@ -39,7 +42,7 @@ export function CharacterDetailModal({
       >
         {/* Portrait header */}
         <LinearGradient
-          colors={[`${gradient[0]}55`, '#161124']}
+          colors={[`${gradient[0]}${palette.isDark ? '55' : '22'}`, palette.surface]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{ paddingHorizontal: 20, paddingTop: 12, paddingBottom: 20 }}
@@ -53,8 +56,8 @@ export function CharacterDetailModal({
             </View>
 
             <View className="ml-4 flex-1">
-              <Text className="text-2xl font-black leading-7 text-white">{character.alias}</Text>
-              <Text className="mt-0.5 text-sm font-semibold text-muted">{character.name}</Text>
+              <Text className="text-2xl font-black leading-7 text-ink">{character.alias}</Text>
+              <Text className="mt-0.5 text-sm font-semibold text-ink-soft">{character.name}</Text>
 
               <View className="mt-2 flex-row items-center">
                 <View
@@ -67,7 +70,7 @@ export function CharacterDetailModal({
                 >
                   {character.status}
                 </Text>
-                <Text className="mx-2 text-2xs text-muted-deep">•</Text>
+                <Text className="mx-2 text-2xs text-ink-faint">•</Text>
                 <Text className="flex-1 text-2xs font-bold uppercase tracking-wider" style={{ color: accent }}>
                   {character.affiliation}
                 </Text>
@@ -76,19 +79,19 @@ export function CharacterDetailModal({
           </View>
 
           <View className="mt-4 flex-row gap-2">
-            <View className="flex-1 rounded-xl border border-surface-border bg-surface/80 px-3 py-2">
-              <Text className="text-2xs font-bold uppercase tracking-wider text-muted-deep">
+            <View className="flex-1 rounded-xl border border-line bg-surface/80 px-3 py-2">
+              <Text className="text-2xs font-bold uppercase tracking-wider text-ink-faint">
                 Portrayed by
               </Text>
-              <Text className="mt-0.5 text-sm font-bold text-white" numberOfLines={2}>
+              <Text className="mt-0.5 text-sm font-bold text-ink" numberOfLines={2}>
                 {character.actor}
               </Text>
             </View>
-            <View className="flex-1 rounded-xl border border-surface-border bg-surface/80 px-3 py-2">
-              <Text className="text-2xs font-bold uppercase tracking-wider text-muted-deep">
+            <View className="flex-1 rounded-xl border border-line bg-surface/80 px-3 py-2">
+              <Text className="text-2xs font-bold uppercase tracking-wider text-ink-faint">
                 MCU debut
               </Text>
-              <Text className="mt-0.5 text-sm font-bold text-white" numberOfLines={2}>
+              <Text className="mt-0.5 text-sm font-bold text-ink" numberOfLines={2}>
                 {character.mcuDebut}
               </Text>
             </View>
@@ -99,19 +102,19 @@ export function CharacterDetailModal({
         <View className="px-5 pt-5">
           <View className="flex-row items-center">
             <Ionicons name="book-outline" size={15} color={accent} />
-            <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-white">
+            <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
               Comic origins vs MCU role
             </Text>
           </View>
 
-          <View className="mt-3 rounded-2xl border border-surface-border bg-surface-raised p-4">
+          <View className="mt-3 rounded-2xl border border-line bg-surface-raised p-4">
             {character.comicBio.map((line, index) => (
               <View key={index} className={`flex-row ${index > 0 ? 'mt-3' : ''}`}>
                 <View
                   className="mr-3 mt-[7px] h-1.5 w-1.5 rounded-full"
                   style={{ backgroundColor: accent }}
                 />
-                <Text className="flex-1 text-[13px] leading-5 text-muted">{line}</Text>
+                <Text className="flex-1 text-[13px] leading-5 text-ink-soft">{line}</Text>
               </View>
             ))}
           </View>
@@ -120,8 +123,8 @@ export function CharacterDetailModal({
         {/* Powers */}
         <View className="px-5 pt-5">
           <View className="flex-row items-center">
-            <Ionicons name="flash-outline" size={15} color="#F59E0B" />
-            <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-white">
+            <Ionicons name="flash-outline" size={15} color={palette.gold} />
+            <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
               Key powers & abilities
             </Text>
           </View>
@@ -152,7 +155,7 @@ export function CharacterDetailModal({
             disabled={appearances.length === 0}
             onPress={() => onShowAppearances(character)}
           />
-          <Text className="mt-2 text-center text-2xs text-muted-deep">
+          <Text className="mt-2 text-center text-2xs text-ink-faint">
             Filters the Roadmap to every entry this character appears in.
           </Text>
         </View>

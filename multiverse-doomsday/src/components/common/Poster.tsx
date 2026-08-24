@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text, View } from 'react-native';
 
+import { usePalette } from '@/hooks/useTheme';
 import { useTmdbDetails } from '@/hooks/useTMDB';
 import { posterUrl } from '@/utils/imageHelper';
 import type { MovieItem } from '@/types';
@@ -16,7 +17,7 @@ interface PosterProps {
   disableFetch?: boolean;
 }
 
-const FALLBACK_GRADIENT = ['#211A35', '#161124'] as const;
+
 
 /** "Avengers: Infinity War" → "AIW". Keeps narrow fallbacks legible. */
 function acronym(title: string): string {
@@ -42,6 +43,7 @@ export function Poster({
   rounded = 'rounded-xl',
   disableFetch = false,
 }: PosterProps) {
+  const palette = usePalette();
   const { data } = useTmdbDetails(disableFetch ? undefined : movie);
   const uri = posterUrl(data?.posterPath, 'w342');
   const height = width / aspectRatio;
@@ -49,7 +51,7 @@ export function Poster({
 
   return (
     <View
-      className={`overflow-hidden border border-surface-border bg-surface-raised ${rounded}`}
+      className={`overflow-hidden border border-line bg-surface-raised ${rounded}`}
       style={{ width, height }}
     >
       {uri ? (
@@ -61,24 +63,24 @@ export function Poster({
           cachePolicy="disk"
         />
       ) : (
-        <LinearGradient colors={FALLBACK_GRADIENT} style={{ flex: 1 }}>
+        <LinearGradient colors={palette.gradient} style={{ flex: 1 }}>
           <View className="flex-1 items-center justify-center p-2">
             {isNarrow ? (
               <Text
-                className="font-black tracking-wider text-muted"
+                className="font-black tracking-wider text-ink-soft"
                 style={{ fontSize: Math.max(13, width * 0.3) }}
               >
                 {acronym(movie.title)}
               </Text>
             ) : (
               <Text
-                className="text-center text-[11px] font-bold uppercase leading-tight tracking-wider text-muted"
+                className="text-center text-[11px] font-bold uppercase leading-tight tracking-wider text-ink-soft"
                 numberOfLines={4}
               >
                 {movie.title}
               </Text>
             )}
-            <Text className="mt-1 text-2xs font-semibold text-muted-deep">{movie.releaseYear}</Text>
+            <Text className="mt-1 text-2xs font-semibold text-ink-faint">{movie.releaseYear}</Text>
           </View>
         </LinearGradient>
       )}

@@ -5,12 +5,13 @@ import type { MovieItem, Tier } from '@/types';
 
 export type DropTarget = Tier | 'unranked';
 
-export const TIER_STYLE: Record<Tier, { bg: string; label: string; hex: string }> = {
-  S: { bg: 'bg-incursion', label: 'text-void', hex: '#EF4444' },
-  A: { bg: 'bg-infinity', label: 'text-void', hex: '#F59E0B' },
-  B: { bg: 'bg-doom', label: 'text-void', hex: '#10B981' },
-  C: { bg: 'bg-[#38BDF8]', label: 'text-void', hex: '#38BDF8' },
-  D: { bg: 'bg-[#8B5CF6]', label: 'text-void', hex: '#8B5CF6' },
+/** Tier colours are the tier list's own identity, so they hold in both themes. */
+export const TIER_STYLE: Record<Tier, { hex: string }> = {
+  S: { hex: '#E23D3D' },
+  A: { hex: '#E08A17' },
+  B: { hex: '#12A46F' },
+  C: { hex: '#2E9BD6' },
+  D: { hex: '#7C5CE0' },
 };
 
 interface MeasuredDropZoneProps {
@@ -75,17 +76,17 @@ export function TierRow({
       onMeasure={onMeasure}
       measureToken={measureToken}
       className={`mb-2 flex-row overflow-hidden rounded-2xl border bg-surface ${
-        isDropTarget ? 'border-white/70' : 'border-surface-border'
+        isDropTarget ? 'border-accent' : 'border-line'
       }`}
     >
-      <View className={`w-14 items-center justify-center ${style.bg}`}>
-        <Text className={`text-2xl font-black ${style.label}`}>{tier}</Text>
-        <Text className={`text-2xs font-bold ${style.label} opacity-70`}>{movies.length}</Text>
+      <View className="w-14 items-center justify-center" style={{ backgroundColor: style.hex }}>
+        <Text className="text-2xl font-black text-white">{tier}</Text>
+        <Text className="text-2xs font-bold text-white opacity-80">{movies.length}</Text>
       </View>
 
       <View className="min-h-[92px] flex-1 flex-row flex-wrap items-center gap-2 p-2.5">
         {movies.length === 0 ? (
-          <Text className="px-1 text-xs text-muted-deep">
+          <Text className="px-1 text-xs text-ink-faint">
             Drop a poster here — or tap one and pick {tier}.
           </Text>
         ) : (

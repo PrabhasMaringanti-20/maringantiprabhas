@@ -10,7 +10,7 @@ import Animated, {
 interface ProgressBarProps {
   /** 0–1 */
   value: number;
-  /** Tailwind colour class for the fill, e.g. "bg-doom". */
+  /** Tailwind colour class for the fill, e.g. "bg-accent". */
   fillClassName?: string;
   trackClassName?: string;
   height?: number;
@@ -20,7 +20,7 @@ interface ProgressBarProps {
 /** Thin animated meter used under path selectors and tier rows. */
 export function ProgressBar({
   value,
-  fillClassName = 'bg-doom',
+  fillClassName = 'bg-accent',
   trackClassName = 'bg-surface-raised',
   height = 6,
   durationMs = 700,

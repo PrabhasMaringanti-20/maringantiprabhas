@@ -7,21 +7,21 @@ import { MOVIE_CATALOGUE, ROADMAP_PATHS, useRoadmapStore } from '@/hooks/useRoad
 import type { PathTag } from '@/types';
 
 const ACCENT_ACTIVE: Record<string, string> = {
-  doom: 'border-doom bg-doom/15',
-  infinity: 'border-infinity bg-infinity/15',
-  incursion: 'border-incursion bg-incursion/15',
+  doom: 'border-accent bg-accent/15',
+  infinity: 'border-gold bg-gold/15',
+  incursion: 'border-crimson bg-crimson/15',
 };
 
 const ACCENT_TEXT: Record<string, string> = {
-  doom: 'text-doom',
-  infinity: 'text-infinity',
-  incursion: 'text-incursion',
+  doom: 'text-accent',
+  infinity: 'text-gold',
+  incursion: 'text-crimson',
 };
 
 const ACCENT_FILL: Record<string, string> = {
-  doom: 'bg-doom',
-  infinity: 'bg-infinity',
-  incursion: 'bg-incursion',
+  doom: 'bg-accent',
+  infinity: 'bg-gold',
+  incursion: 'bg-crimson',
 };
 
 /** Horizontal path tabs with a per-path completion meter underneath. */
@@ -59,16 +59,16 @@ export function PathSelector() {
                 setActivePath(path.id);
               }}
               className={`min-w-[132px] rounded-2xl border px-3.5 py-3 ${
-                isActive ? ACCENT_ACTIVE[path.accent] : 'border-surface-border bg-surface'
+                isActive ? ACCENT_ACTIVE[path.accent] : 'border-line bg-surface'
               }`}
             >
               <Text
-                className={`text-sm font-black ${isActive ? ACCENT_TEXT[path.accent] : 'text-white'}`}
+                className={`text-sm font-black ${isActive ? ACCENT_TEXT[path.accent] : 'text-ink'}`}
                 numberOfLines={1}
               >
                 {path.label}
               </Text>
-              <Text className="mt-0.5 text-2xs font-semibold uppercase tracking-wider text-muted-deep">
+              <Text className="mt-0.5 text-2xs font-semibold uppercase tracking-wider text-ink-faint">
                 {path.tagline}
               </Text>
 
@@ -76,11 +76,11 @@ export function PathSelector() {
                 <ProgressBar
                   value={counts.ratio}
                   height={4}
-                  fillClassName={isActive ? ACCENT_FILL[path.accent] : 'bg-muted-deep'}
-                  trackClassName="bg-void"
+                  fillClassName={isActive ? ACCENT_FILL[path.accent] : 'bg-ink-faint'}
+                  trackClassName="bg-canvas"
                 />
               </View>
-              <Text className="mt-1.5 text-2xs font-semibold text-muted">
+              <Text className="mt-1.5 text-2xs font-semibold text-ink-soft">
                 {counts.watched}/{counts.total} watched
               </Text>
             </Pressable>
@@ -89,7 +89,7 @@ export function PathSelector() {
       </ScrollView>
 
       <Animated.View key={active.id} entering={FadeIn.duration(260)} className="px-5 pt-3">
-        <Text className="text-xs leading-4 text-muted">{active.description}</Text>
+        <Text className="text-xs leading-4 text-ink-soft">{active.description}</Text>
       </Animated.View>
     </View>
   );

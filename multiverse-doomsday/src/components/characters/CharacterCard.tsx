@@ -6,12 +6,15 @@ import { CharacterAvatar } from '@/components/characters/CharacterAvatar';
 import { AFFILIATION_ACCENT } from '@/utils/imageHelper';
 import type { CharacterStatus, MarvelCharacter } from '@/types';
 
+import { usePalette } from '@/hooks/useTheme';
+
 const STATUS_COLOR: Record<CharacterStatus, string> = {
-  Active: '#10B981',
-  Incoming: '#F59E0B',
-  Variant: '#A78BFA',
-  Deceased: '#EF4444',
-  Unknown: '#8B80A8',
+  // Status colours carry meaning, so they hold across themes.
+  Active: '#12A46F',
+  Incoming: '#E08A17',
+  Variant: '#7C5CE0',
+  Deceased: '#E23D3D',
+  Unknown: '#8B899C',
 };
 
 interface CharacterCardProps {
@@ -22,6 +25,7 @@ interface CharacterCardProps {
 
 /** Grid tile: emblem/portrait, alias, real name, actor badge and live status. */
 export function CharacterCard({ character, index, onPress }: CharacterCardProps) {
+  const palette = usePalette();
   const accent = AFFILIATION_ACCENT[character.affiliation];
 
   return (
@@ -38,7 +42,7 @@ export function CharacterCard({ character, index, onPress }: CharacterCardProps)
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           onPress(character);
         }}
-        className="flex-1 items-center rounded-2xl border border-surface-border bg-surface p-3"
+        className="flex-1 items-center rounded-2xl border border-line bg-surface p-3"
       >
         <View className="items-center">
           <View
@@ -52,20 +56,20 @@ export function CharacterCard({ character, index, onPress }: CharacterCardProps)
             className="absolute -bottom-0.5 right-0 h-3.5 w-3.5 rounded-full border-2"
             style={{
               backgroundColor: STATUS_COLOR[character.status],
-              borderColor: '#161124',
+              borderColor: palette.surface,
             }}
           />
         </View>
 
-        <Text className="mt-2.5 text-center text-sm font-black leading-4 text-white" numberOfLines={2}>
+        <Text className="mt-2.5 text-center text-sm font-black leading-4 text-ink" numberOfLines={2}>
           {character.alias}
         </Text>
-        <Text className="mt-0.5 text-center text-2xs font-semibold text-muted" numberOfLines={1}>
+        <Text className="mt-0.5 text-center text-2xs font-semibold text-ink-soft" numberOfLines={1}>
           {character.name}
         </Text>
 
         <View className="mt-2 w-full rounded-lg bg-surface-raised px-2 py-1">
-          <Text className="text-center text-2xs font-semibold text-muted" numberOfLines={1}>
+          <Text className="text-center text-2xs font-semibold text-ink-soft" numberOfLines={1}>
             {character.actor}
           </Text>
         </View>

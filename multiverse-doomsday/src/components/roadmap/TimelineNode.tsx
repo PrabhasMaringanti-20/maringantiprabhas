@@ -19,6 +19,8 @@ import { Poster } from '@/components/common/Poster';
 import { formatRuntime } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
 
+import { usePalette } from '@/hooks/useTheme';
+
 export type NodeStatus = 'completed' | 'next' | 'upcoming';
 
 interface TimelineNodeProps {
@@ -43,6 +45,7 @@ export function TimelineNode({
   onPress,
   onToggleWatched,
 }: TimelineNodeProps) {
+  const palette = usePalette();
   const [burstId, setBurstId] = useState(0);
   const pulse = useSharedValue(0);
   const checkScale = useSharedValue(movie.isWatched ? 1 : 0);
@@ -89,7 +92,7 @@ export function TimelineNode({
   };
 
   const nodeColor =
-    status === 'completed' ? '#F59E0B' : status === 'next' ? '#10B981' : '#372B56';
+    status === 'completed' ? palette.gold : status === 'next' ? palette.accent : palette.line;
 
   return (
     <MotiView
@@ -106,8 +109,8 @@ export function TimelineNode({
             backgroundColor: isFirst
               ? 'transparent'
               : status === 'upcoming'
-                ? '#372B56'
-                : '#10B981AA',
+                ? palette.line
+                : palette.accent,
           }}
         />
 
@@ -122,7 +125,7 @@ export function TimelineNode({
                   width: 34,
                   height: 34,
                   borderRadius: 17,
-                  backgroundColor: '#10B981',
+                  backgroundColor: palette.accent,
                 },
               ]}
             />
@@ -139,11 +142,11 @@ export function TimelineNode({
               width: 26,
               height: 26,
               borderColor: nodeColor,
-              backgroundColor: status === 'completed' ? '#F59E0B' : '#0B0813',
+              backgroundColor: status === 'completed' ? palette.gold : palette.canvas,
             }}
           >
             <Animated.View style={checkStyle}>
-              <Ionicons name="checkmark-sharp" size={15} color="#0B0813" />
+              <Ionicons name="checkmark-sharp" size={15} color="#FFFFFF" />
             </Animated.View>
           </Pressable>
 
@@ -156,8 +159,8 @@ export function TimelineNode({
             backgroundColor: isLast
               ? 'transparent'
               : status === 'completed'
-                ? '#F59E0BAA'
-                : '#372B56',
+                ? palette.gold
+                : palette.line,
           }}
         />
       </View>
@@ -172,10 +175,10 @@ export function TimelineNode({
         }}
         className={`mb-3 flex-1 flex-row rounded-2xl border p-3 ${
           status === 'next'
-            ? 'border-doom/60 bg-surface-raised'
+            ? 'border-accent/60 bg-surface-raised'
             : movie.isWatched
-              ? 'border-surface-border bg-surface/70'
-              : 'border-surface-border bg-surface'
+              ? 'border-line bg-surface/70'
+              : 'border-line bg-surface'
         }`}
       >
         <Poster movie={movie} width={58} rounded="rounded-lg" />
@@ -184,45 +187,45 @@ export function TimelineNode({
           <View className="flex-row items-start justify-between">
             <Text
               className={`flex-1 pr-2 text-[15px] font-bold leading-5 ${
-                movie.isWatched ? 'text-muted' : 'text-white'
+                movie.isWatched ? 'text-ink-soft' : 'text-ink'
               }`}
               numberOfLines={2}
             >
               {movie.title}
             </Text>
-            {movie.isCrucial ? <Badge label="Crucial" tone="doom" compact /> : null}
+            {movie.isCrucial ? <Badge label="Crucial" tone="accent" compact /> : null}
           </View>
 
           <View className="mt-1.5 flex-row flex-wrap items-center gap-1.5">
-            <Text className="text-2xs font-semibold uppercase tracking-wider text-muted-deep">
+            <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
               {movie.releaseYear}
             </Text>
-            <Text className="text-2xs text-muted-deep">•</Text>
-            <Text className="text-2xs font-semibold uppercase tracking-wider text-muted-deep">
+            <Text className="text-2xs text-ink-faint">•</Text>
+            <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
               {typeof movie.phase === 'number' ? `Phase ${movie.phase}` : movie.phase}
             </Text>
-            <Text className="text-2xs text-muted-deep">•</Text>
-            <Text className="text-2xs font-semibold uppercase tracking-wider text-muted-deep">
+            <Text className="text-2xs text-ink-faint">•</Text>
+            <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
               {formatRuntime(movie.runtimeMinutes)}
             </Text>
             {movie.type === 'series' ? (
-              <Badge label="Series" tone="cosmic" compact />
+              <Badge label="Series" tone="violet" compact />
             ) : null}
           </View>
 
-          <Text className="mt-2 text-xs leading-4 text-muted" numberOfLines={2}>
+          <Text className="mt-2 text-xs leading-4 text-ink-soft" numberOfLines={2}>
             {movie.whyItMatters}
           </Text>
 
           <View className="mt-2 flex-row items-center justify-between">
             {status === 'next' ? (
-              <Badge label="Next up" tone="doom" icon="play" compact />
+              <Badge label="Next up" tone="accent" icon="play" compact />
             ) : movie.isWatched ? (
-              <Badge label="Watched" tone="infinity" icon="checkmark-done" compact />
+              <Badge label="Watched" tone="gold" icon="checkmark-done" compact />
             ) : (
               <Badge label="Upcoming" tone="muted" compact />
             )}
-            {movie.tier ? <Badge label={`Tier ${movie.tier}`} tone="incursion" compact /> : null}
+            {movie.tier ? <Badge label={`Tier ${movie.tier}`} tone="crimson" compact /> : null}
           </View>
         </View>
       </Pressable>

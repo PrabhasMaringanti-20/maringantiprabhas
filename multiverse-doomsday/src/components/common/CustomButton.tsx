@@ -3,6 +3,7 @@ import * as Haptics from 'expo-haptics';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
+import { usePalette } from '@/hooks/useTheme';
 import { enableClassName } from '@/styles/nativewindInterop';
 
 const AnimatedPressable = enableClassName(Animated.createAnimatedComponent(Pressable));
@@ -10,11 +11,11 @@ const AnimatedPressable = enableClassName(Animated.createAnimatedComponent(Press
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-const VARIANTS: Record<ButtonVariant, { wrap: string; text: string; icon: string }> = {
-  primary: { wrap: 'bg-doom border-doom', text: 'text-void', icon: '#0B0813' },
-  secondary: { wrap: 'bg-surface-raised border-surface-border', text: 'text-white', icon: '#FFFFFF' },
-  ghost: { wrap: 'bg-transparent border-surface-border', text: 'text-muted', icon: '#8B80A8' },
-  danger: { wrap: 'bg-incursion/15 border-incursion/50', text: 'text-incursion', icon: '#EF4444' },
+const VARIANTS: Record<ButtonVariant, { wrap: string; text: string }> = {
+  primary: { wrap: 'bg-accent border-accent', text: 'text-white' },
+  secondary: { wrap: 'bg-surface-raised border-line', text: 'text-ink' },
+  ghost: { wrap: 'bg-transparent border-line', text: 'text-ink-soft' },
+  danger: { wrap: 'bg-crimson/10 border-crimson/40', text: 'text-crimson' },
 };
 
 const SIZES: Record<ButtonSize, { wrap: string; text: string; icon: number }> = {
@@ -49,8 +50,15 @@ export function CustomButton({
   fullWidth = false,
   haptic = Haptics.ImpactFeedbackStyle.Light,
 }: CustomButtonProps) {
+  const palette = usePalette();
   const scale = useSharedValue(1);
   const style = VARIANTS[variant];
+  const iconColor = {
+    primary: '#FFFFFF',
+    secondary: palette.ink,
+    ghost: palette.inkSoft,
+    danger: palette.crimson,
+  }[variant];
   const sizing = SIZES[size];
 
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
@@ -62,7 +70,7 @@ export function CustomButton({
   };
 
   const iconNode = icon ? (
-    <Ionicons name={icon} size={sizing.icon} color={style.icon} />
+    <Ionicons name={icon} size={sizing.icon} color={iconColor} />
   ) : null;
 
   return (
@@ -82,7 +90,7 @@ export function CustomButton({
       } ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-40' : ''}`}
     >
       {loading ? (
-        <ActivityIndicator size="small" color={style.icon} />
+        <ActivityIndicator size="small" color={iconColor} />
       ) : (
         <View className="flex-row items-center">
           {iconPosition === 'left' && iconNode ? <View className="mr-2">{iconNode}</View> : null}

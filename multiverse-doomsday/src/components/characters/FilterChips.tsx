@@ -33,22 +33,22 @@ export function FilterChips({ value, onChange, counts }: FilterChipsProps) {
               onChange(filter);
             }}
             className={`flex-row items-center rounded-full border px-3.5 py-2 ${
-              isActive ? 'border-doom bg-doom/15' : 'border-surface-border bg-surface'
+              isActive ? 'border-accent bg-accent/15' : 'border-line bg-surface'
             }`}
           >
             <Text
-              className={`text-xs font-bold ${isActive ? 'text-doom' : 'text-muted'}`}
+              className={`text-xs font-bold ${isActive ? 'text-accent' : 'text-ink-soft'}`}
               numberOfLines={1}
             >
               {AFFILIATION_LABELS[filter]}
             </Text>
             <View
               className={`ml-2 rounded-full px-1.5 py-0.5 ${
-                isActive ? 'bg-doom/25' : 'bg-surface-raised'
+                isActive ? 'bg-accent/25' : 'bg-surface-raised'
               }`}
             >
               <Text
-                className={`text-2xs font-bold ${isActive ? 'text-doom' : 'text-muted-deep'}`}
+                className={`text-2xs font-bold ${isActive ? 'text-accent' : 'text-ink-faint'}`}
               >
                 {counts[filter] ?? 0}
               </Text>

@@ -85,7 +85,7 @@ export function BottomSheet({
               style={{ flex: 1 }}
             >
               <BlurView intensity={28} tint="dark" style={{ flex: 1 }}>
-                <View className="flex-1 bg-void/70" />
+                <View className="flex-1 bg-canvas/70" />
               </BlurView>
             </Pressable>
           </Animated.View>
@@ -98,11 +98,11 @@ export function BottomSheet({
                 paddingBottom: insets.bottom,
               },
             ]}
-            className="overflow-hidden rounded-t-[28px] border-t border-surface-border bg-surface"
+            className="overflow-hidden rounded-t-[28px] border-t border-line bg-surface"
           >
             <GestureDetector gesture={pan}>
               <View className="items-center pb-1 pt-3">
-                <View className="h-1 w-10 rounded-full bg-surface-border" />
+                <View className="h-1 w-10 rounded-full bg-line" />
               </View>
             </GestureDetector>
 

@@ -1,14 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 
-export type BadgeTone = 'doom' | 'infinity' | 'incursion' | 'cosmic' | 'muted';
+import { usePalette } from '@/hooks/useTheme';
 
-const TONE_STYLES: Record<BadgeTone, { wrap: string; text: string; icon: string }> = {
-  doom: { wrap: 'bg-doom/15 border-doom/40', text: 'text-doom', icon: '#10B981' },
-  infinity: { wrap: 'bg-infinity/15 border-infinity/40', text: 'text-infinity', icon: '#F59E0B' },
-  incursion: { wrap: 'bg-incursion/15 border-incursion/40', text: 'text-incursion', icon: '#EF4444' },
-  cosmic: { wrap: 'bg-[#8B5CF6]/15 border-[#8B5CF6]/40', text: 'text-[#A78BFA]', icon: '#A78BFA' },
-  muted: { wrap: 'bg-surface-raised border-surface-border', text: 'text-muted', icon: '#8B80A8' },
+export type BadgeTone = 'accent' | 'gold' | 'crimson' | 'violet' | 'muted';
+
+const TONE_STYLES: Record<BadgeTone, { wrap: string; text: string }> = {
+  accent: { wrap: 'bg-accent/10 border-accent/30', text: 'text-accent' },
+  gold: { wrap: 'bg-gold/10 border-gold/30', text: 'text-gold' },
+  crimson: { wrap: 'bg-crimson/10 border-crimson/30', text: 'text-crimson' },
+  violet: { wrap: 'bg-violet/10 border-violet/30', text: 'text-violet' },
+  muted: { wrap: 'bg-surface-raised border-line', text: 'text-ink-faint' },
 };
 
 interface BadgeProps {
@@ -20,7 +22,15 @@ interface BadgeProps {
 }
 
 export function Badge({ label, tone = 'muted', icon, compact = false }: BadgeProps) {
+  const palette = usePalette();
   const style = TONE_STYLES[tone];
+  const iconColor = {
+    accent: palette.accent,
+    gold: palette.gold,
+    crimson: palette.crimson,
+    violet: palette.violet,
+    muted: palette.inkFaint,
+  }[tone];
   return (
     <View
       className={`flex-row items-center rounded-full border ${style.wrap} ${
@@ -28,7 +38,7 @@ export function Badge({ label, tone = 'muted', icon, compact = false }: BadgePro
       }`}
     >
       {icon ? (
-        <Ionicons name={icon} size={compact ? 10 : 12} color={style.icon} style={{ marginRight: 4 }} />
+        <Ionicons name={icon} size={compact ? 10 : 12} color={iconColor} style={{ marginRight: 4 }} />
       ) : null}
       <Text
         className={`${style.text} font-semibold uppercase tracking-wider ${

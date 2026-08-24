@@ -1,3 +1,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * Semantic colour tokens.
+ *
+ * Components never name a raw colour — they use `bg-surface`, `text-ink`,
+ * `border-line` and so on, and the palette swaps underneath them. Light is a
+ * clean, professional paper theme; dark is the Doom vibe.
+ */
+@layer base {
+  :root {
+    /* Light — minimal, paper-like, high contrast text */
+    --color-canvas: 247 247 250;
+    --color-surface: 255 255 255;
+    --color-raised: 242 242 247;
+    --color-line: 226 226 234;
+    --color-ink: 17 16 23;
+    --color-ink-soft: 88 85 102;
+    --color-ink-faint: 140 137 156;
+
+    --color-accent: 5 150 105;
+    --color-accent-soft: 209 250 229;
+    --color-gold: 180 83 9;
+    --color-gold-soft: 254 243 199;
+    --color-crimson: 220 38 38;
+    --color-crimson-soft: 254 226 226;
+    --color-violet: 109 40 217;
+    --color-violet-soft: 237 233 254;
+
+    --color-scrim: 12 10 20;
+  }
+
+  .dark:root {
+    /* Dark — deep cosmic void, neon doom green, infinity gold */
+    --color-canvas: 11 8 19;
+    --color-surface: 22 17 36;
+    --color-raised: 33 26 53;
+    --color-line: 55 43 86;
+    --color-ink: 255 255 255;
+    --color-ink-soft: 139 128 168;
+    --color-ink-faint: 92 83 120;
+
+    --color-accent: 16 185 129;
+    --color-accent-soft: 6 78 59;
+    --color-gold: 245 158 11;
+    --color-gold-soft: 69 39 8;
+    --color-crimson: 239 68 68;
+    --color-crimson-soft: 69 10 10;
+    --color-violet: 167 139 250;
+    --color-violet-soft: 46 16 101;
+
+    --color-scrim: 0 0 0;
+  }
+}

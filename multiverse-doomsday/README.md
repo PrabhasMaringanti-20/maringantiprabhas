@@ -7,17 +7,22 @@ and export a story card of your readiness score.
 Built with Expo (managed workflow), TypeScript, Expo Router, NativeWind,
 Zustand and Reanimated. No account, no backend, no paid services.
 
-![Roadmap](docs/screenshots/02-roadmap-progress.png)
+Two themes: a minimal light mode for daylight, and **Doom mode** — smoky green
+atmosphere with drifting embers, a live countdown to release, and a DOOM cold
+open. Created by **PRABHAS.MAN**.
+
+![Roadmap](docs/screenshots/01-roadmap-dark.png)
 
 ---
 
-## Screens
+## What's in it
 
 | Tab | What it does |
 | --- | --- |
 | **Roadmap** | Animated readiness dashboard (circular meter, completion counters, hours remaining), five selectable watch paths, and a vertical connected timeline with tap-to-complete nodes, haptics and a micro particle burst. |
 | **Vault** | 45-character codex with live search (name, alias, actor, power), allegiance filter chips with counts, a staggered 2-column grid and a drag-dismissable detail sheet. |
-| **Tier Studio** | S/A/B/C/D board with long-press drag-and-drop between tiers, tap-to-assign, star ratings and a 9:16 branded story-card export. |
+| **Tiers** | S/A/B/C/D board with long-press drag-and-drop between tiers, tap-to-assign, star ratings and a 9:16 branded story-card export. |
+| **Ideator** | Who built it and why, your live readiness numbers, what to argue about, the theme switcher and the app's own vitals. |
 | **Movie detail** (modal route) | Backdrop, runtime, synopsis, a prominent "Why It Matters for Doomsday" alert box, live "Where to Stream" widget, star rating, tier assigner and key players. |
 
 ### Watch paths
@@ -80,22 +85,26 @@ multiverse-doomsday/
 │   │   ├── _layout.tsx         # Tab bar
 │   │   ├── index.tsx           # Roadmap / timeline
 │   │   ├── characters.tsx      # Character vault
-│   │   └── tierlist.tsx        # Tier studio + share export
+│   │   ├── tierlist.tsx        # Tier studio + share export
+│   │   └── ideator.tsx         # About the builder + appearance
 │   ├── movie/[id].tsx          # Movie detail (modal presentation)
 │   └── _layout.tsx             # Root stack, gesture root, safe areas
 ├── src/
 │   ├── components/
 │   │   ├── common/             # Badge, ProgressBar, CustomButton, SearchBar,
-│   │   │                       # StarRating, Poster, Confetti, BottomSheet
+│   │   │                       # StarRating, Poster, Confetti, BottomSheet,
+│   │   │                       # DoomIntro, DoomAtmosphere, CountdownBar
 │   │   ├── roadmap/            # TimelineNode, PathSelector, ReadinessCard, StreamWidget
 │   │   ├── characters/         # CharacterCard, CharacterDetailModal, FilterChips, CharacterAvatar
 │   │   └── tierlist/           # TierRow, DraggableItem, ShareCard
 │   ├── data/                   # movies.json (43), characters.json (45)
-│   ├── hooks/                  # useRoadmapStore, useCharacters, useTMDB
+│   ├── hooks/                  # useRoadmapStore, useCharacters, useTMDB, useTheme
 │   ├── services/               # tmdbApi.ts
+│   ├── styles/                 # nativewindInterop.ts
 │   ├── types/                  # index.ts — all domain models
-│   └── utils/                  # timeCalc.ts, imageHelper.ts
-└── tailwind.config.js          # Cosmic palette as design tokens
+│   └── utils/                  # timeCalc.ts, imageHelper.ts, countdown.ts
+├── global.css                  # Light + dark token palettes
+└── tailwind.config.js          # Semantic colours bound to those tokens
 ```
 
 ### State
@@ -117,12 +126,31 @@ live next to the store, so screens never reach into raw state.
 - a 12-second abort timeout,
 - `null` on every failure path, so the UI degrades instead of throwing.
 
-### Design tokens
+### Design tokens and theming
 
-The cosmic palette is defined once in `tailwind.config.js` and used as utility
-classes everywhere: `void` `#0B0813`, `surface` `#161124`, `surface-raised`
-`#211A35`, `surface-border` `#372B56`, `doom` `#10B981`, `infinity` `#F59E0B`,
-`incursion` `#EF4444`.
+`global.css` declares one set of semantic tokens twice — once for light, once
+under `.dark:root` — and `tailwind.config.js` binds them to utility classes.
+Components name a role, never a colour:
+
+| Token | Light | Doom mode |
+| --- | --- | --- |
+| `canvas` | `#F7F7FA` | `#0B0813` |
+| `surface` / `surface-raised` | `#FFFFFF` / `#F2F2F7` | `#161124` / `#211A35` |
+| `line` | `#E2E2EA` | `#372B56` |
+| `ink` / `ink-soft` / `ink-faint` | `#111017` / `#585566` / `#8C899C` | `#FFFFFF` / `#8B80A8` / `#5C5378` |
+| `accent` | `#059669` | `#10B981` |
+| `gold` / `crimson` / `violet` | `#B45309` / `#DC2626` / `#6D28D9` | `#F59E0B` / `#EF4444` / `#A78BFA` |
+
+`useThemeStore` persists the choice (System / Light / Doom) and `usePalette()`
+serves the same values imperatively where `className` cannot reach — SVG strokes,
+gradient stops, icon tints, the tab bar and the status bar.
+
+### Doom mode atmosphere
+
+`DoomAtmosphere` renders three slow-breathing radial smoke blooms and a set of
+embers drifting upward on staggered loops, all on the UI thread via Reanimated.
+It returns `null` in light mode, so the clean theme stays clean. `DoomIntro`
+plays the DOOM cold open once per launch and signs off with the creator credit.
 
 ---
 
@@ -144,23 +172,34 @@ classes everywhere: `void` `#0B0813`, `surface` `#161124`, `surface-raised`
   falls back to a title search when they disagree, caching the corrected id. A
   wrong or stale id costs one extra request, once, and then loads the right
   artwork — no data edit required.
+- **Themes are one set of tokens, not two sets of classes.** Every colour
+  resolves through a CSS variable declared in `global.css`, so a component says
+  `bg-surface text-ink` once and the light and dark palettes swap underneath it.
+  `usePalette()` serves the same values imperatively for SVG, gradients and icon
+  tints. There is not a single `dark:` variant in the codebase.
+- **`LinearGradient` ignores `className` when `style` is also passed.** The
+  explicit `style` prop wins, so layout for a gradient goes in `style`.
 - **NativeWind needs Reanimated and Moti registered.** `className` is only wired
   into React Native's core components, so `src/styles/nativewindInterop.ts`
   registers `Animated.*` and `Moti*` via `cssInterop`. Without it every
   `className` on an animated component is silently dropped.
 
-## Screens
+## Screenshots
 
-| Roadmap | Character vault | Character sheet |
-| --- | --- | --- |
-| ![](docs/screenshots/01-roadmap-start.png) | ![](docs/screenshots/06-vault.png) | ![](docs/screenshots/08-character-detail.png) |
+**Doom mode** — green smoke, drifting embers, neon wordmark.
 
-| Movie detail | Tier board | Story card |
-| --- | --- | --- |
-| ![](docs/screenshots/04-movie-detail.png) | ![](docs/screenshots/13-tier-board-filled.png) | ![](docs/screenshots/14-share-card.png) |
+| Cold open | Roadmap | Vault | Ideator |
+| --- | --- | --- | --- |
+| ![](docs/screenshots/00-intro.png) | ![](docs/screenshots/02-roadmap-dark-progress.png) | ![](docs/screenshots/03-vault-dark.png) | ![](docs/screenshots/05-ideator-dark.png) |
 
-Captured from the running app at 390×844 @3x. Posters and backdrops show their
-offline fallbacks — add a TMDB key for live artwork.
+**Light mode** — minimal, professional, built for daylight reading.
+
+| Roadmap | Vault | Character | Tiers |
+| --- | --- | --- | --- |
+| ![](docs/screenshots/09-roadmap-light.png) | ![](docs/screenshots/11-vault-light.png) | ![](docs/screenshots/12-character-light.png) | ![](docs/screenshots/13-tiers-light.png) |
+
+Captured from the running app at 390×844 @3x. Posters show their offline
+fallbacks — add a TMDB key for live artwork.
 
 ## Verified
 

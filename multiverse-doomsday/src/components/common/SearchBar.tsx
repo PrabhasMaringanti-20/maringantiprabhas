@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Pressable, TextInput, View } from 'react-native';
 
+import { usePalette } from '@/hooks/useTheme';
+
 interface SearchBarProps {
   value: string;
   onChangeText: (value: string) => void;
@@ -15,20 +17,22 @@ export function SearchBar({
   placeholder = 'Search…',
   autoFocus = false,
 }: SearchBarProps) {
+  const palette = usePalette();
+
   return (
-    <View className="flex-row items-center rounded-2xl border border-surface-border bg-surface px-3 py-2.5">
-      <Ionicons name="search" size={16} color="#8B80A8" />
+    <View className="flex-row items-center rounded-2xl border border-line bg-surface px-3 py-2.5">
+      <Ionicons name="search" size={16} color={palette.inkFaint} />
       <TextInput
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#5C5378"
+        placeholderTextColor={palette.inkFaint}
         autoFocus={autoFocus}
         autoCorrect={false}
         autoCapitalize="none"
         returnKeyType="search"
         clearButtonMode="never"
-        className="ml-2 flex-1 p-0 text-[15px] text-white"
+        className="ml-2 flex-1 p-0 text-[15px] text-ink"
         accessibilityLabel={placeholder}
       />
       {value.length > 0 ? (
@@ -41,7 +45,7 @@ export function SearchBar({
             onChangeText('');
           }}
         >
-          <Ionicons name="close-circle" size={18} color="#5C5378" />
+          <Ionicons name="close-circle" size={18} color={palette.inkFaint} />
         </Pressable>
       ) : null}
     </View>

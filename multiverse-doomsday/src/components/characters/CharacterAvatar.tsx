@@ -31,7 +31,7 @@ export function CharacterAvatar({
 
   return (
     <View
-      className="overflow-hidden border border-surface-border"
+      className="overflow-hidden border border-line"
       style={{ width: size, height: size, borderRadius: radius }}
     >
       {uri ? (

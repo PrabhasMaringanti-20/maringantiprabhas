@@ -46,59 +46,59 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
         {/* Header */}
         <View>
           <View className="flex-row items-center">
-            <View className="h-7 w-7 items-center justify-center rounded-lg bg-doom">
+            <View className="h-7 w-7 items-center justify-center rounded-lg bg-accent">
               <Ionicons name="planet" size={16} color="#0B0813" />
             </View>
-            <Text className="ml-2 text-[11px] font-black uppercase tracking-[3px] text-doom">
+            <Text className="ml-2 text-[11px] font-black uppercase tracking-[3px] text-accent">
               Multiverse Roadmap
             </Text>
           </View>
-          <Text className="mt-1 text-[11px] font-semibold uppercase tracking-[2px] text-muted-deep">
+          <Text className="mt-1 text-[11px] font-semibold uppercase tracking-[2px] text-ink-faint">
             Guide to Doomsday
           </Text>
         </View>
 
         {/* Readiness */}
         <View className="items-center">
-          <Text className="text-[13px] font-bold uppercase tracking-[3px] text-muted">
+          <Text className="text-[13px] font-bold uppercase tracking-[3px] text-ink-soft">
             Doomsday Ready
           </Text>
           <Text
-            className="text-doom"
+            className="text-accent"
             style={{ fontSize: 96, fontWeight: '900', lineHeight: 104 }}
           >
             {stats.percent}%
           </Text>
-          <View className="mt-1 rounded-full border border-infinity/50 bg-infinity/10 px-4 py-1.5">
-            <Text className="text-xs font-black uppercase tracking-[2px] text-infinity">
+          <View className="mt-1 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5">
+            <Text className="text-xs font-black uppercase tracking-[2px] text-gold">
               {rank.label}
             </Text>
           </View>
 
           <View className="mt-5 flex-row">
             <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-white" numberOfLines={1}>
+              <Text className="text-xl font-black text-ink" numberOfLines={1}>
                 {stats.watched}/{stats.total}
               </Text>
-              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-muted-deep">
+              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-ink-faint">
                 Titles logged
               </Text>
             </View>
-            <View className="w-px bg-surface-border" />
+            <View className="w-px bg-line" />
             <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-white" numberOfLines={1}>
+              <Text className="text-xl font-black text-ink" numberOfLines={1}>
                 {formatHoursCompact(stats.minutesWatched)}
               </Text>
-              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-muted-deep">
+              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-ink-faint">
                 Watch time
               </Text>
             </View>
-            <View className="w-px bg-surface-border" />
+            <View className="w-px bg-line" />
             <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-white" numberOfLines={1}>
+              <Text className="text-xl font-black text-ink" numberOfLines={1}>
                 {rankedCount}
               </Text>
-              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-muted-deep">
+              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-ink-faint">
                 Ranked
               </Text>
             </View>
@@ -108,17 +108,20 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
         {/* Top tier */}
         <View>
           <View className="flex-row items-center">
-            <View className={`h-5 w-5 items-center justify-center rounded ${tierStyle.bg}`}>
-              <Text className="text-[11px] font-black text-void">{topTierLabel}</Text>
+            <View
+              className="h-5 w-5 items-center justify-center rounded"
+              style={{ backgroundColor: tierStyle.hex }}
+            >
+              <Text className="text-[11px] font-black text-white">{topTierLabel}</Text>
             </View>
-            <Text className="ml-2 text-[11px] font-bold uppercase tracking-[2px] text-white">
+            <Text className="ml-2 text-[11px] font-bold uppercase tracking-[2px] text-ink">
               Top tier
             </Text>
           </View>
 
           <View className="mt-3 flex-row gap-2">
             {topTier.length === 0 ? (
-              <Text className="text-xs text-muted-deep">Nothing ranked yet.</Text>
+              <Text className="text-xs text-ink-faint">Nothing ranked yet.</Text>
             ) : (
               topTier.slice(0, 4).map((movie) => (
                 <Poster key={movie.id} movie={movie} width={72} rounded="rounded-lg" />
@@ -127,11 +130,11 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
           </View>
 
           {favourite ? (
-            <View className="mt-4 rounded-2xl border border-surface-border bg-surface/80 p-3">
-              <Text className="text-2xs font-bold uppercase tracking-[2px] text-muted-deep">
+            <View className="mt-4 rounded-2xl border border-line bg-surface/80 p-3">
+              <Text className="text-2xs font-bold uppercase tracking-[2px] text-ink-faint">
                 Favourite
               </Text>
-              <Text className="mt-1 text-sm font-black text-white" numberOfLines={1}>
+              <Text className="mt-1 text-sm font-black text-ink" numberOfLines={1}>
                 {favourite.title}
               </Text>
               <View className="mt-1.5 flex-row">
@@ -150,11 +153,11 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
         </View>
 
         {/* Footer */}
-        <View className="flex-row items-center justify-between border-t border-surface-border pt-3">
-          <Text className="text-2xs font-semibold uppercase tracking-wider text-muted-deep">
+        <View className="flex-row items-center justify-between border-t border-line pt-3">
+          <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
             Avengers: Doomsday prep
           </Text>
-          <Text className="text-2xs font-semibold uppercase tracking-wider text-doom">
+          <Text className="text-2xs font-semibold uppercase tracking-wider text-accent">
             {stats.watched}/{stats.total} logged
           </Text>
         </View>

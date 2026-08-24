@@ -22,7 +22,10 @@ import { backdropUrl } from '@/utils/imageHelper';
 import { formatRuntime } from '@/utils/timeCalc';
 import { TIERS, type Tier } from '@/types';
 
+import { usePalette } from '@/hooks/useTheme';
+
 export default function MovieDetailScreen() {
+  const palette = usePalette();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -37,9 +40,9 @@ export default function MovieDetailScreen() {
 
   if (!movie) {
     return (
-      <View className="flex-1 items-center justify-center bg-void px-10">
-        <Ionicons name="alert-circle-outline" size={40} color="#372B56" />
-        <Text className="mt-3 text-center text-sm text-muted">
+      <View className="flex-1 items-center justify-center bg-canvas px-10">
+        <Ionicons name="alert-circle-outline" size={40} color={palette.line} />
+        <Text className="mt-3 text-center text-sm text-ink-soft">
           That entry is not in the roadmap.
         </Text>
         <View className="mt-5">
@@ -63,7 +66,7 @@ export default function MovieDetailScreen() {
   };
 
   return (
-    <View className="flex-1 bg-void">
+    <View className="flex-1 bg-canvas">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
@@ -79,10 +82,10 @@ export default function MovieDetailScreen() {
               cachePolicy="disk"
             />
           ) : (
-            <LinearGradient colors={['#211A35', '#0B0813']} style={{ flex: 1 }} />
+            <LinearGradient colors={[palette.raised, palette.canvas]} style={{ flex: 1 }} />
           )}
           <LinearGradient
-            colors={['transparent', '#0B0813']}
+            colors={['transparent', palette.canvas]}
             style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 120 }}
           />
 
@@ -92,9 +95,9 @@ export default function MovieDetailScreen() {
             onPress={router.back}
             hitSlop={12}
             style={{ top: insets.top + 8 }}
-            className="absolute left-4 h-9 w-9 items-center justify-center rounded-full border border-surface-border bg-void/80"
+            className="absolute left-4 h-9 w-9 items-center justify-center rounded-full border border-line bg-canvas/80"
           >
-            <Ionicons name="chevron-down" size={20} color="#FFFFFF" />
+            <Ionicons name="chevron-down" size={20} color={palette.ink} />
           </Pressable>
         </View>
 
@@ -103,27 +106,27 @@ export default function MovieDetailScreen() {
           <Poster movie={movie} width={92} />
 
           <View className="ml-4 flex-1 justify-end pb-1">
-            <Text className="text-2xl font-black leading-7 text-white">{movie.title}</Text>
+            <Text className="text-2xl font-black leading-7 text-ink">{movie.title}</Text>
             <View className="mt-1.5 flex-row flex-wrap items-center gap-1.5">
-              <Text className="text-2xs font-semibold uppercase tracking-wider text-muted">
+              <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-soft">
                 {movie.releaseYear}
               </Text>
-              <Text className="text-2xs text-muted-deep">•</Text>
-              <Text className="text-2xs font-semibold uppercase tracking-wider text-muted">
+              <Text className="text-2xs text-ink-faint">•</Text>
+              <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-soft">
                 {typeof movie.phase === 'number' ? `Phase ${movie.phase}` : movie.phase}
               </Text>
-              <Text className="text-2xs text-muted-deep">•</Text>
-              <Text className="text-2xs font-semibold uppercase tracking-wider text-muted">
+              <Text className="text-2xs text-ink-faint">•</Text>
+              <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-soft">
                 {formatRuntime(details?.runtimeMinutes ?? movie.runtimeMinutes)}
               </Text>
             </View>
             <View className="mt-2 flex-row flex-wrap gap-1.5">
-              {movie.isCrucial ? <Badge label="Express essential" tone="doom" compact /> : null}
-              {movie.type === 'series' ? <Badge label="Series" tone="cosmic" compact /> : null}
+              {movie.isCrucial ? <Badge label="Express essential" tone="accent" compact /> : null}
+              {movie.type === 'series' ? <Badge label="Series" tone="violet" compact /> : null}
               {details?.voteAverage ? (
                 <Badge
                   label={`TMDB ${details.voteAverage.toFixed(1)}`}
-                  tone="infinity"
+                  tone="gold"
                   icon="star"
                   compact
                 />
@@ -134,16 +137,20 @@ export default function MovieDetailScreen() {
 
         {/* Why it matters */}
         <View className="mt-6 px-5">
-          <View className="overflow-hidden rounded-2xl border border-doom/40">
-            <LinearGradient colors={['#10B98122', '#161124']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <View className="overflow-hidden rounded-2xl border border-accent/40">
+            <LinearGradient
+              colors={[`${palette.accent}${palette.isDark ? '22' : '14'}`, palette.surface]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
               <View className="p-4">
                 <View className="flex-row items-center">
-                  <Ionicons name="alert-circle" size={16} color="#10B981" />
-                  <Text className="ml-2 text-xs font-black uppercase tracking-[2px] text-doom">
+                  <Ionicons name="alert-circle" size={16} color={palette.accent} />
+                  <Text className="ml-2 text-xs font-black uppercase tracking-[2px] text-accent">
                     Why it matters for Doomsday
                   </Text>
                 </View>
-                <Text className="mt-2 text-[13px] leading-5 text-white/90">
+                <Text className="mt-2 text-[13px] leading-5 text-ink/90">
                   {movie.whyItMatters}
                 </Text>
               </View>
@@ -154,12 +161,12 @@ export default function MovieDetailScreen() {
         {/* Overview */}
         {details?.overview ? (
           <View className="mt-5 px-5">
-            <Text className="text-xs font-bold uppercase tracking-[2px] text-white">Overview</Text>
-            <Text className="mt-2 text-[13px] leading-5 text-muted">{details.overview}</Text>
+            <Text className="text-xs font-bold uppercase tracking-[2px] text-ink">Overview</Text>
+            <Text className="mt-2 text-[13px] leading-5 text-ink-soft">{details.overview}</Text>
           </View>
         ) : tmdbDisabled ? (
           <View className="mt-5 px-5">
-            <Text className="text-xs leading-4 text-muted-deep">
+            <Text className="text-xs leading-4 text-ink-faint">
               Synopsis, posters and streaming links appear once a free TMDB key is configured.
             </Text>
           </View>
@@ -185,8 +192,8 @@ export default function MovieDetailScreen() {
 
         {/* Rating + tier */}
         <View className="mt-6 px-5">
-          <View className="rounded-2xl border border-surface-border bg-surface p-4">
-            <Text className="text-2xs font-bold uppercase tracking-[2px] text-muted-deep">
+          <View className="rounded-2xl border border-line bg-surface p-4">
+            <Text className="text-2xs font-bold uppercase tracking-[2px] text-ink-faint">
               Your rating
             </Text>
             <View className="mt-2.5">
@@ -196,7 +203,7 @@ export default function MovieDetailScreen() {
               />
             </View>
 
-            <Text className="mt-5 text-2xs font-bold uppercase tracking-[2px] text-muted-deep">
+            <Text className="mt-5 text-2xs font-bold uppercase tracking-[2px] text-ink-faint">
               Tier assignment
             </Text>
             <View className="mt-2.5 flex-row gap-2">
@@ -212,11 +219,14 @@ export default function MovieDetailScreen() {
                       setTier(movie.id, isActive ? undefined : tier);
                     }}
                     className={`h-12 flex-1 items-center justify-center rounded-xl border-2 ${
-                      isActive ? TIER_STYLE[tier].bg : 'bg-surface-raised'
+                      isActive ? '' : 'bg-surface-raised'
                     }`}
-                    style={{ borderColor: isActive ? '#FFFFFF' : '#372B56' }}
+                    style={{
+                      backgroundColor: isActive ? TIER_STYLE[tier].hex : undefined,
+                      borderColor: isActive ? TIER_STYLE[tier].hex : palette.line,
+                    }}
                   >
-                    <Text className={`text-lg font-black ${isActive ? 'text-void' : 'text-white'}`}>
+                    <Text className={`text-lg font-black ${isActive ? 'text-white' : 'text-ink'}`}>
                       {tier}
                     </Text>
                   </Pressable>
@@ -234,7 +244,7 @@ export default function MovieDetailScreen() {
         {/* Key players */}
         {cast.length > 0 ? (
           <View className="mt-6">
-            <Text className="px-5 text-xs font-bold uppercase tracking-[2px] text-white">
+            <Text className="px-5 text-xs font-bold uppercase tracking-[2px] text-ink">
               Key players
             </Text>
             <ScrollView
@@ -246,7 +256,7 @@ export default function MovieDetailScreen() {
                 <View key={character.id} className="w-16 items-center">
                   <CharacterAvatar character={character} size={56} />
                   <Text
-                    className="mt-1.5 text-center text-2xs font-semibold text-white"
+                    className="mt-1.5 text-center text-2xs font-semibold text-ink"
                     numberOfLines={2}
                   >
                     {character.alias}

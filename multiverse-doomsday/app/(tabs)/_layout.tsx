@@ -2,24 +2,30 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 
+import { usePalette } from '@/hooks/useTheme';
+
 export default function TabsLayout() {
+  const palette = usePalette();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#10B981',
-        tabBarInactiveTintColor: '#5C5378',
+        tabBarActiveTintColor: palette.accent,
+        tabBarInactiveTintColor: palette.inkFaint,
+        sceneStyle: { backgroundColor: 'transparent' },
         tabBarStyle: {
-          backgroundColor: '#0B0813',
-          borderTopColor: '#372B56',
+          backgroundColor: palette.surface,
+          borderTopColor: palette.line,
           borderTopWidth: 1,
-          height: Platform.OS === 'ios' ? 88 : 64,
+          height: Platform.OS === 'ios' ? 86 : 62,
           paddingTop: 6,
+          elevation: 0,
         },
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 10,
           fontWeight: '700',
-          letterSpacing: 0.4,
+          letterSpacing: 0.3,
         },
       }}
     >
@@ -28,7 +34,7 @@ export default function TabsLayout() {
         options={{
           title: 'Roadmap',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="git-branch" size={size ?? 22} color={color} />
+            <Ionicons name="git-branch-outline" size={size ?? 21} color={color} />
           ),
         }}
       />
@@ -37,16 +43,25 @@ export default function TabsLayout() {
         options={{
           title: 'Vault',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people" size={size ?? 22} color={color} />
+            <Ionicons name="people-outline" size={size ?? 21} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="tierlist"
         options={{
-          title: 'Tier Studio',
+          title: 'Tiers',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="trophy" size={size ?? 22} color={color} />
+            <Ionicons name="trophy-outline" size={size ?? 21} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ideator"
+        options={{
+          title: 'Ideator',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="sparkles-outline" size={size ?? 21} color={color} />
           ),
         }}
       />

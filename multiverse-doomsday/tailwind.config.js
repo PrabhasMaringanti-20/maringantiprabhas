@@ -1,41 +1,44 @@
 /** @type {import('tailwindcss').Config} */
+
+// Every colour resolves through a CSS variable declared in global.css, so the
+// light and dark palettes swap without a single `dark:` class in a component.
+const token = (name) => `rgb(var(--color-${name}) / <alpha-value>)`;
+
 module.exports = {
   content: ['./app/**/*.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   presets: [require('nativewind/preset')],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Deep Cosmic Void
-        void: {
-          DEFAULT: '#0B0813',
-          deep: '#070510',
-        },
-        // Surfaces
+        canvas: token('canvas'),
         surface: {
-          DEFAULT: '#161124',
-          raised: '#211A35',
-          border: '#372B56',
+          DEFAULT: token('surface'),
+          raised: token('raised'),
         },
-        // Neon Doom Green
-        doom: {
-          DEFAULT: '#10B981',
-          deep: '#059669',
-          dim: '#065F46',
+        line: token('line'),
+        ink: {
+          DEFAULT: token('ink'),
+          soft: token('ink-soft'),
+          faint: token('ink-faint'),
         },
-        // Infinity Gold
-        infinity: {
-          DEFAULT: '#F59E0B',
-          deep: '#B45309',
+        accent: {
+          DEFAULT: token('accent'),
+          soft: token('accent-soft'),
         },
-        // Incursion Crimson
-        incursion: {
-          DEFAULT: '#EF4444',
-          deep: '#B91C1C',
+        gold: {
+          DEFAULT: token('gold'),
+          soft: token('gold-soft'),
         },
-        muted: {
-          DEFAULT: '#8B80A8',
-          deep: '#5C5378',
+        crimson: {
+          DEFAULT: token('crimson'),
+          soft: token('crimson-soft'),
         },
+        violet: {
+          DEFAULT: token('violet'),
+          soft: token('violet-soft'),
+        },
+        scrim: token('scrim'),
       },
       fontSize: {
         '2xs': '10px',

@@ -8,6 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MotiView } from 'moti';
 
 import { Badge } from '@/components/common/Badge';
+import { CountdownBar } from '@/components/common/CountdownBar';
+import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
 import { PathSelector } from '@/components/roadmap/PathSelector';
 import { ReadinessCard } from '@/components/roadmap/ReadinessCard';
 import { TimelineNode, type NodeStatus } from '@/components/roadmap/TimelineNode';
@@ -15,7 +17,10 @@ import { CHARACTER_CATALOGUE, ROADMAP_PATHS, usePathMovies, useRoadmapStore } fr
 import { computeReadiness } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
 
+import { usePalette } from '@/hooks/useTheme';
+
 export default function RoadmapScreen() {
+  const palette = usePalette();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -47,15 +52,15 @@ export default function RoadmapScreen() {
   // the real score instead of flashing 0%.
   if (!hydrated) {
     return (
-      <View className="flex-1 items-center justify-center bg-void">
+      <View className="flex-1 items-center justify-center bg-canvas">
         <MotiView
           from={{ opacity: 0.35, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: 'timing', duration: 900, loop: true }}
         >
-          <Ionicons name="planet" size={44} color="#10B981" />
+          <Ionicons name="planet" size={44} color={palette.accent} />
         </MotiView>
-        <Text className="mt-4 text-2xs font-bold uppercase tracking-[3px] text-muted">
+        <Text className="mt-4 text-2xs font-bold uppercase tracking-[3px] text-ink-soft">
           Restoring your timeline
         </Text>
       </View>
@@ -63,7 +68,9 @@ export default function RoadmapScreen() {
   }
 
   return (
-    <View className="flex-1 bg-void">
+    <View className="flex-1 bg-canvas">
+      <DoomAtmosphere />
+
       <FlatList
         data={movies}
         keyExtractor={(movie) => movie.id}
@@ -75,12 +82,16 @@ export default function RoadmapScreen() {
         ListHeaderComponent={
           <View>
             <View className="px-5 pb-4">
-              <Text className="text-2xs font-bold uppercase tracking-[3px] text-doom">
+              <Text className="text-2xs font-bold uppercase tracking-[3px] text-accent">
                 Multiverse Roadmap
               </Text>
-              <Text className="mt-1 text-3xl font-black leading-9 text-white">
+              <Text className="mt-1 text-[32px] font-black leading-9 tracking-tight text-ink">
                 Guide to Doomsday
               </Text>
+            </View>
+
+            <View className="px-5 pb-4">
+              <CountdownBar />
             </View>
 
             <View className="px-5">
@@ -93,12 +104,12 @@ export default function RoadmapScreen() {
 
             {filterCharacter ? (
               <View className="mt-4 px-5">
-                <View className="flex-row items-center justify-between rounded-2xl border border-doom/40 bg-doom/10 px-4 py-3">
+                <View className="flex-row items-center justify-between rounded-2xl border border-accent/40 bg-accent/10 px-4 py-3">
                   <View className="flex-1 pr-3">
-                    <Text className="text-2xs font-bold uppercase tracking-wider text-doom">
+                    <Text className="text-2xs font-bold uppercase tracking-wider text-accent">
                       Filtered by character
                     </Text>
-                    <Text className="mt-0.5 text-sm font-bold text-white" numberOfLines={1}>
+                    <Text className="mt-0.5 text-sm font-bold text-ink" numberOfLines={1}>
                       {filterCharacter.alias} — {movies.length} appearance
                       {movies.length === 1 ? '' : 's'}
                     </Text>
@@ -112,14 +123,14 @@ export default function RoadmapScreen() {
                       setCharacterFilter(null);
                     }}
                   >
-                    <Ionicons name="close-circle" size={22} color="#10B981" />
+                    <Ionicons name="close-circle" size={22} color={palette.accent} />
                   </Pressable>
                 </View>
               </View>
             ) : null}
 
             <View className="mb-2 mt-6 flex-row items-center justify-between px-5">
-              <Text className="text-xs font-bold uppercase tracking-[2px] text-white">
+              <Text className="text-xs font-bold uppercase tracking-[2px] text-ink">
                 Timeline
               </Text>
               <Badge
@@ -145,8 +156,8 @@ export default function RoadmapScreen() {
         )}
         ListEmptyComponent={
           <View className="items-center px-10 py-16">
-            <Ionicons name="planet-outline" size={40} color="#372B56" />
-            <Text className="mt-3 text-center text-sm text-muted">
+            <Ionicons name="planet-outline" size={40} color={palette.line} />
+            <Text className="mt-3 text-center text-sm text-ink-soft">
               Nothing on this path yet.
             </Text>
           </View>

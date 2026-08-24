@@ -12,7 +12,12 @@ import { useCharacters } from '@/hooks/useCharacters';
 import { useRoadmapStore } from '@/hooks/useRoadmapStore';
 import type { MarvelCharacter } from '@/types';
 
+import { CountdownBar } from '@/components/common/CountdownBar';
+import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
+import { usePalette } from '@/hooks/useTheme';
+
 export default function CharactersScreen() {
+  const palette = usePalette();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { query, setQuery, filter, setFilter, characters, counts, total } = useCharacters();
@@ -33,7 +38,9 @@ export default function CharactersScreen() {
   };
 
   return (
-    <View className="flex-1 bg-void">
+    <View className="flex-1 bg-canvas">
+      <DoomAtmosphere particleCount={9} />
+
       <FlatList
         data={characters}
         keyExtractor={(character) => character.id}
@@ -49,15 +56,19 @@ export default function CharactersScreen() {
         ListHeaderComponent={
           <View className="pb-3">
             <View className="px-5">
-              <Text className="text-2xs font-bold uppercase tracking-[3px] text-doom">
+              <Text className="text-2xs font-bold uppercase tracking-[3px] text-accent">
                 Multiverse Vault
               </Text>
-              <Text className="mt-1 text-3xl font-black leading-9 text-white">
+              <Text className="mt-1 text-[32px] font-black leading-9 tracking-tight text-ink">
                 Character Codex
               </Text>
-              <Text className="mt-1 text-xs text-muted">
+              <Text className="mt-1 text-xs text-ink-soft">
                 {characters.length} of {total} players in the Incursion endgame
               </Text>
+
+              <View className="mt-4">
+                <CountdownBar compact />
+              </View>
 
               <View className="mt-4">
                 <SearchBar
@@ -78,8 +89,8 @@ export default function CharactersScreen() {
         )}
         ListEmptyComponent={
           <View className="items-center px-10 py-16">
-            <Ionicons name="search-outline" size={40} color="#372B56" />
-            <Text className="mt-3 text-center text-sm text-muted">
+            <Ionicons name="search-outline" size={40} color={palette.line} />
+            <Text className="mt-3 text-center text-sm text-ink-soft">
               No one in the vault matches “{query}”.
             </Text>
           </View>

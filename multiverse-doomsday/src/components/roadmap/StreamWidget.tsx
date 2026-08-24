@@ -8,6 +8,8 @@ import { TMDB_REGION } from '@/services/tmdbApi';
 import { providerLogoUrl } from '@/utils/imageHelper';
 import type { MovieItem, ProviderKind } from '@/types';
 
+import { usePalette } from '@/hooks/useTheme';
+
 const KIND_LABEL: Record<ProviderKind, string> = {
   flatrate: 'Stream',
   free: 'Free',
@@ -23,6 +25,7 @@ interface StreamWidgetProps {
 
 /** Live "Where to Stream" row — TMDB's JustWatch-powered availability for one country. */
 export function StreamWidget({ movie, region }: StreamWidgetProps) {
+  const palette = usePalette();
   const { data, state, disabled } = useStreamingProviders(movie, region);
 
   const openJustWatch = async () => {
@@ -30,32 +33,32 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
   };
 
   return (
-    <View className="rounded-2xl border border-surface-border bg-surface p-4">
+    <View className="rounded-2xl border border-line bg-surface p-4">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center">
-          <Ionicons name="play-circle-outline" size={16} color="#10B981" />
-          <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-white">
+          <Ionicons name="play-circle-outline" size={16} color={palette.accent} />
+          <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
             Where to stream
           </Text>
         </View>
-        <Text className="text-2xs font-semibold uppercase tracking-wider text-muted-deep">
+        <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
           {data?.region ?? region ?? TMDB_REGION}
         </Text>
       </View>
 
       {disabled ? (
-        <Text className="mt-3 text-xs leading-4 text-muted">
+        <Text className="mt-3 text-xs leading-4 text-ink-soft">
           Add a free TMDB key as{' '}
-          <Text className="font-bold text-doom">EXPO_PUBLIC_TMDB_API_KEY</Text> to see live
+          <Text className="font-bold text-accent">EXPO_PUBLIC_TMDB_API_KEY</Text> to see live
           Disney+, Prime and Apple TV availability for your country.
         </Text>
       ) : state === 'loading' ? (
         <View className="mt-4 flex-row items-center">
-          <ActivityIndicator size="small" color="#10B981" />
-          <Text className="ml-2 text-xs text-muted">Checking providers…</Text>
+          <ActivityIndicator size="small" color={palette.accent} />
+          <Text className="ml-2 text-xs text-ink-soft">Checking providers…</Text>
         </View>
       ) : !data || data.providers.length === 0 ? (
-        <Text className="mt-3 text-xs leading-4 text-muted">
+        <Text className="mt-3 text-xs leading-4 text-ink-soft">
           No streaming options listed for this region yet — check back closer to release.
         </Text>
       ) : (
@@ -75,7 +78,7 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
                   onPress={openJustWatch}
                   className="w-[70px] items-center"
                 >
-                  <View className="h-12 w-12 overflow-hidden rounded-xl border border-surface-border bg-surface-raised">
+                  <View className="h-12 w-12 overflow-hidden rounded-xl border border-line bg-surface-raised">
                     {logo ? (
                       <Image
                         source={{ uri: logo }}
@@ -86,14 +89,14 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
                       />
                     ) : (
                       <View className="flex-1 items-center justify-center">
-                        <Ionicons name="tv-outline" size={18} color="#8B80A8" />
+                        <Ionicons name="tv-outline" size={18} color={palette.inkFaint} />
                       </View>
                     )}
                   </View>
-                  <Text className="mt-1.5 text-center text-2xs font-semibold text-white" numberOfLines={1}>
+                  <Text className="mt-1.5 text-center text-2xs font-semibold text-ink" numberOfLines={1}>
                     {provider.providerName}
                   </Text>
-                  <Text className="text-2xs uppercase tracking-wider text-muted-deep">
+                  <Text className="text-2xs uppercase tracking-wider text-ink-faint">
                     {KIND_LABEL[provider.kind]}
                   </Text>
                 </Pressable>
@@ -107,10 +110,10 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
               onPress={openJustWatch}
               className="flex-row items-center"
             >
-              <Text className="text-2xs font-semibold text-muted-deep">
+              <Text className="text-2xs font-semibold text-ink-faint">
                 Availability via JustWatch — tap to open
               </Text>
-              <Ionicons name="open-outline" size={11} color="#5C5378" style={{ marginLeft: 4 }} />
+              <Ionicons name="open-outline" size={11} color={palette.inkFaint} style={{ marginLeft: 4 }} />
             </Pressable>
           ) : null}
         </>
