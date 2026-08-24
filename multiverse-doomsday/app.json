@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Multiverse Roadmap",
+    "name": "DOOM",
     "slug": "multiverse-doomsday",
     "version": "1.0.0",
-    "description": "Track your way through the MCU before Avengers: Doomsday — watch paths, a character codex, a tier board and a live countdown.",
+    "description": "Every Marvel film and series in release order, counting down to Avengers: Doomsday.",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "multiversedoomsday",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "automatic",
     "backgroundColor": "#0B0813",
     "primaryColor": "#10B981",
     "newArchEnabled": true,
@@ -47,9 +47,13 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0B0813",
+          "backgroundColor": "#05040A",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 96
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "dark": {
+            "backgroundColor": "#05040A"
+          }
         }
       ],
       [

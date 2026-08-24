@@ -19,21 +19,11 @@ open. Created by **PRABHAS.MAN**.
 
 | Tab | What it does |
 | --- | --- |
-| **Roadmap** | Animated readiness dashboard (circular meter, completion counters, hours remaining), five selectable watch paths, and a vertical connected timeline with tap-to-complete nodes, haptics and a micro particle burst. |
+| **Roadmap** | Animated readiness dashboard (circular meter, completion counters, hours remaining) and every one of the 68 titles in release order, with tap-to-complete cards, haptics and a micro particle burst. |
 | **Vault** | 45-character codex with live search (name, alias, actor, power), allegiance filter chips with counts, a staggered 2-column grid and a drag-dismissable detail sheet. |
 | **Tiers** | S/A/B/C/D board with long-press drag-and-drop between tiers, tap-to-assign, star ratings and a 9:16 branded story-card export. |
 | **Ideator** | Who built it and why, your live readiness numbers, what to argue about, daily reminders, the theme switcher and the app's own vitals. |
 | **Movie detail** (modal route) | Backdrop, runtime, synopsis, a prominent "Why It Matters for Doomsday" alert box, live "Where to Stream" widget, star rating, tier assigner and key players. |
-
-### Watch paths
-
-| Path | Titles | For |
-| --- | --- | --- |
-| **Express** | 9 | The shortest honest route to being Doomsday-ready. |
-| **Doom & F4 Lore** | 19 | Victor Von Doom, Marvel's First Family and cosmic scale. |
-| **Mutants & Incursions** | 12 | The Fox legacy timeline, anchor beings and collisions. |
-| **The New Avengers** | 25 | The roster forming right now and the vacuum it fills. |
-| **Completionist** | 68 | Everything, in release order — about 202 hours. |
 
 ---
 

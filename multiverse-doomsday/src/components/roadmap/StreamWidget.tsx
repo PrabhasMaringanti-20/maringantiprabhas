@@ -30,6 +30,15 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
 
   const openJustWatch = async () => {
     if (data?.link) await WebBrowser.openBrowserAsync(data.link);
+    else await searchTheWeb();
+  };
+
+  /** TMDB's country data has gaps, so there is always a way to go look it up. */
+  const searchTheWeb = async () => {
+    const query = encodeURIComponent(
+      `${movie.title} ${movie.releaseYear} watch online streaming ${region ?? TMDB_REGION}`,
+    );
+    await WebBrowser.openBrowserAsync(`https://www.google.com/search?q=${query}`);
   };
 
   return (
@@ -58,9 +67,22 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
           <Text className="ml-2 text-xs text-ink-soft">Checking providers…</Text>
         </View>
       ) : !data || data.providers.length === 0 ? (
-        <Text className="mt-3 text-xs leading-4 text-ink-soft">
-          No streaming options listed for this region yet — check back closer to release.
-        </Text>
+        <View className="mt-3">
+          <Text className="text-xs leading-4 text-ink-soft">
+            TMDB has no listing for this title in your region.
+          </Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Search where to watch ${movie.title}`}
+            onPress={searchTheWeb}
+            className="mt-3 flex-row items-center self-start rounded-xl border border-line px-3 py-2"
+          >
+            <Ionicons name="search" size={13} color={palette.accent} />
+            <Text className="ml-2 text-2xs font-bold uppercase tracking-wider text-accent">
+              Search where to watch
+            </Text>
+          </Pressable>
+        </View>
       ) : (
         <>
           <ScrollView

@@ -11,11 +11,11 @@ const AnimatedPressable = enableClassName(Animated.createAnimatedComponent(Press
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-const VARIANTS: Record<ButtonVariant, { wrap: string; text: string }> = {
-  primary: { wrap: 'bg-accent border-accent', text: 'text-white' },
-  secondary: { wrap: 'bg-surface-raised border-line', text: 'text-ink' },
-  ghost: { wrap: 'bg-transparent border-line', text: 'text-ink-soft' },
-  danger: { wrap: 'bg-crimson/10 border-crimson/40', text: 'text-crimson' },
+const VARIANTS: Record<ButtonVariant, { text: string }> = {
+  primary: { text: 'text-white' },
+  secondary: { text: 'text-ink' },
+  ghost: { text: 'text-ink-soft' },
+  danger: { text: 'text-crimson' },
 };
 
 const SIZES: Record<ButtonSize, { wrap: string; text: string; icon: number }> = {
@@ -53,11 +53,22 @@ export function CustomButton({
   const palette = usePalette();
   const scale = useSharedValue(1);
   const style = VARIANTS[variant];
+
   const iconColor = {
     primary: '#FFFFFF',
     secondary: palette.ink,
     ghost: palette.inkSoft,
     danger: palette.crimson,
+  }[variant];
+
+  // Colours go through `style` rather than `className`: the animated Pressable
+  // did not pick up the class-based background on device, which rendered
+  // primary buttons as white text on nothing.
+  const surface = {
+    primary: { backgroundColor: palette.accent, borderColor: palette.accent },
+    secondary: { backgroundColor: palette.raised, borderColor: palette.line },
+    ghost: { backgroundColor: 'transparent', borderColor: palette.line },
+    danger: { backgroundColor: `${palette.crimson}1A`, borderColor: `${palette.crimson}66` },
   }[variant];
   const sizing = SIZES[size];
 
@@ -84,10 +95,10 @@ export function CustomButton({
         scale.value = withSpring(1, { damping: 15, stiffness: 260 });
       }}
       onPress={handlePress}
-      style={animatedStyle}
-      className={`flex-row items-center justify-center rounded-2xl border ${style.wrap} ${
-        sizing.wrap
-      } ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-40' : ''}`}
+      style={[animatedStyle, surface, { borderWidth: 1, borderRadius: 16 }]}
+      className={`flex-row items-center justify-center ${sizing.wrap} ${
+        fullWidth ? 'w-full' : ''
+      } ${disabled ? 'opacity-40' : ''}`}
     >
       {loading ? (
         <ActivityIndicator size="small" color={iconColor} />

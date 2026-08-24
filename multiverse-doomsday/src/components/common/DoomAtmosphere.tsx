@@ -123,15 +123,25 @@ interface DoomAtmosphereProps {
   particleCount?: number;
   /** Multiplier on smoke opacity — the intro runs hotter than the tabs. */
   intensity?: number;
+  /** The cold open is always dark, whatever theme the app is in. */
+  forceDark?: boolean;
 }
 
 /**
  * The dark theme's signature: layered green smoke with embers drifting upward.
  * Renders nothing in light mode, where the design stays clean and paper-like.
  */
-export function DoomAtmosphere({ particleCount = 14, intensity = 1 }: DoomAtmosphereProps) {
+export function DoomAtmosphere({
+  particleCount = 14,
+  intensity = 1,
+  forceDark = false,
+}: DoomAtmosphereProps) {
   const palette = usePalette();
   const { width, height } = useWindowDimensions();
+
+  const accent = forceDark ? '#10B981' : palette.accent;
+  const gold = forceDark ? '#F59E0B' : palette.gold;
+  const smoke: [string, string] = forceDark ? ['#10B981', '#064E3B'] : palette.smoke;
 
   const particles = useMemo(
     () =>
@@ -143,9 +153,9 @@ export function DoomAtmosphere({ particleCount = 14, intensity = 1 }: DoomAtmosp
         duration: 10_000 + ((index * 1700) % 10_000),
         drift: 10 + ((index * 7) % 30),
         travel: height * 0.8,
-        color: index % 5 === 0 ? palette.gold : palette.accent,
+        color: index % 5 === 0 ? gold : accent,
       })),
-    [particleCount, width, height, palette.accent, palette.gold],
+    [particleCount, width, height, accent, gold],
   );
 
   const blooms = useMemo(
@@ -159,13 +169,13 @@ export function DoomAtmosphere({ particleCount = 14, intensity = 1 }: DoomAtmosp
     [width, height],
   );
 
-  if (!palette.isDark) return null;
+  if (!palette.isDark && !forceDark) return null;
 
   return (
     <View pointerEvents="none" className="absolute inset-0 overflow-hidden">
       {/* Base wash: green rising from the floor of the screen. */}
       <LinearGradient
-        colors={['transparent', `${palette.accent}0D`, `${palette.accent}1F`]}
+        colors={['transparent', `${accent}0D`, `${accent}1F`]}
         locations={[0.35, 0.75, 1]}
         style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}
       />
@@ -174,7 +184,7 @@ export function DoomAtmosphere({ particleCount = 14, intensity = 1 }: DoomAtmosp
         <Smoke
           {...bloom}
           key={bloom.id}
-          color={index % 2 === 0 ? palette.smoke[0] : palette.smoke[1]}
+          color={index % 2 === 0 ? smoke[0] : smoke[1]}
           strength={bloom.strength * intensity}
         />
       ))}

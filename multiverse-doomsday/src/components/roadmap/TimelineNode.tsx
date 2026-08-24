@@ -94,14 +94,26 @@ export function TimelineNode({ movie, status, index, onPress, onToggleWatched }:
 
   return (
     <MotiView
-      from={{ opacity: 0, translateY: 16 }}
-      animate={{ opacity: 1, translateY: 0 }}
-      transition={{ type: 'timing', duration: 380, delay: Math.min(index, 8) * 55 }}
+      from={{ opacity: 0, translateY: 22, scale: 0.985 }}
+      animate={{ opacity: 1, translateY: 0, scale: 1 }}
+      transition={{
+        type: 'spring',
+        damping: 18,
+        stiffness: 140,
+        mass: 0.9,
+        delay: Math.min(index, 8) * 45,
+      }}
     >
       <Animated.View style={pressStyle}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Open ${movie.title}`}
+          onPressIn={() => {
+            press.value = withTiming(0.985, { duration: 110 });
+          }}
+          onPressOut={() => {
+            press.value = withSpring(1, { damping: 16, stiffness: 260 });
+          }}
           onPress={() => {
             Haptics.selectionAsync();
             onPress(movie);

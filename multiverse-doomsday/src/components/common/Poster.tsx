@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { localPoster } from '@/data/posterImages';
@@ -66,18 +67,24 @@ export function Poster({
   const isNarrow = width < 76;
   const tint = eraTint(movie.phase, palette);
 
-  if (remoteUri || bundled) {
+  // A poster URL that 404s used to leave an empty rectangle; fall through to
+  // the typographic card instead.
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [remoteUri]);
+
+  if ((remoteUri && !failed) || bundled) {
     return (
       <View
         className={`overflow-hidden border border-line bg-surface-raised ${rounded}`}
         style={{ width, height }}
       >
         <Image
-          source={remoteUri ? { uri: remoteUri } : bundled}
+          source={remoteUri && !failed ? { uri: remoteUri } : bundled}
           style={{ width: '100%', height: '100%' }}
           contentFit="cover"
           transition={220}
           cachePolicy="disk"
+          onError={() => setFailed(true)}
         />
       </View>
     );

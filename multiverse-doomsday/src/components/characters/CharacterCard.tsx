@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, useWindowDimensions, View } from 'react-native';
 
 import { CharacterAvatar } from '@/components/characters/CharacterAvatar';
 import { characterPortrait } from '@/data/characterImages';
@@ -32,14 +32,26 @@ interface CharacterCardProps {
  */
 export function CharacterCard({ character, index, onPress }: CharacterCardProps) {
   const palette = usePalette();
+  const { width } = useWindowDimensions();
   const accent = AFFILIATION_ACCENT[character.affiliation];
   const portrait = characterPortrait(character.id);
+
+  // Explicit height: `aspectRatio` resolved to zero inside the two-column list
+  // on device, which collapsed every card to its caption lines.
+  const columnWidth = (width - 40 - 12) / 2;
+  const artHeight = Math.round(columnWidth * 1.28);
 
   return (
     <MotiView
       from={{ opacity: 0, translateY: 20, scale: 0.96 }}
       animate={{ opacity: 1, translateY: 0, scale: 1 }}
-      transition={{ type: 'timing', duration: 340, delay: Math.min(index, 10) * 45 }}
+      transition={{
+        type: 'spring',
+        damping: 19,
+        stiffness: 150,
+        mass: 0.9,
+        delay: Math.min(index, 10) * 40,
+      }}
       className="flex-1"
     >
       <Pressable
@@ -52,7 +64,7 @@ export function CharacterCard({ character, index, onPress }: CharacterCardProps)
         className="flex-1 overflow-hidden rounded-2xl border border-line bg-surface"
       >
         {/* Artwork */}
-        <View style={{ aspectRatio: 3 / 4, backgroundColor: palette.raised }}>
+        <View style={{ height: artHeight, backgroundColor: palette.raised }}>
           {portrait ? (
             <Image
               source={portrait}

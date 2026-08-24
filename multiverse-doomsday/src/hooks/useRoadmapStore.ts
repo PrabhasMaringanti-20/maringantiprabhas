@@ -221,10 +221,12 @@ export function useMovie(movieId: string | undefined): MovieItem | undefined {
   return item ? hydrateMovie(item, progress) : undefined;
 }
 
-/** Entries on the active path, honouring the Character Vault cross-filter. */
+/**
+ * The feed: every title in release order, narrowed only when the Character
+ * Vault has handed over a cross-filter.
+ */
 export function usePathMovies(): MovieItem[] {
   const progress = useRoadmapStore((state) => state.progress);
-  const activePath = useRoadmapStore((state) => state.activePath);
   const characterFilterId = useRoadmapStore((state) => state.characterFilterId);
 
   const character = characterFilterId
@@ -237,7 +239,7 @@ export function usePathMovies(): MovieItem[] {
           character.relatedMovieIds.includes(movie.id) ||
           (movie.keyCharacterIds ?? []).includes(character.id),
       )
-    : MOVIE_CATALOGUE.filter((movie) => movie.pathTags.includes(activePath));
+    : MOVIE_CATALOGUE;
 
   return source.map((movie) => hydrateMovie(movie, progress));
 }

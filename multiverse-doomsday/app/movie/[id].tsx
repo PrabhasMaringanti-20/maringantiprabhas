@@ -264,6 +264,19 @@ export default function MovieDetailScreen() {
                 </View>
               ))}
             </ScrollView>
+
+      {/* Opaque strip so scrolled content never runs under the status bar */}
+      <View
+        pointerEvents="none"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: insets.top,
+          backgroundColor: palette.canvas,
+        }}
+      />
           </View>
         ) : null}
       </ScrollView>

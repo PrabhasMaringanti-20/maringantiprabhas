@@ -262,7 +262,15 @@ export async function fetchStreamingProviders(
   );
   if (!raw?.results) return null;
 
-  const regionData = raw.results[region] ?? raw.results.US;
+  // TMDB's per-country coverage is patchy; if the requested region has nothing,
+  // fall back to US data rather than showing an empty widget.
+  const hasEntries = (entry?: RawRegionProviders) =>
+    !!entry && PROVIDER_KINDS.some((kind) => (entry[kind]?.length ?? 0) > 0);
+
+  const preferred = raw.results[region];
+  const regionData = hasEntries(preferred) ? preferred : raw.results.US;
+  const resolvedRegion = hasEntries(preferred) ? region : 'US';
+
   if (!regionData) return { region, link: null, providers: [] };
 
   const seen = new Set<number>();
@@ -282,7 +290,7 @@ export async function fetchStreamingProviders(
   }
 
   return {
-    region: raw.results[region] ? region : 'US',
+    region: resolvedRegion,
     link: regionData.link ?? null,
     providers,
   };

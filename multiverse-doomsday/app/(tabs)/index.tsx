@@ -10,14 +10,13 @@ import { MotiView } from 'moti';
 import { Badge } from '@/components/common/Badge';
 import { CountdownBar } from '@/components/common/CountdownBar';
 import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
-import { PathSelector } from '@/components/roadmap/PathSelector';
 import { ReadinessCard } from '@/components/roadmap/ReadinessCard';
 import {
   TimelineConnector,
   TimelineNode,
   type NodeStatus,
 } from '@/components/roadmap/TimelineNode';
-import { CHARACTER_CATALOGUE, ROADMAP_PATHS, usePathMovies, useRoadmapStore } from '@/hooks/useRoadmapStore';
+import { CHARACTER_CATALOGUE, usePathMovies, useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { computeReadiness } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
 
@@ -29,14 +28,12 @@ export default function RoadmapScreen() {
   const insets = useSafeAreaInsets();
 
   const movies = usePathMovies();
-  const activePath = useRoadmapStore((state) => state.activePath);
   const toggleWatched = useRoadmapStore((state) => state.toggleWatched);
   const characterFilterId = useRoadmapStore((state) => state.characterFilterId);
   const setCharacterFilter = useRoadmapStore((state) => state.setCharacterFilter);
   const hydrated = useRoadmapStore((state) => state.hydrated);
 
   const stats = useMemo(() => computeReadiness(movies), [movies]);
-  const path = ROADMAP_PATHS.find((item) => item.id === activePath) ?? ROADMAP_PATHS[0];
   const filterCharacter = characterFilterId
     ? CHARACTER_CATALOGUE.find((character) => character.id === characterFilterId)
     : undefined;
@@ -99,11 +96,7 @@ export default function RoadmapScreen() {
             </View>
 
             <View className="px-5">
-              <ReadinessCard stats={stats} pathLabel={`${path.label} path`} />
-            </View>
-
-            <View className="pt-5">
-              <PathSelector />
+              <ReadinessCard stats={stats} pathLabel="Release order" />
             </View>
 
             {filterCharacter ? (
@@ -135,7 +128,7 @@ export default function RoadmapScreen() {
 
             <View className="mb-3 mt-7 flex-row items-center justify-between px-5">
               <Text className="text-2xs font-semibold uppercase tracking-[2px] text-ink-faint">
-                Timeline
+                Release order
               </Text>
               <Badge
                 label={`${movies.length} ${movies.length === 1 ? 'entry' : 'entries'}`}
