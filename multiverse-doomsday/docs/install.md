@@ -8,6 +8,18 @@ You need: a computer (Windows, macOS or Linux), an Android phone, and internet.
 
 ---
 
+## Windows: opening a terminal
+
+"Terminal" on Windows means **PowerShell**. It is already installed.
+
+Press the **Windows key**, type `powershell`, press **Enter**. A window opens
+with a prompt like `PS C:\Users\YourName>`. That is where every command below
+gets typed. Type it, press Enter, wait for the prompt to come back.
+
+To paste into PowerShell: **right-click**, or Ctrl+V.
+
+---
+
 ## Step 1 — Install Node.js
 
 Download the **LTS** version from <https://nodejs.org> and run the installer.
@@ -21,11 +33,25 @@ npm -v
 
 ## Step 2 — Install Git
 
-From <https://git-scm.com/downloads>. Check:
+**Windows, one command** (PowerShell):
 
-```bash
+```powershell
+winget install --id Git.Git -e
+```
+
+Then **close PowerShell and open it again** — new programs only appear in a
+fresh window. Check:
+
+```powershell
 git --version
 ```
+
+If `winget` is not recognised (older Windows), download the installer from
+<https://git-scm.com/download/win> instead — that is a website, opened in a
+browser. Accept every default in the installer.
+
+macOS: `git --version` triggers the install prompt. Linux:
+`sudo apt install git`.
 
 ## Step 3 — Download the project
 
@@ -141,6 +167,19 @@ Apple does not allow free sideloading of a build like this. Options:
 
 **`npm` or `git` not recognised** — close and reopen the terminal after
 installing; the PATH updates only for new terminals.
+
+**Windows: "running scripts is disabled on this system"** — this appears the
+first time you run `eas` or `npx`. Fix it once:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+Press `Y` and Enter, then re-run the command.
+
+**Windows: Notepad saved the file as `.env.txt`** — Notepad appends `.txt` when
+you use *Save As*. Create the file from PowerShell instead (Step 5) or run
+`notepad .env`, which keeps the name.
 
 **QR code will not connect** — `npx expo start --tunnel`.
 
