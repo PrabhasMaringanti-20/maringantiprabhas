@@ -2,7 +2,7 @@
   "expo": {
     "name": "DOOM",
     "slug": "multiverse-doomsday",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Every Marvel film and series in release order, counting down to Avengers: Doomsday.",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

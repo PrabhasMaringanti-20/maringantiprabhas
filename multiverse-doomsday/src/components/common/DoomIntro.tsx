@@ -29,8 +29,6 @@ const HOLD_MS = 3200;
 
 interface DoomIntroProps {
   onFinish: () => void;
-  /** Fired on first paint — the cue to dismiss the native splash. */
-  onReady?: () => void;
 }
 
 /**
@@ -41,7 +39,7 @@ interface DoomIntroProps {
  * because the pieces are images whose intrinsic sizes vary by device density
  * and a flex-based version drifted on real hardware.
  */
-export function DoomIntro({ onFinish, onReady }: DoomIntroProps) {
+export function DoomIntro({ onFinish }: DoomIntroProps) {
   const { width, height } = useWindowDimensions();
 
   const cover = useSharedValue(1);
@@ -123,7 +121,6 @@ export function DoomIntro({ onFinish, onReady }: DoomIntroProps) {
     <Animated.View
       pointerEvents="none"
       style={[coverStyle, { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 50 }]}
-      onLayout={onReady}
       accessibilityElementsHidden
     >
       <LinearGradient
