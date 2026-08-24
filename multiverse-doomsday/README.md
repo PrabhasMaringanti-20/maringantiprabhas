@@ -66,6 +66,12 @@ Without a key nothing errors: posters fall back to typographic cards, portraits
 fall back to generated allegiance emblems, and the stream widget explains how to
 switch it on.
 
+### Adding real posters
+
+The app ships no movie posters. Add a TMDB key for all 43 at once, or drop
+files into `assets/images/posters/` and run `npm run posters`. Full instructions
+and the filename list: [docs/posters.md](docs/posters.md).
+
 ### Scripts
 
 ```bash
@@ -153,8 +159,10 @@ Nothing in the app renders an empty rectangle, with or without a network.
 generated allegiance emblem. 35 of the 45 characters ship with a portrait;
 the rest use the emblem.
 
-**Posters** — real TMDB poster (needs a key) → bundled key art, which composites
-the film's headline character under a title plate → a typographic card.
+**Posters** — real TMDB poster (needs a key) → a local poster file dropped into
+`assets/images/posters/` → a typographic card tinted by era. Comic artwork is
+never used to represent a film; see [docs/posters.md](docs/posters.md) for both
+ways to add real posters.
 
 `src/data/characterImages.ts` is a generated static require map, because Metro
 resolves `require` at build time and cannot take a runtime path.

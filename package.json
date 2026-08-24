@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "posters": "node scripts/generate-poster-map.mjs"
   },
   "dependencies": {
     "motion": "^13.1.1",

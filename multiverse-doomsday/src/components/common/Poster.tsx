@@ -2,15 +2,14 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text, View } from 'react-native';
 
-import { characterPortrait } from '@/data/characterImages';
-import { MOVIE_CATALOGUE } from '@/hooks/useRoadmapStore';
+import { localPoster } from '@/data/posterImages';
 import { usePalette } from '@/hooks/useTheme';
 import { useTmdbDetails } from '@/hooks/useTMDB';
 import { posterUrl } from '@/utils/imageHelper';
 import type { MovieItem } from '@/types';
 
 interface PosterProps {
-  movie: Pick<MovieItem, 'id' | 'title' | 'tmdbId' | 'type' | 'releaseYear'>;
+  movie: Pick<MovieItem, 'id' | 'title' | 'tmdbId' | 'type' | 'releaseYear' | 'phase'>;
   width: number;
   /** Poster aspect is 2:3; override for square thumbnails. */
   aspectRatio?: number;
@@ -21,7 +20,7 @@ interface PosterProps {
   hideCaption?: boolean;
 }
 
-/** "Avengers: Infinity War" → "AIW". Keeps narrow art legible. */
+/** "Avengers: Infinity War" → "AIW". Keeps narrow cards legible. */
 function acronym(title: string): string {
   const words = title
     .replace(/[^A-Za-z0-9\s]/g, ' ')
@@ -34,24 +33,22 @@ function acronym(title: string): string {
     .join('');
 }
 
-/** The face of the film: its first key character that ships with a portrait. */
-function keyArtFor(movieId: string) {
-  const entry = MOVIE_CATALOGUE.find((item) => item.id === movieId);
-  for (const characterId of entry?.keyCharacterIds ?? []) {
-    const portrait = characterPortrait(characterId);
-    if (portrait) return portrait;
-  }
-  return undefined;
+/** Each era gets its own tint, so a scrolled feed reads as a spectrum. */
+function eraTint(phase: number | string, palette: ReturnType<typeof usePalette>): string {
+  if (typeof phase === 'string') return palette.violet;
+  if (phase <= 3) return palette.gold;
+  if (phase <= 5) return palette.accent;
+  return palette.crimson;
 }
 
 /**
  * Poster art, in order of preference:
- *   1. the real TMDB poster, when an API key is configured
- *   2. bundled key art — the film's headline character under a title plate
- *   3. a typographic card
+ *   1. the real TMDB poster, once an API key is configured
+ *   2. a local poster dropped into assets/images/posters/ (see npm run posters)
+ *   3. a typographic card tinted by era
  *
- * Everything below the first rung works offline, so the app is never full of
- * empty rectangles.
+ * Only real posters ever represent a film — the comic art in this app belongs
+ * to the character vault, not to the movies.
  */
 export function Poster({
   movie,
@@ -63,90 +60,65 @@ export function Poster({
 }: PosterProps) {
   const palette = usePalette();
   const { data } = useTmdbDetails(disableFetch ? undefined : movie);
-  const uri = posterUrl(data?.posterPath, 'w342');
-  const keyArt = keyArtFor(movie.id);
+  const remoteUri = posterUrl(data?.posterPath, 'w342');
+  const bundled = localPoster(movie.id);
   const height = width / aspectRatio;
   const isNarrow = width < 76;
+  const tint = eraTint(movie.phase, palette);
 
-  return (
-    <View
-      className={`overflow-hidden border border-line bg-surface-raised ${rounded}`}
-      style={{ width, height }}
-    >
-      {uri ? (
+  if (remoteUri || bundled) {
+    return (
+      <View
+        className={`overflow-hidden border border-line bg-surface-raised ${rounded}`}
+        style={{ width, height }}
+      >
         <Image
-          source={{ uri }}
+          source={remoteUri ? { uri: remoteUri } : bundled}
           style={{ width: '100%', height: '100%' }}
           contentFit="cover"
           transition={220}
           cachePolicy="disk"
         />
-      ) : keyArt ? (
-        <View style={{ flex: 1 }}>
-          <Image
-            source={keyArt}
-            style={{ width: '100%', height: '100%' }}
-            contentFit="cover"
-            contentPosition="top center"
-            transition={180}
-          />
+      </View>
+    );
+  }
 
-          {/* Ink wash so the plate reads over any artwork */}
-          <LinearGradient
-            colors={['transparent', 'rgba(6,4,12,0.35)', 'rgba(6,4,12,0.92)']}
-            locations={[0.3, 0.6, 1]}
-            style={{ position: 'absolute', left: 0, right: 0, bottom: 0, top: 0 }}
-          />
+  return (
+    <View
+      className={`overflow-hidden border border-line ${rounded}`}
+      style={{ width, height }}
+    >
+      <LinearGradient
+        colors={[`${tint}${palette.isDark ? '2E' : '1A'}`, palette.raised, palette.surface]}
+        locations={[0, 0.55, 1]}
+        start={{ x: 0.1, y: 0 }}
+        end={{ x: 0.9, y: 1 }}
+        style={{ flex: 1 }}
+      >
+        <View className="flex-1 items-center justify-center px-1.5">
+          <Text
+            className="font-black tracking-tight"
+            style={{ fontSize: Math.max(15, width * 0.3), color: tint }}
+            numberOfLines={1}
+          >
+            {acronym(movie.title)}
+          </Text>
 
-          {!hideCaption ? (
-            <View className="absolute inset-x-0 bottom-0 p-1.5">
-              {isNarrow ? (
-                <Text
-                  className="text-center font-black tracking-wider text-white"
-                  style={{ fontSize: Math.max(11, width * 0.22) }}
-                  numberOfLines={1}
-                >
-                  {acronym(movie.title)}
-                </Text>
-              ) : (
-                <Text
-                  className="text-[10px] font-black uppercase leading-tight tracking-wide text-white"
-                  numberOfLines={3}
-                >
-                  {movie.title}
-                </Text>
-              )}
-              <Text
-                className="mt-0.5 text-center text-2xs font-bold"
-                style={{ color: palette.accent, textAlign: isNarrow ? 'center' : 'left' }}
-              >
-                {movie.releaseYear}
-              </Text>
-            </View>
+          {!isNarrow && !hideCaption ? (
+            <Text
+              className="mt-1.5 text-center text-[10px] font-bold uppercase leading-tight tracking-wide text-ink-soft"
+              numberOfLines={3}
+            >
+              {movie.title}
+            </Text>
           ) : null}
+
+          <Text className="mt-1 text-2xs font-bold text-ink-faint">{movie.releaseYear}</Text>
         </View>
-      ) : (
-        <LinearGradient colors={palette.gradient} style={{ flex: 1 }}>
-          <View className="flex-1 items-center justify-center p-2">
-            {isNarrow ? (
-              <Text
-                className="font-black tracking-wider text-ink-soft"
-                style={{ fontSize: Math.max(13, width * 0.3) }}
-              >
-                {acronym(movie.title)}
-              </Text>
-            ) : (
-              <Text
-                className="text-center text-[11px] font-bold uppercase leading-tight tracking-wider text-ink-soft"
-                numberOfLines={4}
-              >
-                {movie.title}
-              </Text>
-            )}
-            <Text className="mt-1 text-2xs font-semibold text-ink-faint">{movie.releaseYear}</Text>
-          </View>
-        </LinearGradient>
-      )}
+
+        {/* Era bar along the foot of the card */}
+        <View style={{ height: 3, backgroundColor: tint }} />
+      </LinearGradient>
     </View>
   );
 }
