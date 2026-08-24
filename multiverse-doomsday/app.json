@@ -13,8 +13,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.multiverse.doomsday",
-      "buildNumber": "1"
+      "bundleIdentifier": "com.multiverse.doomsday"
     },
     "android": {
       "package": "com.multiverse.doomsday",
@@ -29,8 +28,7 @@
       "permissions": [
         "android.permission.POST_NOTIFICATIONS",
         "android.permission.SCHEDULE_EXACT_ALARM"
-      ],
-      "versionCode": 1
+      ]
     },
     "web": {
       "output": "single",
