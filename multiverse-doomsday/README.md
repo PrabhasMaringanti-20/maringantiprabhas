@@ -11,7 +11,7 @@ Two themes: a minimal light mode for daylight, and **Doom mode** — smoky green
 atmosphere with drifting embers, a live countdown to release, and a DOOM cold
 open. Created by **PRABHAS.MAN**.
 
-![Roadmap](docs/screenshots/01-roadmap-dark.png)
+![Cold open](docs/screenshots/00-intro.png)
 
 ---
 
@@ -145,6 +145,14 @@ Components name a role, never a colour:
 serves the same values imperatively where `className` cannot reach — SVG strokes,
 gradient stops, icon tints, the tab bar and the status bar.
 
+### The roadmap feed
+
+Progress lives inside each card — a status stripe down its leading edge, a step
+number, and one round control to log it — instead of on a rail down the side of
+the screen. Between cards, a short centred connector fills green as you go, so
+the through-line reads down the middle of the feed rather than pinned to the
+left margin.
+
 ### Doom mode atmosphere
 
 `DoomAtmosphere` renders three slow-breathing radial smoke blooms and a set of
@@ -179,6 +187,10 @@ plays the DOOM cold open once per launch and signs off with the creator credit.
   tints. There is not a single `dark:` variant in the codebase.
 - **`LinearGradient` ignores `className` when `style` is also passed.** The
   explicit `style` prop wins, so layout for a gradient goes in `style`.
+- **React Native cannot blur a view, so glows are gradients.** A translucent
+  solid view renders as a slab with a hard edge. Every bloom in the app — the
+  wordmark glow, the smoke, the ember halos — is an SVG radial gradient or a
+  scaling ring instead.
 - **NativeWind needs Reanimated and Moti registered.** `className` is only wired
   into React Native's core components, so `src/styles/nativewindInterop.ts`
   registers `Animated.*` and `Moti*` via `cssInterop`. Without it every
@@ -188,18 +200,25 @@ plays the DOOM cold open once per launch and signs off with the creator credit.
 
 **Doom mode** — green smoke, drifting embers, neon wordmark.
 
-| Cold open | Roadmap | Vault | Ideator |
+| Cold open | Roadmap | Timeline | Ideator |
 | --- | --- | --- | --- |
-| ![](docs/screenshots/00-intro.png) | ![](docs/screenshots/02-roadmap-dark-progress.png) | ![](docs/screenshots/03-vault-dark.png) | ![](docs/screenshots/05-ideator-dark.png) |
+| ![](docs/screenshots/00-intro.png) | ![](docs/screenshots/02-roadmap-dark-progress.png) | ![](docs/screenshots/03-timeline-dark.png) | ![](docs/screenshots/06-ideator-dark.png) |
 
 **Light mode** — minimal, professional, built for daylight reading.
 
-| Roadmap | Vault | Character | Tiers |
+| Roadmap | Timeline | Vault | Ideator |
 | --- | --- | --- | --- |
-| ![](docs/screenshots/09-roadmap-light.png) | ![](docs/screenshots/11-vault-light.png) | ![](docs/screenshots/12-character-light.png) | ![](docs/screenshots/13-tiers-light.png) |
+| ![](docs/screenshots/07-roadmap-light.png) | ![](docs/screenshots/08-timeline-light.png) | ![](docs/screenshots/09-vault-light.png) | ![](docs/screenshots/10-ideator-light.png) |
 
 Captured from the running app at 390×844 @3x. Posters show their offline
 fallbacks — add a TMDB key for live artwork.
+
+## Artwork
+
+`assets/images/doom-character.png`, `avengers-mark.png` and `doom-wordmark.png`
+were supplied by the app's author and trimmed to their content bounds. They are
+Marvel-owned artwork used here in a personal fan project — they would need
+replacing before any public distribution.
 
 ## Verified
 

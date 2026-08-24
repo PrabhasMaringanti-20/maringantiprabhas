@@ -16,219 +16,228 @@ import Animated, {
 import { Badge } from '@/components/common/Badge';
 import { Confetti } from '@/components/common/Confetti';
 import { Poster } from '@/components/common/Poster';
+import { usePalette } from '@/hooks/useTheme';
 import { formatRuntime } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
-
-import { usePalette } from '@/hooks/useTheme';
 
 export type NodeStatus = 'completed' | 'next' | 'upcoming';
 
 interface TimelineNodeProps {
   movie: MovieItem;
   status: NodeStatus;
-  /** Hides the connector above/below at the ends of the feed. */
-  isFirst: boolean;
-  isLast: boolean;
   index: number;
   onPress: (movie: MovieItem) => void;
   onToggleWatched: (movie: MovieItem) => boolean;
 }
 
-const RAIL_WIDTH = 44;
-
-export function TimelineNode({
-  movie,
-  status,
-  isFirst,
-  isLast,
-  index,
-  onPress,
-  onToggleWatched,
-}: TimelineNodeProps) {
+/**
+ * One entry on the roadmap.
+ *
+ * Progress lives inside the card — a status stripe down its leading edge and a
+ * single round check control — rather than on a rail down the side of the
+ * screen. The centred connector between cards is `TimelineConnector`.
+ */
+export function TimelineNode({ movie, status, index, onPress, onToggleWatched }: TimelineNodeProps) {
   const palette = usePalette();
   const [burstId, setBurstId] = useState(0);
-  const pulse = useSharedValue(0);
-  const checkScale = useSharedValue(movie.isWatched ? 1 : 0);
 
-  // "Next up" node breathes so the eye lands on it first.
+  const check = useSharedValue(movie.isWatched ? 1 : 0);
+  const pulse = useSharedValue(0);
+  const press = useSharedValue(1);
+
   useEffect(() => {
-    if (status === 'next') {
-      pulse.value = withRepeat(
-        withTiming(1, { duration: 1400, easing: Easing.inOut(Easing.quad) }),
-        -1,
-        true,
-      );
-    } else {
-      pulse.value = withTiming(0, { duration: 240 });
+    check.value = withSpring(movie.isWatched ? 1 : 0, { damping: 13, stiffness: 220 });
+  }, [movie.isWatched, check]);
+
+  useEffect(() => {
+    if (status !== 'next') {
+      pulse.value = 0;
+      return;
     }
+    pulse.value = withRepeat(
+      withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.quad) }),
+      -1,
+      true,
+    );
   }, [status, pulse]);
 
-  useEffect(() => {
-    checkScale.value = withSpring(movie.isWatched ? 1 : 0, { damping: 12, stiffness: 240 });
-  }, [movie.isWatched, checkScale]);
-
-  const pulseStyle = useAnimatedStyle(() => ({
-    opacity: 0.15 + pulse.value * 0.45,
-    transform: [{ scale: 1 + pulse.value * 0.35 }],
-  }));
-
   const checkStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: checkScale.value }],
-    opacity: checkScale.value,
+    opacity: check.value,
+    transform: [{ scale: 0.4 + check.value * 0.6 }],
   }));
+
+  // A ripple ring expanding out of the next-up control.
+  const haloStyle = useAnimatedStyle(() => ({
+    opacity: 0.55 - pulse.value * 0.5,
+    transform: [{ scale: 1 + pulse.value * 0.45 }],
+  }));
+
+  const pressStyle = useAnimatedStyle(() => ({ transform: [{ scale: press.value }] }));
 
   const handleToggle = () => {
     const nowWatched = onToggleWatched(movie);
     if (nowWatched) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setBurstId((id) => id + 1);
-      checkScale.value = withSequence(
-        withSpring(1.3, { damping: 8, stiffness: 300 }),
-        withSpring(1, { damping: 12, stiffness: 240 }),
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      press.value = withSequence(
+        withTiming(0.94, { duration: 90 }),
+        withSpring(1, { damping: 12, stiffness: 260 }),
       );
     } else {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
     }
   };
 
-  const nodeColor =
+  const stripeColor =
     status === 'completed' ? palette.gold : status === 'next' ? palette.accent : palette.line;
+
+  const stepLabel = (index + 1).toString().padStart(2, '0');
 
   return (
     <MotiView
-      from={{ opacity: 0, translateY: 18 }}
+      from={{ opacity: 0, translateY: 16 }}
       animate={{ opacity: 1, translateY: 0 }}
       transition={{ type: 'timing', duration: 380, delay: Math.min(index, 8) * 55 }}
-      className="flex-row"
     >
-      {/* Rail */}
-      <View style={{ width: RAIL_WIDTH }} className="items-center">
-        <View
-          className="w-[2px] flex-1"
-          style={{
-            backgroundColor: isFirst
-              ? 'transparent'
-              : status === 'upcoming'
-                ? palette.line
-                : palette.accent,
+      <Animated.View style={pressStyle}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Open ${movie.title}`}
+          onPress={() => {
+            Haptics.selectionAsync();
+            onPress(movie);
           }}
-        />
+          className={`overflow-hidden rounded-3xl border ${
+            status === 'next'
+              ? 'border-accent/50 bg-surface-raised'
+              : movie.isWatched
+                ? 'border-line bg-surface/70'
+                : 'border-line bg-surface'
+          }`}
+        >
+          <View className="flex-row">
+            {/* Status stripe — the whole progress language, in three pixels */}
+            <View style={{ width: 3, backgroundColor: stripeColor }} />
 
-        <View className="my-1 items-center justify-center">
-          {status === 'next' ? (
-            <Animated.View
-              pointerEvents="none"
-              style={[
-                pulseStyle,
-                {
-                  position: 'absolute',
-                  width: 34,
-                  height: 34,
-                  borderRadius: 17,
-                  backgroundColor: palette.accent,
-                },
-              ]}
-            />
-          ) : null}
+            <View className="flex-1 p-3.5">
+              <View className="flex-row items-center justify-between">
+                <Text className="text-[11px] font-black tracking-wide text-ink-faint">
+                  {stepLabel}
+                </Text>
+                <View className="flex-row items-center gap-1.5">
+                  {movie.type === 'series' ? <Badge label="Series" tone="violet" compact /> : null}
+                  {movie.tier ? <Badge label={`Tier ${movie.tier}`} tone="crimson" compact /> : null}
+                  {movie.isCrucial ? <Badge label="Crucial" tone="accent" compact /> : null}
+                </View>
+              </View>
 
-          <Pressable
-            accessibilityRole="checkbox"
-            accessibilityState={{ checked: movie.isWatched }}
-            accessibilityLabel={`Mark ${movie.title} as ${movie.isWatched ? 'unwatched' : 'watched'}`}
-            hitSlop={12}
-            onPress={handleToggle}
-            className="items-center justify-center rounded-full border-2"
-            style={{
-              width: 26,
-              height: 26,
-              borderColor: nodeColor,
-              backgroundColor: status === 'completed' ? palette.gold : palette.canvas,
-            }}
-          >
-            <Animated.View style={checkStyle}>
-              <Ionicons name="checkmark-sharp" size={15} color="#FFFFFF" />
-            </Animated.View>
-          </Pressable>
+              <View className="mt-2.5 flex-row">
+                <Poster movie={movie} width={54} rounded="rounded-xl" />
 
-          <Confetti burstId={burstId} />
-        </View>
+                <View className="ml-3 flex-1 justify-center">
+                  <Text
+                    className={`text-[15px] font-bold leading-5 ${
+                      movie.isWatched ? 'text-ink-soft' : 'text-ink'
+                    }`}
+                    numberOfLines={2}
+                  >
+                    {movie.title}
+                  </Text>
+                  <Text className="mt-1 text-2xs font-semibold uppercase tracking-wider text-ink-faint">
+                    {movie.releaseYear} · {typeof movie.phase === 'number' ? `Phase ${movie.phase}` : movie.phase} ·{' '}
+                    {formatRuntime(movie.runtimeMinutes)}
+                  </Text>
+                </View>
 
-        <View
-          className="w-[2px] flex-1"
-          style={{
-            backgroundColor: isLast
-              ? 'transparent'
-              : status === 'completed'
-                ? palette.gold
-                : palette.line,
-          }}
-        />
-      </View>
+                {/* The single control: tap to log it */}
+                <View className="ml-2 items-center justify-center">
+                  {status === 'next' ? (
+                    <Animated.View
+                      pointerEvents="none"
+                      style={[
+                        haloStyle,
+                        {
+                          position: 'absolute',
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          borderColor: palette.accent,
+                        },
+                      ]}
+                    />
+                  ) : null}
 
-      {/* Card */}
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`Open ${movie.title}`}
-        onPress={() => {
-          Haptics.selectionAsync();
-          onPress(movie);
-        }}
-        className={`mb-3 flex-1 flex-row rounded-2xl border p-3 ${
-          status === 'next'
-            ? 'border-accent/60 bg-surface-raised'
-            : movie.isWatched
-              ? 'border-line bg-surface/70'
-              : 'border-line bg-surface'
-        }`}
-      >
-        <Poster movie={movie} width={58} rounded="rounded-lg" />
+                  <Pressable
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: movie.isWatched }}
+                    accessibilityLabel={`Mark ${movie.title} as ${
+                      movie.isWatched ? 'unwatched' : 'watched'
+                    }`}
+                    hitSlop={10}
+                    onPress={handleToggle}
+                    className="items-center justify-center rounded-full border-2"
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderColor: movie.isWatched ? palette.gold : stripeColor,
+                      backgroundColor: movie.isWatched ? palette.gold : 'transparent',
+                    }}
+                  >
+                    <Animated.View style={checkStyle}>
+                      <Ionicons name="checkmark-sharp" size={18} color="#FFFFFF" />
+                    </Animated.View>
+                  </Pressable>
 
-        <View className="ml-3 flex-1">
-          <View className="flex-row items-start justify-between">
-            <Text
-              className={`flex-1 pr-2 text-[15px] font-bold leading-5 ${
-                movie.isWatched ? 'text-ink-soft' : 'text-ink'
-              }`}
-              numberOfLines={2}
-            >
-              {movie.title}
-            </Text>
-            {movie.isCrucial ? <Badge label="Crucial" tone="accent" compact /> : null}
+                  <Confetti burstId={burstId} />
+                </View>
+              </View>
+
+              <Text className="mt-2.5 text-xs leading-[18px] text-ink-soft" numberOfLines={2}>
+                {movie.whyItMatters}
+              </Text>
+
+              {status === 'next' ? (
+                <View className="mt-2.5 flex-row items-center">
+                  <Ionicons name="play" size={10} color={palette.accent} />
+                  <Text className="ml-1.5 text-2xs font-black uppercase tracking-[2px] text-accent">
+                    Start here
+                  </Text>
+                </View>
+              ) : null}
+            </View>
           </View>
-
-          <View className="mt-1.5 flex-row flex-wrap items-center gap-1.5">
-            <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
-              {movie.releaseYear}
-            </Text>
-            <Text className="text-2xs text-ink-faint">•</Text>
-            <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
-              {typeof movie.phase === 'number' ? `Phase ${movie.phase}` : movie.phase}
-            </Text>
-            <Text className="text-2xs text-ink-faint">•</Text>
-            <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
-              {formatRuntime(movie.runtimeMinutes)}
-            </Text>
-            {movie.type === 'series' ? (
-              <Badge label="Series" tone="violet" compact />
-            ) : null}
-          </View>
-
-          <Text className="mt-2 text-xs leading-4 text-ink-soft" numberOfLines={2}>
-            {movie.whyItMatters}
-          </Text>
-
-          <View className="mt-2 flex-row items-center justify-between">
-            {status === 'next' ? (
-              <Badge label="Next up" tone="accent" icon="play" compact />
-            ) : movie.isWatched ? (
-              <Badge label="Watched" tone="gold" icon="checkmark-done" compact />
-            ) : (
-              <Badge label="Upcoming" tone="muted" compact />
-            )}
-            {movie.tier ? <Badge label={`Tier ${movie.tier}`} tone="crimson" compact /> : null}
-          </View>
-        </View>
-      </Pressable>
+        </Pressable>
+      </Animated.View>
     </MotiView>
+  );
+}
+
+interface TimelineConnectorProps {
+  /** Green once the entry above has been logged. */
+  isComplete: boolean;
+}
+
+/** Centred link between two cards: a short dashed run with a dot at its middle. */
+export function TimelineConnector({ isComplete }: TimelineConnectorProps) {
+  const palette = usePalette();
+  const color = isComplete ? palette.accent : palette.line;
+
+  return (
+    <View className="items-center py-2" pointerEvents="none">
+      <View style={{ width: 2, height: 10, borderRadius: 1, backgroundColor: color, opacity: 0.55 }} />
+      <View
+        className="my-1"
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: 3,
+          backgroundColor: isComplete ? palette.accent : 'transparent',
+          borderWidth: isComplete ? 0 : 1.5,
+          borderColor: color,
+        }}
+      />
+      <View style={{ width: 2, height: 10, borderRadius: 1, backgroundColor: color, opacity: 0.55 }} />
+    </View>
   );
 }

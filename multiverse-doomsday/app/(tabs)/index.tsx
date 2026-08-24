@@ -12,7 +12,11 @@ import { CountdownBar } from '@/components/common/CountdownBar';
 import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
 import { PathSelector } from '@/components/roadmap/PathSelector';
 import { ReadinessCard } from '@/components/roadmap/ReadinessCard';
-import { TimelineNode, type NodeStatus } from '@/components/roadmap/TimelineNode';
+import {
+  TimelineConnector,
+  TimelineNode,
+  type NodeStatus,
+} from '@/components/roadmap/TimelineNode';
 import { CHARACTER_CATALOGUE, ROADMAP_PATHS, usePathMovies, useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { computeReadiness } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
@@ -142,17 +146,18 @@ export default function RoadmapScreen() {
           </View>
         }
         renderItem={({ item, index }) => (
-          <View className="pl-3 pr-5">
+          <View className="px-5">
             <TimelineNode
               movie={item}
               index={index}
               status={statusFor(item)}
-              isFirst={index === 0}
-              isLast={index === movies.length - 1}
               onPress={openMovie}
               onToggleWatched={(movie) => toggleWatched(movie.id)}
             />
           </View>
+        )}
+        ItemSeparatorComponent={({ leadingItem }) => (
+          <TimelineConnector isComplete={(leadingItem as MovieItem | undefined)?.isWatched ?? false} />
         )}
         ListEmptyComponent={
           <View className="items-center px-10 py-16">
