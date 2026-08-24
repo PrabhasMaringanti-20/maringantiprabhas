@@ -106,6 +106,38 @@ Check that posters load. If they do, the key works and the build will be right.
 *Daily reminders are unreliable in Expo Go — that is expected, and Step 7 fixes
 it. Everything else works.*
 
+## Step 6b — Put the key on EAS as well
+
+EAS builds on Expo's servers, from the files tracked in git. `.env` is
+git-ignored — correctly, so your key never lands on GitHub — which means the
+build machine cannot see it. `EXPO_PUBLIC_` values are compiled in at build
+time, so a key that is missing during the build is missing from the app.
+
+Set it once on EAS and every future build picks it up:
+
+**Website (easiest):** <https://expo.dev> → your project → **Environment
+Variables** → **Create** →
+
+| Field | Value |
+| --- | --- |
+| Name | `EXPO_PUBLIC_TMDB_API_KEY` |
+| Value | your key |
+| Environment | tick **preview** (and **production**) |
+| Visibility | Plain text |
+
+Repeat for `EXPO_PUBLIC_TMDB_REGION` with value `IN`.
+
+**Or from the terminal:**
+
+```powershell
+eas env:create --environment preview --name EXPO_PUBLIC_TMDB_API_KEY --value "your_key" --visibility plaintext
+eas env:create --environment preview --name EXPO_PUBLIC_TMDB_REGION --value "IN" --visibility plaintext
+```
+
+`EXPO_PUBLIC_` variables end up readable inside the app bundle by design, so
+plain text is the right visibility here — treat this key as public-ish and keep
+it to personal use.
+
 ## Step 7 — Build the installable app
 
 ```bash
