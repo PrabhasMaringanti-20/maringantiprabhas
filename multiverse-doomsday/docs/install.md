@@ -1,110 +1,170 @@
-# Getting the app onto your phone
+# Getting the app onto your phone — step by step
 
-Three ways, from quickest to most permanent. All are free.
+**Total cost: nothing.** Every account and service below has a free tier that
+needs no card. The one paid path (iPhone sideloading) is called out where it
+appears, with a free alternative.
 
----
-
-## Option A — Real installable app (recommended)
-
-EAS Build compiles the app on Expo's servers and hands you a download link. You
-end up with a normal app on your home screen: icon, notifications, everything.
-No Play Store, no developer fee.
-
-You need a computer for these commands, and a free Expo account.
-
-```bash
-cd multiverse-doomsday
-npm install
-
-npm install -g eas-cli
-eas login                    # create a free account at expo.dev if you have none
-eas build:configure          # links the project (first time only)
-
-eas build --platform android --profile preview
-```
-
-The build takes roughly 10–20 minutes on the free queue. When it finishes the
-terminal prints a URL and a QR code:
-
-1. Open that link on your phone (or scan the QR)
-2. Tap **Install**
-3. Android will warn about installing outside the Play Store — allow it for
-   your browser, then install
-
-That APK is yours to share. Send the link to anyone in your group and they can
-install the same build.
-
-### iPhone
-
-iOS is stricter: sideloading needs either a paid Apple Developer account
-($99/yr) or a TestFlight build. Without one, use Option B on iOS.
-
-```bash
-eas build --platform ios --profile preview   # needs an Apple Developer account
-```
+You need: a computer (Windows, macOS or Linux), an Android phone, and internet.
 
 ---
 
-## Option B — Expo Go (fastest look, no build)
+## Step 1 — Install Node.js
 
-Good for trying it in two minutes, or for iPhone without a developer account.
+Download the **LTS** version from <https://nodejs.org> and run the installer.
 
-1. Install **Expo Go** from the Play Store or App Store
-2. On your computer, in the project folder:
+Then open a terminal (Windows: PowerShell; macOS: Terminal) and check:
+
+```bash
+node -v      # expect v20 or higher
+npm -v
+```
+
+## Step 2 — Install Git
+
+From <https://git-scm.com/downloads>. Check:
+
+```bash
+git --version
+```
+
+## Step 3 — Download the project
+
+```bash
+git clone -b claude/multiverse-roadmap-marvel-v2svaq https://github.com/PrabhasMaringanti-20/maringantiprabhas.git
+cd maringantiprabhas/multiverse-doomsday
+```
+
+## Step 4 — Install the dependencies
 
 ```bash
 npm install
-npx expo start
 ```
 
-3. Scan the QR code with Expo Go (Android) or the Camera app (iOS)
+Two to four minutes. Warnings are normal; errors are not.
 
-Phone and computer must be on the same Wi-Fi. Add `--tunnel` if they are not.
+## Step 5 — Get a free TMDB key
 
-**Limitation:** daily reminders are unreliable in Expo Go. Everything else —
-progress, vault, tiers, themes, the countdown — works fully. For notifications,
-use Option A or C.
+This is what turns the typographic cards into real movie posters, and fills in
+backdrops, synopses, streaming links and actor headshots.
 
----
+1. Sign up at <https://www.themoviedb.org/signup> — free, no card
+2. Go to **Settings → API → Create → Developer**
+3. Fill the short form (any personal-project description is fine)
+4. Copy the key labelled **API Key (v3 auth)**
 
-## Option C — Development build (for changing the code)
-
-A build that runs your local code with the full native runtime, so
-notifications behave exactly as they will in production.
-
-```bash
-eas build --platform android --profile development
-# install the resulting APK, then:
-npx expo start --dev-client
-```
-
----
-
-## Before you build: add your TMDB key
-
-Posters, backdrops, streaming links and actor headshots all come from TMDB.
-Without a key the app still works — it falls back to typographic cards — but
-with one it looks complete.
-
-Create `multiverse-doomsday/.env`:
+Create a file called `.env` inside `multiverse-doomsday/`:
 
 ```
-EXPO_PUBLIC_TMDB_API_KEY=your_key_here
+EXPO_PUBLIC_TMDB_API_KEY=paste_your_key_here
 EXPO_PUBLIC_TMDB_REGION=IN
 ```
 
-Free key: <https://www.themoviedb.org/settings/api> (v3 auth).
+`.env` is git-ignored, so the key never leaves your machine.
 
-`EXPO_PUBLIC_` variables are compiled into the app at build time, so set this
-**before** running `eas build`. Rebuild if you add it later.
+> `EXPO_PUBLIC_` values are compiled into the app **at build time**. Set this
+> before Step 7, or you will have to rebuild.
+
+## Step 6 — Try it before you build
+
+This costs nothing and uses no build quota, so do it first.
+
+1. Install **Expo Go** from the Play Store
+2. On the computer: `npx expo start`
+3. Scan the QR code with Expo Go
+
+Phone and computer must be on the same Wi-Fi. If the QR will not connect, stop
+the server and run `npx expo start --tunnel` instead.
+
+Check that posters load. If they do, the key works and the build will be right.
+
+*Daily reminders are unreliable in Expo Go — that is expected, and Step 7 fixes
+it. Everything else works.*
+
+## Step 7 — Build the installable app
+
+```bash
+npm install -g eas-cli
+eas login
+```
+
+If you have no Expo account, create one at <https://expo.dev/signup> — free,
+**no credit card**. The free plan includes **15 Android builds a month**, and
+once the quota is used builds simply pause until the 1st of the next month.
+There are no overage charges on the free plan.
+
+```bash
+eas build:configure          # pick Android when asked
+eas build --platform android --profile preview
+```
+
+Answer **Yes** when it offers to generate a keystore — Expo stores it for you,
+free, and reuses it for future builds.
+
+The build takes 10–20 minutes on the free queue. Leave the terminal open.
+
+## Step 8 — Install it
+
+When the build finishes, the terminal prints a link and a QR code.
+
+1. Open that link on your phone (or scan the QR)
+2. Tap **Install** — the browser downloads an `.apk`
+3. Android asks to allow installs from this source: allow it for your browser
+4. Install, then open the app
+
+You now have a real app: home-screen icon, offline data, working notifications.
+
+## Step 9 — Switch on the daily reminder
+
+Open the app → **Ideator** tab → **Daily reminder** → toggle on, pick a time.
+Allow notifications when Android asks. You will get one Marvel line a day with
+the days-to-Doomsday count.
+
+## Step 10 — Share it with your group
+
+The link from Step 8 is public and reusable. Anyone can install the same APK —
+no Expo Go, no account, no Play Store. Each person's progress, ratings and tier
+list stay on their own phone.
 
 ---
 
-## Sharing it with your group
+## iPhone
 
-The `preview` APK from Option A is a single file with a public download link.
-Anyone can install it — no account, no Expo Go, no Play Store. Each person's
-progress, ratings and tier list live only on their own device.
+Apple does not allow free sideloading of a build like this. Options:
 
-Note the app bundles Marvel-owned artwork, so keep distribution to people you
-know rather than a public listing.
+- **Free:** Expo Go (Step 6). Everything works except reliable notifications.
+- **Paid:** an Apple Developer account ($99/yr) for
+  `eas build --platform ios --profile preview`. Not required for anything here.
+
+---
+
+## If something goes wrong
+
+**`npm` or `git` not recognised** — close and reopen the terminal after
+installing; the PATH updates only for new terminals.
+
+**QR code will not connect** — `npx expo start --tunnel`.
+
+**Metro cache weirdness after editing** — `npx expo start -c`.
+
+**"App not installed" on Android** — an older copy with the same package name is
+present. Uninstall it first.
+
+**Posters still missing after adding the key** — the key is compiled in at build
+time, so rebuild (Step 7). In Expo Go, restart with `npx expo start -c`.
+
+**Build quota used up** — 15 per month on the free plan; it resets on the 1st.
+Test in Expo Go meanwhile, which uses no quota.
+
+---
+
+## Fully offline alternative (no cloud at all)
+
+If you would rather not use Expo's servers, you can build on your own machine
+with Android Studio installed:
+
+```bash
+npx expo run:android --variant release
+```
+
+This needs the Android SDK (a several-GB download) and is slower to set up, but
+it is free and everything stays local.

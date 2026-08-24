@@ -69,9 +69,10 @@ switch it on.
 ### Installing it on a phone
 
 `eas build --platform android --profile preview` produces an installable APK
-with a public download link — no Play Store, no developer fee. Expo Go works
-for a quick look but is unreliable for notifications. Full instructions:
-[docs/install.md](docs/install.md).
+with a public download link — no Play Store, no developer fee, and 15 free
+builds a month with no card on file. Expo Go works for a quick look but is
+unreliable for notifications. Step-by-step, from installing Node to sharing the
+APK: [docs/install.md](docs/install.md).
 
 ### Adding real posters
 
