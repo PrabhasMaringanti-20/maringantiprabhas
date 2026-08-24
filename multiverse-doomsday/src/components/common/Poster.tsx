@@ -7,7 +7,7 @@ import { posterUrl } from '@/utils/imageHelper';
 import type { MovieItem } from '@/types';
 
 interface PosterProps {
-  movie: Pick<MovieItem, 'title' | 'tmdbId' | 'type' | 'releaseYear'>;
+  movie: Pick<MovieItem, 'id' | 'title' | 'tmdbId' | 'type' | 'releaseYear'>;
   width: number;
   /** Poster aspect is 2:3; override for square thumbnails. */
   aspectRatio?: number;
@@ -17,6 +17,19 @@ interface PosterProps {
 }
 
 const FALLBACK_GRADIENT = ['#211A35', '#161124'] as const;
+
+/** "Avengers: Infinity War" → "AIW". Keeps narrow fallbacks legible. */
+function acronym(title: string): string {
+  const words = title
+    .replace(/[^A-Za-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((word) => word.length > 2 || /^[0-9]+$/.test(word));
+  if (words.length === 0) return title.slice(0, 2).toUpperCase();
+  return words
+    .slice(0, 3)
+    .map((word) => word[0].toUpperCase())
+    .join('');
+}
 
 /**
  * TMDB poster with a hand-built fallback so the app looks intentional offline
@@ -29,9 +42,10 @@ export function Poster({
   rounded = 'rounded-xl',
   disableFetch = false,
 }: PosterProps) {
-  const { data } = useTmdbDetails(disableFetch ? undefined : movie.tmdbId, movie.type);
+  const { data } = useTmdbDetails(disableFetch ? undefined : movie);
   const uri = posterUrl(data?.posterPath, 'w342');
   const height = width / aspectRatio;
+  const isNarrow = width < 76;
 
   return (
     <View
@@ -49,12 +63,21 @@ export function Poster({
       ) : (
         <LinearGradient colors={FALLBACK_GRADIENT} style={{ flex: 1 }}>
           <View className="flex-1 items-center justify-center p-2">
-            <Text
-              className="text-center text-[11px] font-bold uppercase leading-tight tracking-wider text-muted"
-              numberOfLines={4}
-            >
-              {movie.title}
-            </Text>
+            {isNarrow ? (
+              <Text
+                className="font-black tracking-wider text-muted"
+                style={{ fontSize: Math.max(13, width * 0.3) }}
+              >
+                {acronym(movie.title)}
+              </Text>
+            ) : (
+              <Text
+                className="text-center text-[11px] font-bold uppercase leading-tight tracking-wider text-muted"
+                numberOfLines={4}
+              >
+                {movie.title}
+              </Text>
+            )}
             <Text className="mt-1 text-2xs font-semibold text-muted-deep">{movie.releaseYear}</Text>
           </View>
         </LinearGradient>

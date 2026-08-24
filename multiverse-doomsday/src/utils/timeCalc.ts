@@ -19,6 +19,14 @@ export function formatHours(minutes: number): string {
   return `${Math.round(minutes)} min`;
 }
 
+/** Tight variant for stat tiles that must stay on one line: "10.4h" · "45m". */
+export function formatHoursCompact(minutes: number): string {
+  const hours = minutes / 60;
+  if (hours >= 10) return `${Math.round(hours)}h`;
+  if (hours >= 1) return `${hours.toFixed(1)}h`;
+  return `${Math.round(minutes)}m`;
+}
+
 /** Aggregate the readiness numbers for a set of entries on the active path. */
 export function computeReadiness(movies: MovieItem[]): ReadinessStats {
   const total = movies.length;

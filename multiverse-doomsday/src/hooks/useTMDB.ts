@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   fetchActorProfilePath,
   fetchDetails,
   fetchStreamingProviders,
   hasTmdbKey,
+  type TmdbLookup,
 } from '@/services/tmdbApi';
 import type { AsyncState, StreamingAvailability, TmdbDetails } from '@/types';
 
@@ -15,20 +16,27 @@ interface TmdbResult<T> {
   disabled: boolean;
 }
 
+/** Stable lookup object so effects do not refire on every parent render. */
+function useLookup(entry: TmdbLookup | undefined): TmdbLookup | undefined {
+  return useMemo(
+    () => entry,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [entry?.id, entry?.tmdbId, entry?.type, entry?.title, entry?.releaseYear],
+  );
+}
+
 /** Poster, backdrop and overview for one catalogue entry. */
-export function useTmdbDetails(
-  tmdbId: number | undefined,
-  type: 'movie' | 'series' = 'movie',
-): TmdbResult<TmdbDetails> {
+export function useTmdbDetails(entry: TmdbLookup | undefined): TmdbResult<TmdbDetails> {
   const [data, setData] = useState<TmdbDetails | null>(null);
   const [state, setState] = useState<AsyncState>('idle');
+  const lookup = useLookup(entry);
 
   useEffect(() => {
-    if (!tmdbId || !hasTmdbKey) return;
+    if (!lookup || !hasTmdbKey) return;
     let cancelled = false;
 
     setState('loading');
-    fetchDetails(tmdbId, type)
+    fetchDetails(lookup)
       .then((result) => {
         if (cancelled) return;
         setData(result);
@@ -41,26 +49,26 @@ export function useTmdbDetails(
     return () => {
       cancelled = true;
     };
-  }, [tmdbId, type]);
+  }, [lookup]);
 
   return { data, state, disabled: !hasTmdbKey };
 }
 
 /** Country-specific "Where to Stream" row, powered by TMDB's JustWatch data. */
 export function useStreamingProviders(
-  tmdbId: number | undefined,
-  type: 'movie' | 'series' = 'movie',
+  entry: TmdbLookup | undefined,
   region?: string,
 ): TmdbResult<StreamingAvailability> {
   const [data, setData] = useState<StreamingAvailability | null>(null);
   const [state, setState] = useState<AsyncState>('idle');
+  const lookup = useLookup(entry);
 
   useEffect(() => {
-    if (!tmdbId || !hasTmdbKey) return;
+    if (!lookup || !hasTmdbKey) return;
     let cancelled = false;
 
     setState('loading');
-    fetchStreamingProviders(tmdbId, type, region)
+    fetchStreamingProviders(lookup, region)
       .then((result) => {
         if (cancelled) return;
         setData(result);
@@ -73,7 +81,7 @@ export function useStreamingProviders(
     return () => {
       cancelled = true;
     };
-  }, [tmdbId, type, region]);
+  }, [lookup, region]);
 
   return { data, state, disabled: !hasTmdbKey };
 }
@@ -103,3 +111,4 @@ export function useActorProfile(actorName: string | undefined): string | null {
 }
 
 export { hasTmdbKey };
+export type { TmdbLookup };

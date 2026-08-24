@@ -131,7 +131,7 @@ export default function RoadmapScreen() {
           </View>
         }
         renderItem={({ item, index }) => (
-          <View className="pr-5">
+          <View className="pl-3 pr-5">
             <TimelineNode
               movie={item}
               index={index}

@@ -85,10 +85,6 @@ async function request<T>(path: string, params: Record<string, string> = {}): Pr
   return promise;
 }
 
-/* ------------------------------------------------------------------ *
- * Details
- * ------------------------------------------------------------------ */
-
 interface RawMovie {
   id: number;
   title?: string;
@@ -105,10 +101,112 @@ interface RawMovie {
   tagline?: string | null;
 }
 
-export async function fetchDetails(
-  tmdbId: number,
-  type: 'movie' | 'series',
-): Promise<TmdbDetails | null> {
+/* ------------------------------------------------------------------ *
+ * Id resolution
+ *
+ * Bundled tmdbIds are curated by hand, so an occasional one is wrong or goes
+ * stale. Rather than trust them blindly we verify the title and year, and fall
+ * back to a title search when they disagree. The corrected id is cached, so a
+ * bad id self-heals after one extra request.
+ * ------------------------------------------------------------------ */
+
+const RESOLVED_ID_PREFIX = 'resolved-id:';
+
+export interface TmdbLookup {
+  /** Catalogue id — the cache key for the resolved TMDB id. */
+  id: string;
+  title: string;
+  tmdbId: number;
+  type: 'movie' | 'series';
+  releaseYear: number;
+}
+
+/** "Loki — Season 2" → "loki" · "The Marvels" → "marvels" */
+function normaliseTitle(title: string): string {
+  return title
+    .split(/[\u2014\u2013-]\s*Season/i)[0]
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/^(the|a)\s+/, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function titlesMatch(a: string, b: string): boolean {
+  const left = normaliseTitle(a);
+  const right = normaliseTitle(b);
+  if (!left || !right) return false;
+  return left === right || left.startsWith(right) || right.startsWith(left);
+}
+
+function yearOf(dateString: string | null | undefined): number | null {
+  const year = Number(dateString?.slice(0, 4));
+  return Number.isFinite(year) && year > 1900 ? year : null;
+}
+
+async function searchByTitle(entry: TmdbLookup): Promise<number | null> {
+  const segment = entry.type === 'series' ? 'tv' : 'movie';
+  const raw = await request<{ results?: RawMovie[] }>(`/search/${segment}`, {
+    query: normaliseTitle(entry.title),
+    include_adult: 'false',
+  });
+  const results = raw?.results ?? [];
+  if (results.length === 0) return null;
+
+  // Prefer an exact title match in the right year, then title alone, then
+  // whatever TMDB ranked first.
+  const scored = results.map((result) => {
+    const title = result.title ?? result.name ?? '';
+    const year = yearOf(result.release_date ?? result.first_air_date);
+    return {
+      id: result.id,
+      score:
+        (titlesMatch(title, entry.title) ? 2 : 0) +
+        (year && Math.abs(year - entry.releaseYear) <= 1 ? 1 : 0),
+    };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored[0].score > 0 ? scored[0].id : results[0].id;
+}
+
+/**
+ * The TMDB id to actually use for an entry: the bundled one when it checks out,
+ * otherwise whatever a title search finds.
+ */
+export async function resolveTmdbId(entry: TmdbLookup): Promise<number | null> {
+  if (!hasTmdbKey) return null;
+
+  const cacheKey = RESOLVED_ID_PREFIX + entry.id;
+  const cached = await readCache<number>(cacheKey);
+  if (cached) return cached;
+
+  const segment = entry.type === 'series' ? 'tv' : 'movie';
+  const candidate = await request<RawMovie>(`/${segment}/${entry.tmdbId}`);
+
+  const candidateTitle = candidate?.title ?? candidate?.name ?? '';
+  const candidateYear = yearOf(candidate?.release_date ?? candidate?.first_air_date);
+  const looksRight =
+    !!candidate &&
+    titlesMatch(candidateTitle, entry.title) &&
+    (candidateYear === null || Math.abs(candidateYear - entry.releaseYear) <= 1);
+
+  const resolved = looksRight ? entry.tmdbId : await searchByTitle(entry);
+  if (resolved) await writeCache(cacheKey, resolved);
+  return resolved;
+}
+
+/* ------------------------------------------------------------------ *
+ * Details
+ * ------------------------------------------------------------------ */
+
+
+export async function fetchDetails(entry: TmdbLookup): Promise<TmdbDetails | null> {
+  const type = entry.type;
+  const tmdbId = await resolveTmdbId(entry);
+  if (!tmdbId) return null;
+
   const segment = type === 'series' ? 'tv' : 'movie';
   const raw = await request<RawMovie>(`/${segment}/${tmdbId}`);
   if (!raw) return null;
@@ -152,11 +250,13 @@ interface RawRegionProviders {
 const PROVIDER_KINDS: ProviderKind[] = ['flatrate', 'free', 'ads', 'rent', 'buy'];
 
 export async function fetchStreamingProviders(
-  tmdbId: number,
-  type: 'movie' | 'series',
+  entry: TmdbLookup,
   region: string = TMDB_REGION,
 ): Promise<StreamingAvailability | null> {
-  const segment = type === 'series' ? 'tv' : 'movie';
+  const tmdbId = await resolveTmdbId(entry);
+  if (!tmdbId) return null;
+
+  const segment = entry.type === 'series' ? 'tv' : 'movie';
   const raw = await request<{ results?: Record<string, RawRegionProviders> }>(
     `/${segment}/${tmdbId}/watch/providers`,
   );

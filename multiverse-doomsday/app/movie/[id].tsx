@@ -33,7 +33,7 @@ export default function MovieDetailScreen() {
   const setTier = useRoadmapStore((state) => state.setTier);
 
   const [burstId, setBurstId] = useState(0);
-  const { data: details, disabled: tmdbDisabled } = useTmdbDetails(movie?.tmdbId, movie?.type);
+  const { data: details, disabled: tmdbDisabled } = useTmdbDetails(movie);
 
   if (!movie) {
     return (
@@ -69,7 +69,7 @@ export default function MovieDetailScreen() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
       >
         {/* Backdrop */}
-        <View className="h-56 w-full bg-surface-raised">
+        <View className={`w-full bg-surface-raised ${backdrop ? 'h-56' : 'h-36'}`}>
           {backdrop ? (
             <Image
               source={{ uri: backdrop }}
@@ -228,7 +228,7 @@ export default function MovieDetailScreen() {
 
         {/* Streaming */}
         <View className="mt-5 px-5">
-          <StreamWidget tmdbId={movie.tmdbId} type={movie.type} />
+          <StreamWidget movie={movie} />
         </View>
 
         {/* Key players */}

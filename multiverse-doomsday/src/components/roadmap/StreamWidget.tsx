@@ -6,7 +6,7 @@ import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-nati
 import { useStreamingProviders } from '@/hooks/useTMDB';
 import { TMDB_REGION } from '@/services/tmdbApi';
 import { providerLogoUrl } from '@/utils/imageHelper';
-import type { ProviderKind } from '@/types';
+import type { MovieItem, ProviderKind } from '@/types';
 
 const KIND_LABEL: Record<ProviderKind, string> = {
   flatrate: 'Stream',
@@ -17,14 +17,13 @@ const KIND_LABEL: Record<ProviderKind, string> = {
 };
 
 interface StreamWidgetProps {
-  tmdbId: number;
-  type: 'movie' | 'series';
+  movie: Pick<MovieItem, 'id' | 'title' | 'tmdbId' | 'type' | 'releaseYear'>;
   region?: string;
 }
 
 /** Live "Where to Stream" row — TMDB's JustWatch-powered availability for one country. */
-export function StreamWidget({ tmdbId, type, region }: StreamWidgetProps) {
-  const { data, state, disabled } = useStreamingProviders(tmdbId, type, region);
+export function StreamWidget({ movie, region }: StreamWidgetProps) {
+  const { data, state, disabled } = useStreamingProviders(movie, region);
 
   const openJustWatch = async () => {
     if (data?.link) await WebBrowser.openBrowserAsync(data.link);

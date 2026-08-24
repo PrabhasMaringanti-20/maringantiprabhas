@@ -101,8 +101,14 @@ export function TimelineNode({
       {/* Rail */}
       <View style={{ width: RAIL_WIDTH }} className="items-center">
         <View
-          className={`w-[2px] flex-1 ${isFirst ? 'bg-transparent' : ''}`}
-          style={{ backgroundColor: isFirst ? 'transparent' : status === 'upcoming' ? '#2A2140' : '#10B98155' }}
+          className="w-[2px] flex-1"
+          style={{
+            backgroundColor: isFirst
+              ? 'transparent'
+              : status === 'upcoming'
+                ? '#372B56'
+                : '#10B981AA',
+          }}
         />
 
         <View className="my-1 items-center justify-center">
@@ -147,7 +153,11 @@ export function TimelineNode({
         <View
           className="w-[2px] flex-1"
           style={{
-            backgroundColor: isLast ? 'transparent' : status === 'completed' ? '#F59E0B55' : '#2A2140',
+            backgroundColor: isLast
+              ? 'transparent'
+              : status === 'completed'
+                ? '#F59E0BAA'
+                : '#372B56',
           }}
         />
       </View>

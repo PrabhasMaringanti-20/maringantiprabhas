@@ -7,6 +7,8 @@ and export a story card of your readiness score.
 Built with Expo (managed workflow), TypeScript, Expo Router, NativeWind,
 Zustand and Reanimated. No account, no backend, no paid services.
 
+![Roadmap](docs/screenshots/02-roadmap-progress.png)
+
 ---
 
 ## Screens
@@ -137,11 +139,31 @@ classes everywhere: `void` `#0B0813`, `surface` `#161124`, `surface-raised`
 - **Web output is SPA (`"output": "single"`).** Static rendering runs routes through
   Node, where a native-only dependency fails to interop; the app itself is
   native-first and bundles cleanly for iOS, Android and web.
-- **TMDB ids are best-effort.** They were written from reference rather than verified
-  against the live API (no outbound access at build time). A wrong id only affects
-  remote artwork, which falls back gracefully — worth a pass if you enable a key.
+- **TMDB ids self-heal.** The bundled ids are curated by hand, so
+  `resolveTmdbId()` verifies each one's title and release year against TMDB and
+  falls back to a title search when they disagree, caching the corrected id. A
+  wrong or stale id costs one extra request, once, and then loads the right
+  artwork — no data edit required.
+- **NativeWind needs Reanimated and Moti registered.** `className` is only wired
+  into React Native's core components, so `src/styles/nativewindInterop.ts`
+  registers `Animated.*` and `Moti*` via `cssInterop`. Without it every
+  `className` on an animated component is silently dropped.
+
+## Screens
+
+| Roadmap | Character vault | Character sheet |
+| --- | --- | --- |
+| ![](docs/screenshots/01-roadmap-start.png) | ![](docs/screenshots/06-vault.png) | ![](docs/screenshots/08-character-detail.png) |
+
+| Movie detail | Tier board | Story card |
+| --- | --- | --- |
+| ![](docs/screenshots/04-movie-detail.png) | ![](docs/screenshots/13-tier-board-filled.png) | ![](docs/screenshots/14-share-card.png) |
+
+Captured from the running app at 390×844 @3x. Posters and backdrops show their
+offline fallbacks — add a TMDB key for live artwork.
 
 ## Verified
 
-`tsc --noEmit` clean · `eslint` clean across 32 files · `expo export` succeeds for
-web, iOS and Android.
+`tsc --noEmit` clean · `eslint` clean · `expo export` succeeds for web, iOS and
+Android · every screen rendered and driven end-to-end in a real browser with no
+console errors.

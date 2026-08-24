@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 
 import { Poster } from '@/components/common/Poster';
 import { TIER_STYLE } from '@/components/tierlist/TierRow';
-import { formatHours, readinessRank } from '@/utils/timeCalc';
+import { formatHoursCompact, readinessRank } from '@/utils/timeCalc';
 import type { MovieItem, ReadinessStats, Tier } from '@/types';
 
 export const SHARE_CARD_WIDTH = 360;
@@ -77,7 +77,7 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
 
           <View className="mt-5 flex-row">
             <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-white">
+              <Text className="text-xl font-black text-white" numberOfLines={1}>
                 {stats.watched}/{stats.total}
               </Text>
               <Text className="mt-0.5 text-2xs uppercase tracking-wider text-muted-deep">
@@ -86,8 +86,8 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
             </View>
             <View className="w-px bg-surface-border" />
             <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-white">
-                {formatHours(stats.minutesWatched)}
+              <Text className="text-xl font-black text-white" numberOfLines={1}>
+                {formatHoursCompact(stats.minutesWatched)}
               </Text>
               <Text className="mt-0.5 text-2xs uppercase tracking-wider text-muted-deep">
                 Watch time
@@ -95,7 +95,9 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
             </View>
             <View className="w-px bg-surface-border" />
             <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-white">{rankedCount}</Text>
+              <Text className="text-xl font-black text-white" numberOfLines={1}>
+                {rankedCount}
+              </Text>
               <Text className="mt-0.5 text-2xs uppercase tracking-wider text-muted-deep">
                 Ranked
               </Text>
@@ -152,8 +154,8 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
           <Text className="text-2xs font-semibold uppercase tracking-wider text-muted-deep">
             Avengers: Doomsday prep
           </Text>
-          <Text className="text-2xs font-semibold uppercase tracking-wider text-muted-deep">
-            {rank.blurb}
+          <Text className="text-2xs font-semibold uppercase tracking-wider text-doom">
+            {stats.watched}/{stats.total} logged
           </Text>
         </View>
       </LinearGradient>

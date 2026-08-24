@@ -1,5 +1,5 @@
 import * as Haptics from 'expo-haptics';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -90,9 +90,6 @@ export function DraggableItem({
       <Animated.View style={animatedStyle} accessibilityLabel={`${movie.title} tier tile`}>
         <View className="items-center" style={{ width: TILE_WIDTH }}>
           <Poster movie={movie} width={TILE_WIDTH} rounded="rounded-lg" />
-          <Text className="mt-1 text-center text-2xs text-muted-deep" numberOfLines={1}>
-            {movie.releaseYear}
-          </Text>
         </View>
       </Animated.View>
     </GestureDetector>
