@@ -381,12 +381,17 @@ export default function IdeatorScreen() {
           />
         </View>
 
-        <View className="mt-8 items-center">
+        <View className="mt-8 items-center px-8">
           <Text className="text-2xs font-bold uppercase tracking-[4px] text-ink-faint">
             Created by
           </Text>
           <Text className="mt-1 text-sm font-black uppercase tracking-[3px] text-ink">
             Prabhas.man
+          </Text>
+
+          {/* Required by TMDB's terms of use whenever their API is used. */}
+          <Text className="mt-5 text-center text-2xs leading-4 text-ink-faint">
+            This product uses the TMDB API but is not endorsed or certified by TMDB.
           </Text>
         </View>
       </ScrollView>
