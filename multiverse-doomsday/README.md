@@ -145,6 +145,20 @@ Components name a role, never a colour:
 serves the same values imperatively where `className` cannot reach — SVG strokes,
 gradient stops, icon tints, the tab bar and the status bar.
 
+### Artwork ladder
+
+Nothing in the app renders an empty rectangle, with or without a network.
+
+**Characters** — bundled comic portrait → TMDB actor headshot (needs a key) →
+generated allegiance emblem. 35 of the 45 characters ship with a portrait;
+the rest use the emblem.
+
+**Posters** — real TMDB poster (needs a key) → bundled key art, which composites
+the film's headline character under a title plate → a typographic card.
+
+`src/data/characterImages.ts` is a generated static require map, because Metro
+resolves `require` at build time and cannot take a runtime path.
+
 ### The roadmap feed
 
 Progress lives inside each card — a status stripe down its leading edge, a step
@@ -200,24 +214,31 @@ plays the DOOM cold open once per launch and signs off with the creator credit.
 
 **Doom mode** — green smoke, drifting embers, neon wordmark.
 
-| Cold open | Roadmap | Timeline | Ideator |
+| Cold open | Timeline | Vault | Character |
 | --- | --- | --- | --- |
-| ![](docs/screenshots/00-intro.png) | ![](docs/screenshots/02-roadmap-dark-progress.png) | ![](docs/screenshots/03-timeline-dark.png) | ![](docs/screenshots/06-ideator-dark.png) |
+| ![](docs/screenshots/00-intro.png) | ![](docs/screenshots/01-timeline-dark.png) | ![](docs/screenshots/02-vault-dark.png) | ![](docs/screenshots/04-character-dark.png) |
 
 **Light mode** — minimal, professional, built for daylight reading.
 
-| Roadmap | Timeline | Vault | Ideator |
-| --- | --- | --- | --- |
-| ![](docs/screenshots/07-roadmap-light.png) | ![](docs/screenshots/08-timeline-light.png) | ![](docs/screenshots/09-vault-light.png) | ![](docs/screenshots/10-ideator-light.png) |
+| Timeline | Vault |
+| --- | --- |
+| ![](docs/screenshots/07-timeline-light.png) | ![](docs/screenshots/06-vault-light.png) |
 
-Captured from the running app at 390×844 @3x. Posters show their offline
-fallbacks — add a TMDB key for live artwork.
+Captured from the running app at 390×844 @3x, with no TMDB key configured —
+all artwork here is the bundled comic set.
 
-## Artwork
+## Artwork credits
 
-`assets/images/doom-character.png`, `avengers-mark.png` and `doom-wordmark.png`
-were supplied by the app's author and trimmed to their content bounds. They are
-Marvel-owned artwork used here in a personal fan project — they would need
+- **Cold open** — `doom-character.png`, `avengers-mark.png` and
+  `doom-wordmark.png` were supplied by the app's author, trimmed to their
+  content bounds.
+- **Character portraits** — 35 comic portraits from
+  [akabab/superhero-api](https://github.com/akabab/superhero-api) `0.3.0`,
+  resized to 300×450 and re-encoded (1.1 MB total). Each mapping was verified
+  against the character's full name, not just a name match — the dataset holds
+  two different Captain Marvels, one of them DC's Billy Batson.
+
+All of it is Marvel-owned artwork used in a personal fan project. It would need
 replacing before any public distribution.
 
 ## Verified

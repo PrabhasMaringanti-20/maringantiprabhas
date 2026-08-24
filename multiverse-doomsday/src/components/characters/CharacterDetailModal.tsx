@@ -6,6 +6,7 @@ import { BottomSheet } from '@/components/common/BottomSheet';
 import { CustomButton } from '@/components/common/CustomButton';
 import { CharacterAvatar } from '@/components/characters/CharacterAvatar';
 import { STATUS_COLOR } from '@/components/characters/CharacterCard';
+import { characterPortrait } from '@/data/characterImages';
 import { useCharacterAppearances } from '@/hooks/useCharacters';
 import { AFFILIATION_ACCENT, AFFILIATION_GRADIENT } from '@/utils/imageHelper';
 import type { MarvelCharacter } from '@/types';
@@ -33,6 +34,7 @@ export function CharacterDetailModal({
 
   const accent = AFFILIATION_ACCENT[character.affiliation];
   const gradient = AFFILIATION_GRADIENT[character.affiliation];
+  const hasPortrait = Boolean(characterPortrait(character.id));
 
   return (
     <BottomSheet visible={visible} onClose={onClose}>
@@ -48,11 +50,18 @@ export function CharacterDetailModal({
           style={{ paddingHorizontal: 20, paddingTop: 12, paddingBottom: 20 }}
         >
           <View className="flex-row items-center">
+            {/* A comic portrait is 2:3, so show it at full height rather than
+                cropping the face into a square. */}
             <View
               className="rounded-2xl p-[3px]"
               style={{ borderWidth: 2, borderColor: `${accent}88`, borderRadius: 20 }}
             >
-              <CharacterAvatar character={character} size={92} rounded={16} />
+              <CharacterAvatar
+                character={character}
+                size={96}
+                rounded={16}
+                showFullPortrait={hasPortrait}
+              />
             </View>
 
             <View className="ml-4 flex-1">

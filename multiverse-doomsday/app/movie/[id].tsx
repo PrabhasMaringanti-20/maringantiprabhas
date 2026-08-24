@@ -103,7 +103,7 @@ export default function MovieDetailScreen() {
 
         {/* Title block */}
         <View className="-mt-12 flex-row px-5">
-          <Poster movie={movie} width={92} />
+          <Poster movie={movie} width={92} hideCaption />
 
           <View className="ml-4 flex-1 justify-end pb-1">
             <Text className="text-2xl font-black leading-7 text-ink">{movie.title}</Text>

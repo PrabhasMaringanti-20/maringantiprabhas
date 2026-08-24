@@ -132,7 +132,7 @@ export function TimelineNode({ movie, status, index, onPress, onToggleWatched }:
               </View>
 
               <View className="mt-2.5 flex-row">
-                <Poster movie={movie} width={54} rounded="rounded-xl" />
+                <Poster movie={movie} width={54} rounded="rounded-xl" hideCaption />
 
                 <View className="ml-3 flex-1 justify-center">
                   <Text

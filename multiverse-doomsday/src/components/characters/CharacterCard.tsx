@@ -1,12 +1,14 @@
+import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
 import { Pressable, Text, View } from 'react-native';
 
 import { CharacterAvatar } from '@/components/characters/CharacterAvatar';
+import { characterPortrait } from '@/data/characterImages';
+import { usePalette } from '@/hooks/useTheme';
 import { AFFILIATION_ACCENT } from '@/utils/imageHelper';
 import type { CharacterStatus, MarvelCharacter } from '@/types';
-
-import { usePalette } from '@/hooks/useTheme';
 
 const STATUS_COLOR: Record<CharacterStatus, string> = {
   // Status colours carry meaning, so they hold across themes.
@@ -23,10 +25,15 @@ interface CharacterCardProps {
   onPress: (character: MarvelCharacter) => void;
 }
 
-/** Grid tile: emblem/portrait, alias, real name, actor badge and live status. */
+/**
+ * Trading-card tile: comic portrait up top with the codename over it, then the
+ * civilian name, the actor and a live status line. Characters without a bundled
+ * portrait fall back to the emblem avatar in the same frame.
+ */
 export function CharacterCard({ character, index, onPress }: CharacterCardProps) {
   const palette = usePalette();
   const accent = AFFILIATION_ACCENT[character.affiliation];
+  const portrait = characterPortrait(character.id);
 
   return (
     <MotiView
@@ -42,46 +49,64 @@ export function CharacterCard({ character, index, onPress }: CharacterCardProps)
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           onPress(character);
         }}
-        className="flex-1 items-center rounded-2xl border border-line bg-surface p-3"
+        className="flex-1 overflow-hidden rounded-2xl border border-line bg-surface"
       >
-        <View className="items-center">
+        {/* Artwork */}
+        <View style={{ aspectRatio: 3 / 4, backgroundColor: palette.raised }}>
+          {portrait ? (
+            <Image
+              source={portrait}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
+              contentPosition="top center"
+              transition={180}
+            />
+          ) : (
+            <View className="flex-1 items-center justify-center">
+              <CharacterAvatar character={character} size={78} />
+            </View>
+          )}
+
+          <LinearGradient
+            colors={['transparent', 'rgba(6,4,12,0.4)', 'rgba(6,4,12,0.94)']}
+            locations={[0.35, 0.65, 1]}
+            style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}
+          />
+
+          {/* Allegiance hairline along the top edge */}
           <View
-            className="rounded-full p-[2px]"
-            style={{ borderWidth: 1.5, borderColor: `${accent}66`, borderRadius: 999 }}
-          >
-            <CharacterAvatar character={character} size={72} />
-          </View>
+            className="absolute inset-x-0 top-0 h-[3px]"
+            style={{ backgroundColor: accent }}
+          />
 
           <View
-            className="absolute -bottom-0.5 right-0 h-3.5 w-3.5 rounded-full border-2"
+            className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full border-2"
             style={{
               backgroundColor: STATUS_COLOR[character.status],
-              borderColor: palette.surface,
+              borderColor: 'rgba(6,4,12,0.6)',
             }}
           />
-        </View>
 
-        <Text className="mt-2.5 text-center text-sm font-black leading-4 text-ink" numberOfLines={2}>
-          {character.alias}
-        </Text>
-        <Text className="mt-0.5 text-center text-2xs font-semibold text-ink-soft" numberOfLines={1}>
-          {character.name}
-        </Text>
-
-        <View className="mt-2 w-full rounded-lg bg-surface-raised px-2 py-1">
-          <Text className="text-center text-2xs font-semibold text-ink-soft" numberOfLines={1}>
-            {character.actor}
+          <Text
+            className="absolute inset-x-0 bottom-0 px-2.5 pb-2 text-[13px] font-black leading-4 text-white"
+            numberOfLines={2}
+          >
+            {character.alias}
           </Text>
         </View>
 
-        <View className="mt-2 flex-row items-center">
-          <View
-            className="mr-1.5 h-1.5 w-1.5 rounded-full"
-            style={{ backgroundColor: STATUS_COLOR[character.status] }}
-          />
+        {/* Credits */}
+        <View className="px-2.5 py-2">
+          <Text className="text-2xs font-semibold text-ink-soft" numberOfLines={1}>
+            {character.name}
+          </Text>
+          <Text className="mt-1 text-2xs font-bold text-ink" numberOfLines={1}>
+            {character.actor}
+          </Text>
           <Text
-            className="text-2xs font-bold uppercase tracking-wider"
+            className="mt-1 text-2xs font-bold uppercase tracking-wider"
             style={{ color: STATUS_COLOR[character.status] }}
+            numberOfLines={1}
           >
             {character.status}
           </Text>
