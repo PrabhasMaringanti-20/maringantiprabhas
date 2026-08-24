@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   Easing,
+  runOnJS,
   useAnimatedProps,
-  useDerivedValue,
+  useAnimatedReaction,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -15,7 +16,6 @@ import { eveningsRemaining, formatHours, readinessRank } from '@/utils/timeCalc'
 import type { ReadinessStats } from '@/types';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const AnimatedText = Animated.createAnimatedComponent(Text);
 
 const SIZE = 132;
 const STROKE = 11;
@@ -30,6 +30,7 @@ interface ReadinessCardProps {
 /** Header dashboard: animated ring, completion counters and remaining watch time. */
 export function ReadinessCard({ stats, pathLabel }: ReadinessCardProps) {
   const progress = useSharedValue(0);
+  const [displayPercent, setDisplayPercent] = useState(0);
   const rank = readinessRank(stats.percent);
   const evenings = eveningsRemaining(stats.minutesRemaining);
 
@@ -45,8 +46,13 @@ export function ReadinessCard({ stats, pathLabel }: ReadinessCardProps) {
   }));
 
   // The counter climbs with the ring instead of snapping to the final value.
-  const counterText = useDerivedValue(() => `${Math.round(progress.value * 100)}%`);
-  const counterProps = useAnimatedProps(() => ({ text: counterText.value } as never));
+  useAnimatedReaction(
+    () => Math.round(progress.value * 100),
+    (value, previous) => {
+      if (value !== previous) runOnJS(setDisplayPercent)(value);
+    },
+    [],
+  );
 
   return (
     <LinearGradient
@@ -89,14 +95,7 @@ export function ReadinessCard({ stats, pathLabel }: ReadinessCardProps) {
           </Svg>
 
           <View className="absolute items-center justify-center">
-            <AnimatedText
-              className="text-3xl font-black text-white"
-              animatedProps={counterProps}
-              // @ts-expect-error — Reanimated drives `text` through animatedProps.
-              text={`${stats.percent}%`}
-            >
-              {`${stats.percent}%`}
-            </AnimatedText>
+            <Text className="text-3xl font-black text-white">{`${displayPercent}%`}</Text>
             <Text className="text-2xs font-bold uppercase tracking-[2px] text-doom">Ready</Text>
           </View>
         </View>
