@@ -29,9 +29,11 @@ export function CharacterAvatar({
   disableFetch = false,
   showFullPortrait = false,
 }: CharacterAvatarProps) {
-  const profilePath = useActorProfile(disableFetch ? undefined : character.actor);
-  const remoteUri = characterImage(character, profilePath);
   const bundled = characterPortrait(character.id);
+  // Only look up an actor headshot when there is no comic portrait to show,
+  // otherwise the grid becomes a mix of illustration and photography.
+  const profilePath = useActorProfile(disableFetch || bundled ? undefined : character.actor);
+  const remoteUri = bundled ? null : characterImage(character, profilePath);
   const radius = rounded ?? size / 2;
   const gradient = AFFILIATION_GRADIENT[character.affiliation];
 
@@ -42,21 +44,21 @@ export function CharacterAvatar({
       className="overflow-hidden border border-line bg-surface-raised"
       style={{ width: size, height, borderRadius: radius }}
     >
-      {remoteUri ? (
-        <Image
-          source={{ uri: remoteUri }}
-          style={{ width: '100%', height: '100%' }}
-          contentFit="cover"
-          transition={220}
-          cachePolicy="disk"
-        />
-      ) : bundled ? (
+      {bundled ? (
         <Image
           source={bundled}
           style={{ width: '100%', height: '100%' }}
           contentFit="cover"
           contentPosition="top center"
           transition={180}
+        />
+      ) : remoteUri ? (
+        <Image
+          source={{ uri: remoteUri }}
+          style={{ width: '100%', height: '100%' }}
+          contentFit="cover"
+          transition={220}
+          cachePolicy="disk"
         />
       ) : (
         <LinearGradient

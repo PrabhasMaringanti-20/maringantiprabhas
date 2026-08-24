@@ -51,7 +51,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "posters": "node scripts/generate-poster-map.mjs"
+    "posters": "node scripts/generate-poster-map.mjs",
+    "verify": "node scripts/verify-web.js"
   },
   "private": true
 }

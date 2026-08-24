@@ -44,6 +44,14 @@ export default function RootLayout() {
     SplashScreen.hideAsync().catch(() => {});
   }, []);
 
+  // Belt and braces: never leave someone stranded on the native splash if the
+  // intro's first layout pass does not fire.
+  useEffect(() => {
+    if (!assetsReady) return;
+    const timer = setTimeout(() => SplashScreen.hideAsync().catch(() => {}), 900);
+    return () => clearTimeout(timer);
+  }, [assetsReady]);
+
   // Until the intro can paint, keep the screen on its exact background colour.
   if (!assetsReady) {
     return <View style={{ flex: 1, backgroundColor: INTRO_BACKDROP }} />;

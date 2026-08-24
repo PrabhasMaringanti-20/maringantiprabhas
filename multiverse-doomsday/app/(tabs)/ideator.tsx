@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Sharing from 'expo-sharing';
@@ -21,6 +22,8 @@ import { hasTmdbKey } from '@/hooks/useTMDB';
 import { usePalette, useThemeStore, type ThemeMode } from '@/hooks/useTheme';
 import { countdownLine, daysToDoomsday, quoteForDay, QUOTES } from '@/services/notifications';
 import { formatHours } from '@/utils/timeCalc';
+
+const PROFILE_PHOTO = require('../../assets/images/prabhas.jpg');
 
 const INTERESTS = [
   'Secret Wars theories',
@@ -94,7 +97,7 @@ export default function IdeatorScreen() {
 
   return (
     <View className="flex-1 bg-canvas">
-      <DoomAtmosphere particleCount={12} />
+      <DoomAtmosphere particleCount={8} />
 
       <ScrollView
         contentContainerStyle={{
@@ -131,20 +134,24 @@ export default function IdeatorScreen() {
               }}
             >
               <View className="items-center px-5 py-7">
-                <LinearGradient
-                  colors={[palette.accent, palette.isDark ? '#064E3B' : '#34D399']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
+                <View
                   style={{
-                    width: 84,
-                    height: 84,
-                    borderRadius: 42,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    width: 96,
+                    height: 96,
+                    borderRadius: 48,
+                    borderWidth: 2,
+                    borderColor: palette.accent,
+                    overflow: 'hidden',
+                    backgroundColor: palette.raised,
                   }}
                 >
-                  <Text className="text-3xl font-black tracking-widest text-white">MP</Text>
-                </LinearGradient>
+                  <Image
+                    source={PROFILE_PHOTO}
+                    style={{ width: '100%', height: '100%' }}
+                    contentFit="cover"
+                    transition={200}
+                  />
+                </View>
 
                 <Text className="mt-4 text-2xl font-black tracking-tight text-ink">
                   Maringanti Prabhas
@@ -352,7 +359,7 @@ export default function IdeatorScreen() {
           <SectionTitle icon="construct-outline" label="Under the hood" />
           <View className="rounded-2xl border border-line bg-surface px-4 py-4">
             {[
-              [`${MOVIE_CATALOGUE.length} titles`, 'curated across five paths'],
+              [`${MOVIE_CATALOGUE.length} titles`, 'every film and series, in release order'],
               [`${CHARACTER_CATALOGUE.length} characters`, 'with comic-to-MCU context'],
               ['100% offline', 'your progress never leaves the device'],
               [

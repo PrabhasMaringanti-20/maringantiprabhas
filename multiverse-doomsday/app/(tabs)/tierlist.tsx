@@ -90,7 +90,7 @@ export default function TierStudioScreen() {
 
   return (
     <View className="flex-1 bg-canvas">
-      <DoomAtmosphere particleCount={9} />
+      <DoomAtmosphere particleCount={6} />
 
       <ScrollView
         contentContainerStyle={{

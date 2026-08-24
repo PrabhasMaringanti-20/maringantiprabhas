@@ -121,7 +121,7 @@ export default function MovieDetailScreen() {
               </Text>
             </View>
             <View className="mt-2 flex-row flex-wrap gap-1.5">
-              {movie.isCrucial ? <Badge label="Express essential" tone="accent" compact /> : null}
+              {movie.isCrucial ? <Badge label="Essential" tone="accent" compact /> : null}
               {movie.type === 'series' ? <Badge label="Series" tone="violet" compact /> : null}
               {details?.voteAverage ? (
                 <Badge

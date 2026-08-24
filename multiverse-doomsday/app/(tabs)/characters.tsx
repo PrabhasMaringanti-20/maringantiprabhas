@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SearchBar } from '@/components/common/SearchBar';
-import { CharacterCard } from '@/components/characters/CharacterCard';
+import { CharacterCard, characterCardHeight } from '@/components/characters/CharacterCard';
 import { CharacterDetailModal } from '@/components/characters/CharacterDetailModal';
 import { FilterChips } from '@/components/characters/FilterChips';
 import { useCharacters } from '@/hooks/useCharacters';
@@ -17,6 +17,11 @@ import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
 import { usePalette } from '@/hooks/useTheme';
 
 export default function CharactersScreen() {
+  const { width: windowWidth } = useWindowDimensions();
+  // Column width and row height are fixed, so virtualisation never has to
+  // measure a card. Recycled rows used to collapse to hairlines without this.
+  const columnWidth = Math.floor((windowWidth - 40 - 12) / 2);
+  const rowHeight = characterCardHeight(columnWidth) + 12;
   const palette = usePalette();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -39,7 +44,7 @@ export default function CharactersScreen() {
 
   return (
     <View className="flex-1 bg-canvas">
-      <DoomAtmosphere particleCount={9} />
+      <DoomAtmosphere particleCount={6} />
 
       <FlatList
         data={characters}
@@ -53,6 +58,14 @@ export default function CharactersScreen() {
         }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        removeClippedSubviews={false}
+        initialNumToRender={8}
+        windowSize={9}
+        getItemLayout={(_data, index) => ({
+          length: rowHeight,
+          offset: rowHeight * Math.floor(index / 2),
+          index,
+        })}
         ListHeaderComponent={
           <View className="pb-3">
             <View className="px-5">
@@ -85,7 +98,12 @@ export default function CharactersScreen() {
           </View>
         }
         renderItem={({ item, index }) => (
-          <CharacterCard character={item} index={index} onPress={openCharacter} />
+          <CharacterCard
+            character={item}
+            index={index}
+            width={columnWidth}
+            onPress={openCharacter}
+          />
         )}
         ListEmptyComponent={
           <View className="items-center px-10 py-16">

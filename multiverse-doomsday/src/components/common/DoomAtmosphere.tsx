@@ -132,8 +132,8 @@ interface DoomAtmosphereProps {
  * Renders nothing in light mode, where the design stays clean and paper-like.
  */
 export function DoomAtmosphere({
-  particleCount = 14,
-  intensity = 1,
+  particleCount = 10,
+  intensity = 0.45,
   forceDark = false,
 }: DoomAtmosphereProps) {
   const palette = usePalette();
@@ -175,8 +175,8 @@ export function DoomAtmosphere({
     <View pointerEvents="none" className="absolute inset-0 overflow-hidden">
       {/* Base wash: green rising from the floor of the screen. */}
       <LinearGradient
-        colors={['transparent', `${accent}0D`, `${accent}1F`]}
-        locations={[0.35, 0.75, 1]}
+        colors={['transparent', `${accent}07`, `${accent}12`]}
+        locations={[0.45, 0.8, 1]}
         style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}
       />
 

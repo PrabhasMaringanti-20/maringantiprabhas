@@ -2,12 +2,12 @@ import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MotiView } from 'moti';
-import { Pressable, Text, useWindowDimensions, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
-import { CharacterAvatar } from '@/components/characters/CharacterAvatar';
 import { characterPortrait } from '@/data/characterImages';
+import { useActorProfile } from '@/hooks/useTMDB';
 import { usePalette } from '@/hooks/useTheme';
-import { AFFILIATION_ACCENT } from '@/utils/imageHelper';
+import { AFFILIATION_ACCENT, AFFILIATION_GRADIENT, initialsFor, profileUrl } from '@/utils/imageHelper';
 import type { CharacterStatus, MarvelCharacter } from '@/types';
 
 const STATUS_COLOR: Record<CharacterStatus, string> = {
@@ -19,40 +19,48 @@ const STATUS_COLOR: Record<CharacterStatus, string> = {
   Unknown: '#8B899C',
 };
 
+/** Art is 3:4; the caption block below it is a fixed three lines. */
+export const CARD_ART_RATIO = 4 / 3;
+export const CARD_CAPTION_HEIGHT = 74;
+
+/** Total card height for a given column width — the list needs this up front. */
+export function characterCardHeight(columnWidth: number): number {
+  return Math.round(columnWidth * CARD_ART_RATIO) + CARD_CAPTION_HEIGHT;
+}
+
 interface CharacterCardProps {
   character: MarvelCharacter;
   index: number;
+  /** Explicit width; the grid measures once and passes it down. */
+  width: number;
   onPress: (character: MarvelCharacter) => void;
 }
 
 /**
- * Trading-card tile: comic portrait up top with the codename over it, then the
- * civilian name, the actor and a live status line. Characters without a bundled
- * portrait fall back to the emblem avatar in the same frame.
+ * Trading-card tile.
+ *
+ * Every dimension is explicit. An earlier version leaned on `flex-1` and
+ * `aspectRatio`, and recycled rows collapsed to hairlines on device — the grid
+ * showed stacks of empty borders instead of cards.
  */
-export function CharacterCard({ character, index, onPress }: CharacterCardProps) {
+export function CharacterCard({ character, index, width, onPress }: CharacterCardProps) {
   const palette = usePalette();
-  const { width } = useWindowDimensions();
   const accent = AFFILIATION_ACCENT[character.affiliation];
   const portrait = characterPortrait(character.id);
 
-  // Explicit height: `aspectRatio` resolved to zero inside the two-column list
-  // on device, which collapsed every card to its caption lines.
-  const columnWidth = (width - 40 - 12) / 2;
-  const artHeight = Math.round(columnWidth * 1.28);
+  // Comic art is the house style; an actor headshot only fills the gaps.
+  const actorProfile = useActorProfile(portrait ? undefined : character.actor);
+  const actorUri = portrait ? null : profileUrl(actorProfile);
+
+  const artHeight = Math.round(width * CARD_ART_RATIO);
+  const gradient = AFFILIATION_GRADIENT[character.affiliation];
 
   return (
     <MotiView
-      from={{ opacity: 0, translateY: 20, scale: 0.96 }}
-      animate={{ opacity: 1, translateY: 0, scale: 1 }}
-      transition={{
-        type: 'spring',
-        damping: 19,
-        stiffness: 150,
-        mass: 0.9,
-        delay: Math.min(index, 10) * 40,
-      }}
-      className="flex-1"
+      from={{ opacity: 0, translateY: 18 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{ type: 'timing', duration: 320, delay: Math.min(index, 8) * 40 }}
+      style={{ width, height: characterCardHeight(width) }}
     >
       <Pressable
         accessibilityRole="button"
@@ -61,54 +69,79 @@ export function CharacterCard({ character, index, onPress }: CharacterCardProps)
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           onPress(character);
         }}
-        className="flex-1 overflow-hidden rounded-2xl border border-line bg-surface"
+        style={{
+          width,
+          height: characterCardHeight(width),
+          borderRadius: 16,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: palette.line,
+          backgroundColor: palette.surface,
+        }}
       >
-        {/* Artwork */}
-        <View style={{ height: artHeight, backgroundColor: palette.raised }}>
-          {portrait ? (
+        <View style={{ width, height: artHeight, backgroundColor: palette.raised }}>
+          {portrait || actorUri ? (
             <Image
-              source={portrait}
-              style={{ width: '100%', height: '100%' }}
+              source={portrait ?? { uri: actorUri as string }}
+              style={{ width, height: artHeight }}
               contentFit="cover"
               contentPosition="top center"
-              transition={180}
+              transition={160}
+              cachePolicy="disk"
             />
           ) : (
-            <View className="flex-1 items-center justify-center">
-              <CharacterAvatar character={character} size={78} />
-            </View>
+            <LinearGradient
+              colors={gradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{ width, height: artHeight, alignItems: 'center', justifyContent: 'center' }}
+            >
+              <Text style={{ fontSize: width * 0.3, fontWeight: '900', color: '#FFFFFF' }}>
+                {initialsFor(character)}
+              </Text>
+            </LinearGradient>
           )}
 
           <LinearGradient
-            colors={['transparent', 'rgba(6,4,12,0.4)', 'rgba(6,4,12,0.94)']}
-            locations={[0.35, 0.65, 1]}
-            style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}
+            colors={['transparent', 'rgba(6,4,12,0.45)', 'rgba(6,4,12,0.95)']}
+            locations={[0.4, 0.7, 1]}
+            style={{ position: 'absolute', left: 0, right: 0, top: 0, height: artHeight }}
           />
 
-          {/* Allegiance hairline along the top edge */}
-          <View
-            className="absolute inset-x-0 top-0 h-[3px]"
-            style={{ backgroundColor: accent }}
-          />
+          <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, backgroundColor: accent }} />
 
           <View
-            className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full border-2"
             style={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              borderWidth: 2,
+              borderColor: 'rgba(6,4,12,0.55)',
               backgroundColor: STATUS_COLOR[character.status],
-              borderColor: 'rgba(6,4,12,0.6)',
             }}
           />
 
           <Text
-            className="absolute inset-x-0 bottom-0 px-2.5 pb-2 text-[13px] font-black leading-4 text-white"
             numberOfLines={2}
+            style={{
+              position: 'absolute',
+              left: 10,
+              right: 10,
+              bottom: 8,
+              fontSize: 13,
+              lineHeight: 16,
+              fontWeight: '900',
+              color: '#FFFFFF',
+            }}
           >
             {character.alias}
           </Text>
         </View>
 
-        {/* Credits */}
-        <View className="px-2.5 py-2">
+        <View style={{ height: CARD_CAPTION_HEIGHT, paddingHorizontal: 10, paddingVertical: 8 }}>
           <Text className="text-2xs font-semibold text-ink-soft" numberOfLines={1}>
             {character.name}
           </Text>
