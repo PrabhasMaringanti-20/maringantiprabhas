@@ -79,7 +79,6 @@ export default function EmailAction({
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="true"
-        data-cursor
         className={styles}
       >
         <Icon name="mail" className="h-4 w-4" />

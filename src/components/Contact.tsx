@@ -2,7 +2,6 @@ import { site } from '@/lib/site';
 import EmailAction from './EmailAction';
 import Icon from './Icon';
 import type { UIIcon } from '@/lib/ui-icons';
-import Magnetic from './Magnetic';
 import Reveal from './Reveal';
 
 const DESTINATIONS: { icon: UIIcon; label: string; value: string; href: string; external?: boolean; download?: boolean }[] = [
@@ -11,13 +10,6 @@ const DESTINATIONS: { icon: UIIcon; label: string; value: string; href: string; 
     label: 'Email',
     value: site.email,
     href: `mailto:${site.email}`,
-  },
-  {
-    icon: 'download',
-    label: 'Resume',
-    value: 'PDF, one page',
-    href: site.resume,
-    download: true,
   },
   {
     icon: 'github',
@@ -57,17 +49,6 @@ export default function Contact() {
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <EmailAction variant="primary" label="Email me" />
-            <Magnetic>
-              <a
-                href={site.resume}
-                download
-                data-cursor
-                className="inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-card px-7 py-4 text-[16px] font-bold text-ink shadow-[var(--shadow)]"
-              >
-                <Icon name="download" className="h-4 w-4" />
-                Download resume
-              </a>
-            </Magnetic>
           </div>
 
           <ul className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -77,7 +58,6 @@ export default function Contact() {
                   href={d.href}
                   {...(d.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   {...(d.download ? { download: true } : {})}
-                  data-cursor
                   className="contact-card flex items-center gap-4 rounded-2xl border border-line bg-bg px-5 py-4"
                 >
                   <span className="grid h-10 w-10 flex-none place-items-center rounded-xl border border-line bg-card text-accent">

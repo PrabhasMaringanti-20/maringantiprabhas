@@ -42,7 +42,6 @@ export default function ScreenshotGallery({ shots }: { shots: Screenshot[] }) {
               onClick={() => setIndex(i)}
               aria-label={s.alt}
               aria-current={i === index}
-              data-cursor
               className={`h-14 w-20 overflow-hidden rounded-lg border transition-colors ${
                 i === index ? 'border-accent' : 'border-line hover:border-line-2'
               }`}

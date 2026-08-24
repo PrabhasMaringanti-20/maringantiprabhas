@@ -2,7 +2,6 @@ import { site } from '@/lib/site';
 import Constellation from './Constellation';
 import EmailAction from './EmailAction';
 import Icon from './Icon';
-import Magnetic from './Magnetic';
 
 const ease = 'cubic-bezier(.2,.8,.2,1)';
 const enter = (delay: string) => `fade-up .7s ${ease} ${delay} both`;
@@ -50,28 +49,13 @@ export default function Hero() {
           className="mt-8 flex flex-wrap items-center gap-3"
           style={{ animation: enter('.3s') }}
         >
-          <Magnetic>
-            <a
-              href="#work"
-              data-cursor
-              className="inline-flex items-center gap-2.5 rounded-full bg-accent px-7 py-4 text-[16px] font-bold text-on-accent shadow-[var(--btn-glow)]"
+          <a
+            href="#work"
+            className="inline-flex items-center gap-2.5 rounded-full bg-accent px-7 py-4 text-[16px] font-bold text-on-accent shadow-[var(--btn-glow)]"
             >
-              Explore my work
-              <Icon name="arrow" className="h-4 w-4" />
-            </a>
-          </Magnetic>
-
-          <Magnetic>
-            <a
-              href={site.resume}
-              download
-              data-cursor
-              className="inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-card px-7 py-4 text-[16px] font-bold text-ink shadow-[var(--shadow)]"
-            >
-              <Icon name="download" className="h-4 w-4" />
-              Download resume
-            </a>
-          </Magnetic>
+            Explore my work
+            <Icon name="arrow" className="h-4 w-4" />
+          </a>
 
           <EmailAction variant="quiet" label="Email" />
 
@@ -79,7 +63,6 @@ export default function Hero() {
             href={site.github}
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor
             className="inline-flex items-center gap-2 px-2.5 py-4 text-[15.5px] font-medium text-ink-2 transition-colors hover:text-ink"
           >
             <Icon name="github" className="h-4 w-4" />
@@ -89,7 +72,6 @@ export default function Hero() {
             href={site.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor
             className="inline-flex items-center gap-2 px-2.5 py-4 text-[15.5px] font-medium text-ink-2 transition-colors hover:text-ink"
           >
             <Icon name="linkedin" className="h-4 w-4" />

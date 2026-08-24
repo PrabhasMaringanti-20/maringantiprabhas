@@ -18,7 +18,6 @@ export default function Footer() {
             href={`mailto:${site.email}`}
             aria-label="Email"
             title="Email"
-            data-cursor
             className="grid h-10 w-10 place-items-center rounded-full border border-line-2 bg-card text-ink-2 transition-colors hover:text-ink"
           >
             <Icon name="mail" className="h-[17px] w-[17px]" />
@@ -29,7 +28,6 @@ export default function Footer() {
             rel="noopener noreferrer"
             aria-label="GitHub"
             title="GitHub"
-            data-cursor
             className="grid h-10 w-10 place-items-center rounded-full border border-line-2 bg-card text-ink-2 transition-colors hover:text-ink"
           >
             <Icon name="github" className="h-[17px] w-[17px]" />
@@ -40,7 +38,6 @@ export default function Footer() {
             rel="noopener noreferrer"
             aria-label="LinkedIn"
             title="LinkedIn"
-            data-cursor
             className="grid h-10 w-10 place-items-center rounded-full border border-line-2 bg-card text-ink-2 transition-colors hover:text-ink"
           >
             <Icon name="linkedin" className="h-[17px] w-[17px]" />

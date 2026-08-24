@@ -58,18 +58,16 @@ export const projects: Project[] = [
     description:
       'A 14-node LangGraph pipeline that retrieves from a knowledge base, verifies its own draft answer against those sources, then answers, digs deeper, or hands off to a human.',
     longDescription:
-      'Most "AI chatbot" demos are a single model call wrapped in a text box. This one is built around the machinery that makes an answer trustworthy: grounded retrieval with citations, a separate verification pass, and an explicit confidence gate that decides between answering, searching wider, and escalating to a person. When a human resolves a ticket, the system drafts a new knowledge article from that fix, so the next person gets an instant answer.',
+      'Most "AI chatbot" demos are one model call in a text box. This one is built around what actually makes an answer trustworthy: grounded retrieval, a separate verification pass, and a confidence gate that decides between answering, digging deeper, and handing off to a person.',
     problem:
-      'The dangerous failure mode for a support bot is not a wrong answer — it is a confident wrong answer, delivered with no way for anyone to check it.',
+      'The dangerous failure for a support bot is not a wrong answer. It is a confident wrong answer, with no way to check it.',
     solution:
-      'Every answer is assembled from retrieved passages and then checked against those same passages before the user sees it. If the check fails or confidence is low, the request escalates through L1 → L2 → L3 instead of guessing.',
+      'Answers are assembled from retrieved passages, then checked against those same passages before anyone sees them. Low confidence escalates through L1 → L2 → L3 instead of guessing.',
     features: [
-      'A LangGraph state machine of 14 nodes runs every chat turn, from ingress guard through to memory persistence',
-      'Hybrid retrieval: PostgreSQL full-text search and vector similarity, merged with Reciprocal Rank Fusion, then reranked',
-      'A grounding verifier checks the drafted answer is actually supported by its sources before delivery',
-      'A confidence gate routes between answering (L1), searching the whole knowledge base (L2), and creating a ticket with human handoff (L3)',
-      'Every human resolution is turned into a reviewed knowledge article, so the knowledge base improves itself',
-      'Role-based access control, persistent conversation memory, and a Dockerised deployment',
+      'A 14-node LangGraph state machine runs every chat turn',
+      'Hybrid retrieval — full-text and vector search fused by Reciprocal Rank Fusion',
+      'A grounding verifier checks each answer against its sources before delivery',
+      'Every human resolution becomes a new knowledge article, so the system improves itself',
     ],
     technologies: [
       { name: 'Python', slug: 'python' },
@@ -127,17 +125,15 @@ export const projects: Project[] = [
     description:
       'Searches the web for the companies already doing what you propose, then grades the idea with Gemini under one of three analyst personas.',
     longDescription:
-      'Rather than asking a model what it thinks of an idea, VET-AI goes and finds evidence first. It runs a live web search for real competitors, feeds that evidence into a persona-shaped prompt, forces structured JSON out of Gemini, validates it strictly, and renders the verdict as a dashboard — success probability, market saturation, capital required, and the flaws that are hard to see from inside your own idea.',
+      'Rather than asking a model what it thinks, VET-AI finds evidence first: a live web search for real competitors, fed into a persona-shaped prompt and validated before it reaches the dashboard.',
     problem:
       'Asking a language model to judge a business idea with no evidence produces confident, agreeable fiction.',
     solution:
       'Ground the judgement in live search results, force a strict JSON schema, and validate the response against the evidence before rendering it.',
     features: [
-      'Live competitor discovery through Tavily with a DuckDuckGo fallback',
-      'Three analyst personas — supportive, investor, and sceptical short-seller — that materially change the verdict',
-      'Forced structured JSON output from Gemini, strictly validated before it reaches the UI',
-      'A competitor grid with live website previews and recent news',
-      'Runs without an API key in a clearly-labelled sample mode, so the app never pretends to have data it does not',
+      'Live competitor discovery through Tavily, falling back to DuckDuckGo',
+      'Three analyst personas that materially change the verdict',
+      'Forced JSON from Gemini, strictly validated before it renders',
     ],
     technologies: [
       { name: 'Python', slug: 'python' },
@@ -168,16 +164,15 @@ export const projects: Project[] = [
     description:
       'A full-stack learning platform with Gemini-powered tutoring and automatic quiz generation from course material.',
     longDescription:
-      'An educational prototype built around adaptive testing and course recommendation. Learners ask questions and get answers from Gemini in context, and quizzes are generated from the material rather than hand-authored. The initial release was validated by student users at NIT Warangal, and the architecture was later refactored locally for modular scalability.',
+      'Learners ask questions and get answers from Gemini in context, and quizzes are generated from the material rather than hand-authored. The initial release was validated by student users at NIT Warangal.',
     problem:
       'Static course content cannot tell whether a learner has actually understood something, or adapt when they have not.',
     solution:
       'Generate assessment from the material itself and answer questions in context, so the platform responds to the individual learner rather than serving everyone the same page.',
     features: [
-      'Gemini-powered tutoring that answers questions in the context of the course material',
+      'Gemini-powered tutoring, answered in the context of the course material',
       'Automatic quiz generation from lesson content',
-      'Course recommendation and real-time progress tracking',
-      'Firebase authentication with role-based access control',
+      'Firebase auth with role-based access control',
     ],
     technologies: [
       { name: 'Node.js' },
@@ -207,18 +202,16 @@ export const projects: Project[] = [
     description:
       'A banking onboarding system with separated compliance, KYC and risk officer roles, built on a full Controller–Service–Repository stack.',
     longDescription:
-      'The closest thing here to the enterprise work I do day to day. RoyalBank models customer onboarding the way a bank actually structures it: distinct roles for KYC officers, compliance officers and administrators, documents that must be tracked and verified, risk profiles that decide routing, and an audit log behind it all. It runs against SQL Server through Entity Framework Core migrations.',
+      'The closest thing here to the enterprise work I do day to day. RoyalBank models onboarding the way a bank structures it: separate KYC, compliance and admin roles, tracked documents, risk profiles that decide routing, and an audit log behind it all.',
     problem:
       'Onboarding a bank customer is not a form submission — it is a multi-party approval workflow with separation of duties and an audit trail.',
     solution:
       'Model each officer role as its own controller and service boundary, keep persistence behind repository interfaces, and drive approvals through explicit risk scoring rather than implicit trust.',
     features: [
-      'Separate controllers and services for customer, KYC officer, compliance officer and admin roles',
-      'Document tracking with verification state per customer',
+      'Separate controllers and services per officer role',
       'Risk profiling that classifies applications and routes them accordingly',
-      'Entity Framework Core code-first migrations against SQL Server',
       'Repository interfaces over every data path, keeping controllers free of persistence detail',
-      'An audit log covering the actions that change an application’s state',
+      'EF Core code-first migrations against SQL Server',
     ],
     technologies: [
       { name: 'C#', slug: 'csharp' },

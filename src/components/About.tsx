@@ -18,26 +18,19 @@ export default function About() {
 
       <div className="mt-12 grid gap-x-16 gap-y-10 lg:grid-cols-[1.15fr_1fr]">
         <Reveal delay={80}>
-          <div className="space-y-6 text-[18px] leading-[1.72] text-ink-2">
+          <div className="space-y-6 text-[17px] leading-[1.7] text-ink-2">
             <p>
-              I&rsquo;m a software engineer working across the full stack, with the centre of gravity
-              in backend systems and generative AI. At{' '}
-              <strong className="font-bold text-ink">Cognizant</strong> I&rsquo;m building the
-              onboarding and KYC compliance core of an enterprise banking platform — registration,
-              document tracking, risk scoring and multi-step approvals — on a clean
-              Controller–Service–Repository architecture in .NET Core.
-            </p>
-            <p>
-              Before that, at <strong className="font-bold text-ink">Revive Tek</strong>, I built
-              AI-driven CRM and applicant-tracking interfaces in React, and the generative pipelines
-              sitting behind them: context-aware email drafting, resume parsing and scheduling
-              optimisation with the OpenAI API and LangChain.
+              I&rsquo;m a software engineer working across the full stack, with the centre of
+              gravity in backend systems and generative AI. At{' '}
+              <strong className="font-bold text-ink">Cognizant</strong> I build the onboarding and
+              KYC compliance core of an enterprise banking platform; before that, at{' '}
+              <strong className="font-bold text-ink">Revive Tek</strong>, AI-driven CRM interfaces
+              in React and the generative pipelines behind them.
             </p>
             <p>
               What holds my attention is the part most demos skip — making a system that can tell
-              when it&rsquo;s wrong. Retrieval that cites its sources. A confidence gate that
-              escalates instead of guessing. A risk engine that routes an application to a person
-              rather than approving it on trust. That thread runs through everything below.
+              when it&rsquo;s wrong. Retrieval that cites its sources. A gate that escalates
+              instead of guessing. That thread runs through everything below.
             </p>
           </div>
         </Reveal>

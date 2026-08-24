@@ -39,7 +39,6 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
       onClick={toggle}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      data-cursor
       className={`grid h-10 w-10 flex-none place-items-center rounded-full border border-line-2 bg-card text-ink-2 transition-colors hover:text-ink ${className}`}
     >
       {/* invisible until mounted so we never flash the wrong glyph */}

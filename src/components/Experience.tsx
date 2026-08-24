@@ -66,7 +66,6 @@ function RoleItem({
             onClick={onToggle}
             aria-expanded={open}
             aria-controls={panelId}
-            data-cursor
             className="flex w-full items-start justify-between gap-5 px-6 py-6 text-left sm:px-8 sm:py-7"
           >
             <span className="min-w-0">

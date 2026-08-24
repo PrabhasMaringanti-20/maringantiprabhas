@@ -3,20 +3,19 @@
 import { BRAND } from '@/lib/brand';
 
 /**
- * The floating stack marks beside the hero headline. Each chip sits on its own
- * depth, and the parallax is pure CSS: `--mx` / `--my` are written to <html> by
- * PointerLayer, so nothing here re-renders on pointer move. On coarse pointers
- * those variables never change and the chips simply rest in place.
+ * The floating stack marks beside the hero headline. Purely decorative and
+ * static — they establish the technologies at a glance without competing with
+ * the headline for attention.
  */
 const CHIPS = [
-  { slug: 'react', x: 69, y: 10, depth: 1.5 },
-  { slug: 'googlegemini', x: 88, y: 6, depth: 1.2 },
-  { slug: 'python', x: 76, y: 29, depth: 2.4 },
-  { slug: 'tailwindcss', x: 68, y: 46, depth: 2.7 },
-  { slug: 'csharp', x: 87, y: 43, depth: 1.1 },
-  { slug: 'postgresql', x: 72, y: 68, depth: 1.6 },
-  { slug: 'docker', x: 89, y: 70, depth: 2.0 },
-  { slug: 'dotnet', x: 75, y: 87, depth: 1.3 },
+  { slug: 'react', x: 69, y: 10 },
+  { slug: 'googlegemini', x: 88, y: 6 },
+  { slug: 'python', x: 76, y: 29 },
+  { slug: 'tailwindcss', x: 68, y: 46 },
+  { slug: 'csharp', x: 87, y: 43 },
+  { slug: 'postgresql', x: 72, y: 68 },
+  { slug: 'docker', x: 89, y: 70 },
+  { slug: 'dotnet', x: 75, y: 87 },
 ] as const;
 
 export default function Constellation() {
@@ -28,15 +27,10 @@ export default function Constellation() {
         return (
           <div
             key={c.slug}
-            data-cursor
             className="group pointer-events-auto absolute grid h-[60px] w-[60px] place-items-center rounded-[17px] border border-line bg-card shadow-[var(--shadow)] transition-shadow duration-300 hover:shadow-[var(--shadow-lg)]"
             style={{
               left: `${c.x}%`,
               top: `${c.y}%`,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ...({ '--depth': c.depth } as any),
-              transform:
-                'translate(calc(var(--mx, 0) * var(--depth) * -40px), calc(var(--my, 0) * var(--depth) * -40px))',
             }}
           >
             <svg viewBox="0 0 24 24" className="h-[27px] w-[27px]" role="img" aria-label={icon.title}>

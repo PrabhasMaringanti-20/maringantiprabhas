@@ -2,7 +2,6 @@ import { projects, type Project } from '@/data/projects';
 import ArchitectureFlow from './ArchitectureFlow';
 import BrandMark from './BrandMark';
 import Icon from './Icon';
-import Magnetic from './Magnetic';
 import Reveal from './Reveal';
 import ScreenshotGallery from './ScreenshotGallery';
 
@@ -24,31 +23,25 @@ function Links({ project }: { project: Project }) {
   return (
     <div className="mt-8 flex flex-wrap items-center gap-3">
       {project.liveUrl ? (
-        <Magnetic>
           <a
             href={project.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor
             className="inline-flex items-center gap-2.5 rounded-full bg-accent px-6 py-3.5 text-[15.5px] font-bold text-on-accent shadow-[var(--btn-glow)]"
           >
             Open the live app
             <Icon name="arrow" className="h-4 w-4" />
           </a>
-        </Magnetic>
       ) : null}
-      <Magnetic>
         <a
           href={project.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          data-cursor
           className="inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-card px-6 py-3.5 text-[15.5px] font-bold text-ink shadow-[var(--shadow)]"
         >
           <Icon name="github" className="h-4 w-4" />
           {project.status === 'live' ? 'Source' : 'Read the source'}
         </a>
-      </Magnetic>
     </div>
   );
 }
@@ -198,7 +191,10 @@ function StandardBand({ project, flip }: { project: Project; flip: boolean }) {
           </Reveal>
         </div>
 
-        <Reveal delay={90} className={flip ? 'lg:order-1' : undefined}>
+        {/* On phones the diagram is the heaviest block on the page and the tech
+            chips above already carry the stack, so it is desktop-only here.
+            The featured project keeps its diagram at every width. */}
+        <Reveal delay={90} className={`hidden lg:block ${flip ? 'lg:order-1' : ''}`}>
           <div className="lg:sticky lg:top-28">
             <ArchitectureFlow nodes={project.architecture} label="How a request flows" />
           </div>

@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { sections, site } from '@/lib/site';
 import Icon from './Icon';
-import Magnetic from './Magnetic';
 import ThemeToggle from './ThemeToggle';
 
 export default function Nav() {
@@ -85,7 +84,6 @@ export default function Nav() {
       <nav aria-label="Primary" className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
         <a
           href="#top"
-          data-cursor
           className="font-display text-[19px] font-bold tracking-tight text-ink"
         >
           {site.shortName}
@@ -97,7 +95,6 @@ export default function Nav() {
             <li key={s.id}>
               <a
                 href={`#${s.id}`}
-                data-cursor
                 aria-current={active === s.id ? 'true' : undefined}
                 className={`group relative text-[15px] font-medium transition-colors ${
                   active === s.id ? 'text-ink' : 'text-ink-2 hover:text-ink'
@@ -117,21 +114,17 @@ export default function Nav() {
         <div className="flex items-center gap-2.5">
           <ThemeToggle />
 
-          {/* Visibility lives on this wrapper, not on Magnetic: Magnetic sets
-              `inline-block` itself, which would fight a `hidden` passed into it
-              and leave the button on screen at every width. */}
+          {/* The one resume link on desktop. On narrower screens it lives in
+              the menu instead, so there is never more than one on screen. */}
           <span className="hidden min-[900px]:inline-block">
-            <Magnetic>
-              <a
+            <a
                 href={site.resume}
                 download
-                data-cursor
                 className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-bold text-on-ink transition-opacity hover:opacity-90"
               >
                 <Icon name="download" className="h-4 w-4" />
                 Resume
               </a>
-            </Magnetic>
           </span>
 
           <button
@@ -141,7 +134,6 @@ export default function Nav() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? 'Close menu' : 'Open menu'}
-            data-cursor
             className="relative h-10 w-10 flex-none rounded-xl border border-line-2 bg-card min-[900px]:hidden"
           >
             <span

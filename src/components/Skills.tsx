@@ -64,7 +64,6 @@ export default function Skills() {
                 aria-controls={`panel-${g.id}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActiveId(g.id)}
-                data-cursor
                 className={`rounded-full border px-5 py-3 text-[15px] font-bold transition-colors duration-200 ${
                   selected
                     ? 'border-ink bg-ink text-on-ink'
@@ -94,7 +93,6 @@ export default function Skills() {
               return (
                 <li
                   key={s.name}
-                  data-cursor
                   className="skill-tile group relative flex flex-col items-center gap-3.5 overflow-hidden rounded-2xl border border-line bg-card px-4 pb-5 pt-6 text-center"
                   style={{
                     boxShadow: 'var(--shadow)',

@@ -28,11 +28,10 @@ export const roles: Role[] = [
     summary:
       'Building the onboarding and compliance core of an enterprise banking platform in .NET.',
     points: [
-      'Engineered core modules for an enterprise-level Banking Customer Onboarding and KYC Compliance system within a .NET Core ecosystem.',
-      'Implemented business logic covering customer registration, digital document tracking, simulated risk-engine scoring (Low / Medium / High) and automated multi-step account approval workflows.',
-      'Designed and normalised relational database schemas in SQL Server using an Entity Framework Core code-first approach, with data validation and strict transactional integrity.',
-      'Developed structured, authenticated RESTful API endpoints on a clean Controller–Service–Repository multi-layer architecture.',
-      'Managed codebase updates, versioning and continuous feature integration using Visual Studio and structured Git/GitHub branching strategies.',
+      'Engineered core modules of an enterprise Banking Customer Onboarding and KYC Compliance system in .NET Core.',
+      'Built the business logic for registration, document tracking, risk-engine scoring and multi-step account approval.',
+      'Designed normalised SQL Server schemas with Entity Framework Core code-first, keeping transactional integrity strict.',
+      'Developed authenticated REST endpoints on a clean Controller–Service–Repository architecture.',
     ],
     tech: [
       { name: '.NET Core', slug: 'dotnet' },
@@ -54,9 +53,9 @@ export const roles: Role[] = [
     summary:
       'Shipped AI-driven CRM and recruitment interfaces, and the generative pipelines behind them.',
     points: [
-      'Architected responsive AI-driven CRM platforms and intelligent Applicant Tracking System (ATS) dashboards using React.js and Tailwind CSS, integrated with live REST APIs.',
-      'Built production-ready generative-AI automation pipelines for context-aware email drafting, resume parsing and scheduling optimisation, using the OpenAI API and LangChain orchestration.',
-      'Executed data preprocessing workflows and structured prompt engineering to improve model response accuracy, cutting manual HR pipeline processing effort by over 30%.',
+      'Architected AI-driven CRM platforms and ATS dashboards in React and Tailwind, wired to live REST APIs.',
+      'Built generative-AI pipelines for email drafting, resume parsing and scheduling, using the OpenAI API and LangChain.',
+      'Improved model accuracy through data preprocessing and prompt engineering, cutting manual HR effort by over 30%.',
     ],
     tech: [
       { name: 'React.js', slug: 'react' },

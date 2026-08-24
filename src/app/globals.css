@@ -209,13 +209,6 @@
   }
 }
 
-/* The custom cursor replaces the system one only on real pointer devices. */
-body.has-cursor,
-body.has-cursor a,
-body.has-cursor button {
-  cursor: none;
-}
-
 /* --------------------------------- motion --------------------------------- */
 
 .reveal {
@@ -248,19 +241,6 @@ body.has-cursor button {
 
 /* The cursor ring. Sizing lives here rather than in utility classes so the
    hover state can't be dropped by the class scanner. */
-[data-ring] {
-  width: 34px;
-  height: 34px;
-  border: 1.5px solid var(--accent-ring);
-  background-color: transparent;
-  transition: width 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
-    height 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.22s ease;
-}
-[data-ring][data-wide='true'] {
-  width: 64px;
-  height: 64px;
-  background-color: var(--accent-soft);
-}
 
 /* one orchestrated entrance for the hero; everything else reveals on scroll */
 @keyframes fade-up {
