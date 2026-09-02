@@ -5,11 +5,12 @@ import Animated, {
   useAnimatedStyle,
   type SharedValue,
 } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 import { Marker } from '@/components/common/Primitives';
 import { usePalette } from '@/hooks/useTheme';
 import { GUTTER, HAIRLINE, HEADER_BAR, space, type } from '@/styles/tokens';
+import { useTopInset } from '@/utils/layout';
 
 interface CollapsingHeaderProps {
   /** Scroll offset of the list underneath, driven on the UI thread. */
@@ -37,7 +38,7 @@ const RANGE = 64;
  */
 export function CollapsingHeader({ scrollY, title, large, trailing }: CollapsingHeaderProps) {
   const palette = usePalette();
-  const insets = useSafeAreaInsets();
+  const topInset = useTopInset();
 
   const largeStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollY.value, [0, RANGE * 0.7], [1, 0], Extrapolation.CLAMP),
@@ -68,8 +69,8 @@ export function CollapsingHeader({ scrollY, title, large, trailing }: Collapsing
             top: 0,
             left: 0,
             right: 0,
-            paddingTop: insets.top,
-            height: insets.top + HEADER_BAR,
+            paddingTop: topInset,
+            height: topInset + HEADER_BAR,
             backgroundColor: palette.canvas,
             justifyContent: 'center',
           },
@@ -102,7 +103,7 @@ export function CollapsingHeader({ scrollY, title, large, trailing }: Collapsing
           pointerEvents="none"
           style={[
             largeStyle,
-            { paddingTop: insets.top + space.sm, paddingHorizontal: GUTTER, paddingBottom: space.lg },
+            { paddingTop: topInset + space.sm, paddingHorizontal: GUTTER, paddingBottom: space.lg },
           ]}
         >
           {large.eyebrow ? <Marker>{large.eyebrow}</Marker> : null}
@@ -122,10 +123,10 @@ export function CollapsingHeader({ scrollY, title, large, trailing }: Collapsing
  * Pass `large: false` on screens that only use the compact bar.
  */
 export function useHeaderInset(large = true): number {
-  const insets = useSafeAreaInsets();
-  if (!large) return insets.top + space.md;
+  const topInset = useTopInset();
+  if (!large) return topInset + space.md;
   return (
-    insets.top +
+    topInset +
     space.sm +
     space.sm +
     type.marker.lineHeight +

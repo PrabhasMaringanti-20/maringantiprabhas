@@ -18,7 +18,10 @@ export function StarRating({ value, onChange, size = 26, readOnly = false }: Sta
   const palette = usePalette();
 
   return (
-    <View className="flex-row items-center" accessibilityLabel={`${value} out of 5 stars`}>
+    <View
+      style={{ flexDirection: 'row', alignItems: 'center' }}
+      accessibilityLabel={`${value} out of 5 stars`}
+    >
       {[1, 2, 3, 4, 5].map((star) => {
         const filled = star <= value;
         return (

@@ -123,6 +123,37 @@ const check = (name, ok, detail = '') => {
   await page.keyboard.press('Escape');
   await page.waitForTimeout(800);
 
+  // --- The character sheet must be opaque ---
+  // It renders inside a native Modal. A transparent sheet let the vault grid
+  // show through the bio text on device, so this asserts a real fill.
+  await page.getByRole('button', { name: /Doctor Doom/i }).first().click();
+  await page.waitForTimeout(1400);
+  const sheet = await page.evaluate(() => {
+    // Markers are uppercased in CSS, so textContent keeps the source casing.
+    const label = [...document.querySelectorAll('*')].find(
+      (el) => el.children.length === 0
+        && el.textContent?.trim().toLowerCase() === 'comic origins vs mcu role',
+    );
+    if (!label) return null;
+    // Walk up to the panel that carries the sheet's own background.
+    let node = label;
+    for (let i = 0; i < 12 && node; i += 1) {
+      const bg = getComputedStyle(node).backgroundColor;
+      const m = bg.match(/rgba?\(([^)]+)\)/);
+      if (m) {
+        const parts = m[1].split(',').map((n) => parseFloat(n));
+        const alpha = parts.length > 3 ? parts[3] : 1;
+        if (alpha > 0.9) return { bg, height: node.getBoundingClientRect().height };
+      }
+      node = node.parentElement;
+    }
+    return null;
+  });
+  check('character sheet has an opaque background', sheet !== null && sheet.height > 300,
+        sheet ? `${sheet.bg} over ${Math.round(sheet.height)}px` : 'no opaque ancestor found');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(800);
+
   // --- Roadmap ---
   await page.getByRole('tab', { name: /Roadmap/ }).first().click();
   await page.waitForTimeout(1400);

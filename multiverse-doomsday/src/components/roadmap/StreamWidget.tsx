@@ -8,7 +8,9 @@ import { TMDB_REGION } from '@/services/tmdbApi';
 import { providerLogoUrl } from '@/utils/imageHelper';
 import type { MovieItem, ProviderKind } from '@/types';
 
+import { Marker } from '@/components/common/Primitives';
 import { usePalette } from '@/hooks/useTheme';
+import { radius, space, type } from '@/styles/tokens';
 
 const KIND_LABEL: Record<ProviderKind, string> = {
   flatrate: 'Stream',
@@ -42,45 +44,51 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
   };
 
   return (
-    <View className="rounded-2xl border border-line bg-surface p-4">
-      <View className="flex-row items-center justify-between">
-        <View className="flex-row items-center">
-          <Ionicons name="play-circle-outline" size={16} color={palette.accent} />
-          <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
-            Where to stream
-          </Text>
-        </View>
-        <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
-          {data?.region ?? region ?? TMDB_REGION}
-        </Text>
+    <View>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Ionicons name="play-circle-outline" size={15} color={palette.accent} />
+        <Marker style={{ marginLeft: space.sm, flex: 1 }}>Where to stream</Marker>
+        <Marker>{data?.region ?? region ?? TMDB_REGION}</Marker>
       </View>
 
       {disabled ? (
-        <Text className="mt-3 text-xs leading-4 text-ink-soft">
+        <Text style={{ ...type.small, color: palette.inkSoft, marginTop: space.md }}>
           Add a free TMDB key as{' '}
-          <Text className="font-bold text-accent">EXPO_PUBLIC_TMDB_API_KEY</Text> to see live
-          Disney+, Prime and Apple TV availability for your country.
+          <Text style={{ fontWeight: '700', color: palette.accent }}>EXPO_PUBLIC_TMDB_API_KEY</Text>{' '}
+          to see live Disney+, Prime and Apple TV availability for your country.
         </Text>
       ) : state === 'loading' ? (
-        <View className="mt-4 flex-row items-center">
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: space.lg }}>
           <ActivityIndicator size="small" color={palette.accent} />
-          <Text className="ml-2 text-xs text-ink-soft">Checking providers…</Text>
+          <Text style={{ ...type.small, color: palette.inkSoft, marginLeft: space.sm }}>
+            Checking providers…
+          </Text>
         </View>
       ) : !data || data.providers.length === 0 ? (
-        <View className="mt-3">
-          <Text className="text-xs leading-4 text-ink-soft">
+        <View style={{ marginTop: space.md }}>
+          <Text style={{ ...type.small, color: palette.inkSoft }}>
             TMDB has no listing for this title in your region.
           </Text>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`Search where to watch ${movie.title}`}
             onPress={searchTheWeb}
-            className="mt-3 flex-row items-center self-start rounded-xl border border-line px-3 py-2"
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              alignSelf: 'flex-start',
+              marginTop: space.md,
+              paddingHorizontal: space.md,
+              paddingVertical: space.sm,
+              borderRadius: radius.md,
+              borderWidth: 1,
+              borderColor: palette.line,
+            }}
           >
             <Ionicons name="search" size={13} color={palette.accent} />
-            <Text className="ml-2 text-2xs font-bold uppercase tracking-wider text-accent">
+            <Marker color={palette.accent} style={{ marginLeft: space.sm }}>
               Search where to watch
-            </Text>
+            </Marker>
           </Pressable>
         </View>
       ) : (
@@ -88,7 +96,7 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 10, paddingVertical: 12 }}
+            contentContainerStyle={{ gap: space.md, paddingVertical: space.md }}
           >
             {data.providers.map((provider) => {
               const logo = providerLogoUrl(provider.logoPath);
@@ -98,9 +106,19 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
                   accessibilityRole="link"
                   accessibilityLabel={`${provider.providerName} — ${KIND_LABEL[provider.kind]}`}
                   onPress={openJustWatch}
-                  className="w-[70px] items-center"
+                  style={{ width: 70, alignItems: 'center' }}
                 >
-                  <View className="h-12 w-12 overflow-hidden rounded-xl border border-line bg-surface-raised">
+                  <View
+                    style={{
+                      height: 46,
+                      width: 46,
+                      borderRadius: radius.md,
+                      overflow: 'hidden',
+                      borderWidth: 1,
+                      borderColor: palette.line,
+                      backgroundColor: palette.raised,
+                    }}
+                  >
                     {logo ? (
                       <Image
                         source={{ uri: logo }}
@@ -110,17 +128,25 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
                         cachePolicy="disk"
                       />
                     ) : (
-                      <View className="flex-1 items-center justify-center">
+                      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                         <Ionicons name="tv-outline" size={18} color={palette.inkFaint} />
                       </View>
                     )}
                   </View>
-                  <Text className="mt-1.5 text-center text-2xs font-semibold text-ink" numberOfLines={1}>
+                  <Text
+                    style={{
+                      ...type.small,
+                      fontSize: 10,
+                      fontWeight: '600',
+                      color: palette.ink,
+                      marginTop: space.sm,
+                      textAlign: 'center',
+                    }}
+                    numberOfLines={1}
+                  >
                     {provider.providerName}
                   </Text>
-                  <Text className="text-2xs uppercase tracking-wider text-ink-faint">
-                    {KIND_LABEL[provider.kind]}
-                  </Text>
+                  <Marker>{KIND_LABEL[provider.kind]}</Marker>
                 </Pressable>
               );
             })}
@@ -130,12 +156,17 @@ export function StreamWidget({ movie, region }: StreamWidgetProps) {
             <Pressable
               accessibilityRole="link"
               onPress={openJustWatch}
-              className="flex-row items-center"
+              style={{ flexDirection: 'row', alignItems: 'center' }}
             >
-              <Text className="text-2xs font-semibold text-ink-faint">
+              <Text style={{ ...type.small, color: palette.inkFaint }}>
                 Availability via JustWatch — tap to open
               </Text>
-              <Ionicons name="open-outline" size={11} color={palette.inkFaint} style={{ marginLeft: 4 }} />
+              <Ionicons
+                name="open-outline"
+                size={11}
+                color={palette.inkFaint}
+                style={{ marginLeft: 4 }}
+              />
             </Pressable>
           ) : null}
         </>

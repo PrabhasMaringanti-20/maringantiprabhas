@@ -10,6 +10,7 @@ import { CustomButton } from '@/components/common/CustomButton';
 import { Marker, Meter, Rule } from '@/components/common/Primitives';
 import { useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { usePalette } from '@/hooks/useTheme';
+import { useTopInset } from '@/utils/layout';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { buildRound, gradeLabel, type QuizQuestion } from '@/utils/quiz';
 
@@ -18,6 +19,7 @@ type Phase = 'idle' | 'answered' | 'done';
 export default function QuizScreen() {
   const palette = usePalette();
   const router = useRouter();
+  const topInset = useTopInset();
   const insets = useSafeAreaInsets();
 
   // A round is reproducible from its seed, which is the whole basis of a
@@ -115,7 +117,7 @@ export default function QuizScreen() {
       });
     };
     return (
-      <View style={{ flex: 1, backgroundColor: palette.canvas, paddingTop: insets.top + space.sm }}>
+      <View style={{ flex: 1, backgroundColor: palette.canvas, paddingTop: topInset + space.sm }}>
         <View style={{ paddingHorizontal: GUTTER, alignItems: 'flex-end' }}>{closeButton}</View>
 
         <Animated.View
@@ -204,7 +206,7 @@ export default function QuizScreen() {
   const progress = (index + (phase === 'answered' ? 1 : 0)) / round.length;
 
   return (
-    <View style={{ flex: 1, backgroundColor: palette.canvas, paddingTop: insets.top + space.sm }}>
+    <View style={{ flex: 1, backgroundColor: palette.canvas, paddingTop: topInset + space.sm }}>
       {/* Progress + close */}
       <View style={{ paddingHorizontal: GUTTER, flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1, marginRight: space.md }}>

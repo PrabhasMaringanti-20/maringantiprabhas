@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Text, View } from 'react-native';
 
 import { characterPortrait } from '@/data/characterImages';
+import { usePalette } from '@/hooks/useTheme';
 import { useActorProfile } from '@/hooks/useTMDB';
 import { AFFILIATION_GRADIENT, characterImage, initialsFor } from '@/utils/imageHelper';
 import type { MarvelCharacter } from '@/types';
@@ -29,6 +30,7 @@ export function CharacterAvatar({
   disableFetch = false,
   showFullPortrait = false,
 }: CharacterAvatarProps) {
+  const palette = usePalette();
   const bundled = characterPortrait(character.id);
   // Only look up an actor headshot when there is no comic portrait to show,
   // otherwise the grid becomes a mix of illustration and photography.
@@ -41,8 +43,15 @@ export function CharacterAvatar({
 
   return (
     <View
-      className="overflow-hidden border border-line bg-surface-raised"
-      style={{ width: size, height, borderRadius: radius }}
+      style={{
+        width: size,
+        height,
+        borderRadius: radius,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: palette.line,
+        backgroundColor: palette.raised,
+      }}
     >
       {bundled ? (
         <Image
@@ -68,8 +77,12 @@ export function CharacterAvatar({
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <Text
-            className="font-black text-white"
-            style={{ fontSize: size * 0.34, letterSpacing: size * 0.02 }}
+            style={{
+              fontSize: size * 0.34,
+              letterSpacing: size * 0.02,
+              fontWeight: '800',
+              color: '#FFFFFF',
+            }}
           >
             {initialsFor(character)}
           </Text>

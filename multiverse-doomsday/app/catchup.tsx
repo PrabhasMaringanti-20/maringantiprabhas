@@ -10,6 +10,7 @@ import { CustomButton } from '@/components/common/CustomButton';
 import { Marker, Rule } from '@/components/common/Primitives';
 import { MOVIE_CATALOGUE, useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { usePalette } from '@/hooks/useTheme';
+import { useTopInset } from '@/utils/layout';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { formatHoursCompact } from '@/utils/timeCalc';
 import type { MovieCatalogueItem } from '@/types';
@@ -31,6 +32,7 @@ interface PhaseGroup {
 export default function CatchUpScreen() {
   const palette = usePalette();
   const router = useRouter();
+  const topInset = useTopInset();
   const insets = useSafeAreaInsets();
 
   const setManyWatched = useRoadmapStore((state) => state.setManyWatched);
@@ -96,7 +98,7 @@ export default function CatchUpScreen() {
     <View style={{ flex: 1, backgroundColor: palette.canvas }}>
       <ScrollView
         contentContainerStyle={{
-          paddingTop: insets.top + space.xxl,
+          paddingTop: topInset + space.xxl,
           paddingBottom: insets.bottom + space.huge,
         }}
         showsVerticalScrollIndicator={false}

@@ -5,11 +5,20 @@ import { Text, View } from 'react-native';
 
 import { Poster } from '@/components/common/Poster';
 import { TIER_STYLE } from '@/components/tierlist/TierRow';
+import { DARK_PALETTE } from '@/hooks/useTheme';
+import { radius, space, type } from '@/styles/tokens';
 import { formatHoursCompact, readinessRank } from '@/utils/timeCalc';
 import type { MovieItem, ReadinessStats, Tier } from '@/types';
 
 export const SHARE_CARD_WIDTH = 360;
 export const SHARE_CARD_HEIGHT = 640; // 9:16
+
+/**
+ * The card is always dark, whatever theme the app is in. It is an image that
+ * leaves the device and gets posted somewhere — it should look the same no
+ * matter who exported it.
+ */
+const P = DARK_PALETTE;
 
 interface ShareCardProps {
   stats: ReadinessStats;
@@ -18,6 +27,12 @@ interface ShareCardProps {
   topTierLabel: Tier;
   rankedCount: number;
 }
+
+const marker = {
+  ...type.marker,
+  color: P.inkFaint,
+  textTransform: 'uppercase' as const,
+};
 
 /**
  * The 9:16 story graphic captured by react-native-view-shot.
@@ -30,12 +45,28 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
   const rank = readinessRank(stats.percent);
   const tierStyle = TIER_STYLE[topTierLabel];
 
+  const stat = (value: string, label: string) => (
+    <View style={{ flex: 1, alignItems: 'center' }}>
+      <Text
+        style={{ ...type.title, color: P.ink, fontVariant: ['tabular-nums'] }}
+        numberOfLines={1}
+      >
+        {value}
+      </Text>
+      <Text style={{ ...marker, marginTop: space.xs }}>{label}</Text>
+    </View>
+  );
+
   return (
     <View
       ref={ref}
       collapsable={false}
-      style={{ width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT }}
-      className="overflow-hidden rounded-3xl"
+      style={{
+        width: SHARE_CARD_WIDTH,
+        height: SHARE_CARD_HEIGHT,
+        borderRadius: 24,
+        overflow: 'hidden',
+      }}
     >
       <LinearGradient
         colors={['#0B0813', '#1A0F2E', '#0B0813']}
@@ -45,105 +76,118 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
       >
         {/* Header */}
         <View>
-          <View className="flex-row items-center">
-            <View className="h-7 w-7 items-center justify-center rounded-lg bg-accent">
-              <Ionicons name="planet" size={16} color="#0B0813" />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View
+              style={{
+                height: 26,
+                width: 26,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: radius.sm,
+                backgroundColor: P.accent,
+              }}
+            >
+              <Ionicons name="planet" size={15} color="#0B0813" />
             </View>
-            <Text className="ml-2 text-[11px] font-black uppercase tracking-[3px] text-accent">
-              Multiverse Roadmap
-            </Text>
+            <Text style={{ ...marker, color: P.accent, marginLeft: space.sm }}>DOOM</Text>
           </View>
-          <Text className="mt-1 text-[11px] font-semibold uppercase tracking-[2px] text-ink-faint">
-            Guide to Doomsday
-          </Text>
+          <Text style={{ ...marker, marginTop: space.xs }}>Guide to Doomsday</Text>
         </View>
 
         {/* Readiness */}
-        <View className="items-center">
-          <Text className="text-[13px] font-bold uppercase tracking-[3px] text-ink-soft">
-            Doomsday Ready
-          </Text>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ ...marker, color: P.inkSoft }}>Doomsday ready</Text>
           <Text
-            className="text-accent"
-            style={{ fontSize: 96, fontWeight: '900', lineHeight: 104 }}
+            style={{
+              fontSize: 92,
+              lineHeight: 100,
+              fontWeight: '800',
+              letterSpacing: -4,
+              color: P.accent,
+              fontVariant: ['tabular-nums'],
+            }}
           >
             {stats.percent}%
           </Text>
-          <View className="mt-1 rounded-full border border-marvel/50 bg-marvel/10 px-4 py-1.5">
-            <Text className="text-xs font-black uppercase tracking-[2px] text-marvel">
-              {rank.label}
-            </Text>
+
+          <View
+            style={{
+              marginTop: space.xs,
+              borderRadius: radius.pill,
+              borderWidth: 1,
+              borderColor: `${P.marvel}80`,
+              backgroundColor: `${P.marvel}1A`,
+              paddingHorizontal: space.lg,
+              paddingVertical: space.sm - 2,
+            }}
+          >
+            <Text style={{ ...marker, color: P.marvel }}>{rank.label}</Text>
           </View>
 
-          <View className="mt-5 flex-row">
-            <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-ink" numberOfLines={1}>
-                {stats.watched}/{stats.total}
-              </Text>
-              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-ink-faint">
-                Titles logged
-              </Text>
-            </View>
-            <View className="w-px bg-line" />
-            <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-ink" numberOfLines={1}>
-                {formatHoursCompact(stats.minutesWatched)}
-              </Text>
-              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-ink-faint">
-                Watch time
-              </Text>
-            </View>
-            <View className="w-px bg-line" />
-            <View className="flex-1 items-center">
-              <Text className="text-xl font-black text-ink" numberOfLines={1}>
-                {rankedCount}
-              </Text>
-              <Text className="mt-0.5 text-2xs uppercase tracking-wider text-ink-faint">
-                Ranked
-              </Text>
-            </View>
+          <View style={{ marginTop: space.xl, flexDirection: 'row' }}>
+            {stat(`${stats.watched}/${stats.total}`, 'Titles logged')}
+            <View style={{ width: 1, backgroundColor: P.line }} />
+            {stat(formatHoursCompact(stats.minutesWatched), 'Watch time')}
+            <View style={{ width: 1, backgroundColor: P.line }} />
+            {stat(String(rankedCount), 'Ranked')}
           </View>
         </View>
 
         {/* Top tier */}
         <View>
-          <View className="flex-row items-center">
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View
-              className="h-5 w-5 items-center justify-center rounded"
-              style={{ backgroundColor: tierStyle.hex }}
+              style={{
+                height: 20,
+                width: 20,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: radius.sm,
+                backgroundColor: tierStyle.hex,
+              }}
             >
-              <Text className="text-[11px] font-black text-white">{topTierLabel}</Text>
+              <Text style={{ fontSize: 11, fontWeight: '800', color: '#FFFFFF' }}>
+                {topTierLabel}
+              </Text>
             </View>
-            <Text className="ml-2 text-[11px] font-bold uppercase tracking-[2px] text-ink">
-              Top tier
-            </Text>
+            <Text style={{ ...marker, color: P.ink, marginLeft: space.sm }}>Top tier</Text>
           </View>
 
-          <View className="mt-3 flex-row gap-2">
+          <View style={{ marginTop: space.md, flexDirection: 'row', gap: space.sm }}>
             {topTier.length === 0 ? (
-              <Text className="text-xs text-ink-faint">Nothing ranked yet.</Text>
+              <Text style={{ ...type.small, color: P.inkFaint }}>Nothing ranked yet.</Text>
             ) : (
-              topTier.slice(0, 4).map((movie) => (
-                <Poster key={movie.id} movie={movie} width={72} round={10} />
-              ))
+              topTier
+                .slice(0, 4)
+                .map((movie) => <Poster key={movie.id} movie={movie} width={72} round={10} />)
             )}
           </View>
 
           {favourite ? (
-            <View className="mt-4 rounded-2xl border border-line bg-surface/80 p-3">
-              <Text className="text-2xs font-bold uppercase tracking-[2px] text-ink-faint">
-                Favourite
-              </Text>
-              <Text className="mt-1 text-sm font-black text-ink" numberOfLines={1}>
+            <View
+              style={{
+                marginTop: space.lg,
+                borderRadius: radius.lg,
+                borderWidth: 1,
+                borderColor: P.line,
+                backgroundColor: `${P.surface}CC`,
+                padding: space.md,
+              }}
+            >
+              <Text style={marker}>Favourite</Text>
+              <Text
+                style={{ ...type.bodyStrong, color: P.ink, marginTop: space.xs }}
+                numberOfLines={1}
+              >
                 {favourite.title}
               </Text>
-              <View className="mt-1.5 flex-row">
+              <View style={{ marginTop: space.sm, flexDirection: 'row' }}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Ionicons
                     key={star}
                     name={star <= favourite.userRating ? 'star' : 'star-outline'}
                     size={13}
-                    color={star <= favourite.userRating ? '#F59E0B' : '#5C5378'}
+                    color={star <= favourite.userRating ? P.marvel : P.inkFaint}
                     style={{ marginRight: 2 }}
                   />
                 ))}
@@ -153,11 +197,18 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
         </View>
 
         {/* Footer */}
-        <View className="flex-row items-center justify-between border-t border-line pt-3">
-          <Text className="text-2xs font-semibold uppercase tracking-wider text-ink-faint">
-            Avengers: Doomsday prep
-          </Text>
-          <Text className="text-2xs font-semibold uppercase tracking-wider text-accent">
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderTopWidth: 1,
+            borderTopColor: P.line,
+            paddingTop: space.md,
+          }}
+        >
+          <Text style={marker}>Avengers: Doomsday prep</Text>
+          <Text style={{ ...marker, color: P.accent }}>
             {stats.watched}/{stats.total} logged
           </Text>
         </View>

@@ -37,7 +37,18 @@ export function Confetti({ burstId, count = 10, radius = 34, size = 5 }: Confett
   if (burstId === 0) return null;
 
   return (
-    <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
+    <View
+      pointerEvents="none"
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       {particles.map((particle) => (
         <MotiView
           key={particle.key}

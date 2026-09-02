@@ -22,6 +22,7 @@ import { useMovie, useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { useTmdbDetails } from '@/hooks/useTMDB';
 import { usePalette } from '@/hooks/useTheme';
+import { useTopInset } from '@/utils/layout';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { backdropUrl } from '@/utils/imageHelper';
 import { formatRuntime } from '@/utils/timeCalc';
@@ -36,6 +37,7 @@ export default function MovieDetailScreen() {
   const palette = usePalette();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const topInset = useTopInset();
   const insets = useSafeAreaInsets();
 
   const movie = useMovie(id);
@@ -117,7 +119,7 @@ export default function MovieDetailScreen() {
           />
           <LinearGradient
             colors={[`${palette.canvas}E6`, 'transparent']}
-            style={{ position: 'absolute', left: 0, right: 0, top: 0, height: insets.top + 56 }}
+            style={{ position: 'absolute', left: 0, right: 0, top: 0, height: topInset + 56 }}
           />
 
           <Pressable
@@ -125,7 +127,7 @@ export default function MovieDetailScreen() {
             accessibilityLabel="Close"
             onPress={router.back}
             hitSlop={14}
-            style={{ position: 'absolute', left: GUTTER, top: insets.top + space.sm }}
+            style={{ position: 'absolute', left: GUTTER, top: topInset + space.sm }}
           >
             <Ionicons name="chevron-down" size={26} color={palette.ink} />
           </Pressable>
@@ -311,7 +313,7 @@ export default function MovieDetailScreen() {
           top: 0,
           left: 0,
           right: 0,
-          height: insets.top,
+          height: topInset,
           backgroundColor: palette.canvas,
         }}
       />

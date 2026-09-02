@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 /**
@@ -12,4 +12,18 @@ export const TAB_BAR_BASE = Platform.OS === 'ios' ? 86 : 62;
 export function useTabBarHeight(): number {
   const insets = useSafeAreaInsets();
   return TAB_BAR_BASE + insets.bottom;
+}
+
+/**
+ * Safe-area top inset, floored to the real status-bar height on Android.
+ *
+ * With edge-to-edge enabled the app draws behind the status bar, so anything
+ * pinned to the top has to be pushed down by this. Reading it from the safe
+ * area alone is not enough — it has been observed as 0 on device, which put
+ * every screen title underneath the clock and the battery icon.
+ */
+export function useTopInset(): number {
+  const insets = useSafeAreaInsets();
+  const androidFloor = Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) : 0;
+  return Math.max(insets.top, androidFloor);
 }

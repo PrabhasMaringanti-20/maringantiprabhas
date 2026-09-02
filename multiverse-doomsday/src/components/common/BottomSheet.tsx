@@ -95,11 +95,13 @@ export function BottomSheet({
             />
           </Animated.View>
 
-          <Animated.View
-            style={[
-              sheetStyle,
-              {
-                height: sheetHeight,
+          {/* The animated wrapper carries movement only. Everything that makes
+              the sheet opaque lives on the plain View inside it, so the
+              background can never depend on an animated component. */}
+          <Animated.View style={[sheetStyle, { height: sheetHeight }]}>
+            <View
+              style={{
+                flex: 1,
                 paddingBottom: insets.bottom,
                 backgroundColor: palette.surface,
                 borderTopLeftRadius: 28,
@@ -107,24 +109,25 @@ export function BottomSheet({
                 borderTopWidth: 1,
                 borderColor: palette.line,
                 overflow: 'hidden',
-              },
-            ]}
-          >
-            <GestureDetector gesture={pan}>
-              <View style={{ alignItems: 'center', paddingTop: 12, paddingBottom: 4 }}>
-                <View
-                  style={{
-                    height: 4,
-                    width: 40,
-                    borderRadius: 999,
-                    backgroundColor: palette.line,
-                  }}
-                />
-              </View>
-            </GestureDetector>
+              }}
+            >
+              <GestureDetector gesture={pan}>
+                <View style={{ alignItems: 'center', paddingTop: 12, paddingBottom: 4 }}>
+                  <View
+                    style={{
+                      height: 4,
+                      width: 40,
+                      borderRadius: 999,
+                      backgroundColor: palette.line,
+                    }}
+                  />
+                </View>
+              </GestureDetector>
 
-            {children}
+              {children}
+            </View>
           </Animated.View>
+
         </View>
       </GestureHandlerRootView>
     </Modal>

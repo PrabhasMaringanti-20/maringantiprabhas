@@ -10,6 +10,7 @@ import { Poster } from '@/components/common/Poster';
 import { Empty, Marker, Rule } from '@/components/common/Primitives';
 import { useAllMovies } from '@/hooks/useRoadmapStore';
 import { usePalette } from '@/hooks/useTheme';
+import { useTopInset } from '@/utils/layout';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { formatRuntime } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
@@ -32,6 +33,7 @@ const BUDGETS = [
 export default function TonightScreen() {
   const palette = usePalette();
   const router = useRouter();
+  const topInset = useTopInset();
   const insets = useSafeAreaInsets();
 
   const movies = useAllMovies();
@@ -68,7 +70,7 @@ export default function TonightScreen() {
     <View style={{ flex: 1, backgroundColor: palette.canvas }}>
       <ScrollView
         contentContainerStyle={{
-          paddingTop: insets.top + space.xl,
+          paddingTop: topInset + space.xl,
           paddingBottom: insets.bottom + space.huge,
         }}
         showsVerticalScrollIndicator={false}

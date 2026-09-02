@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { colorScheme, useColorScheme } from 'nativewind';
 import { useMemo } from 'react';
+import { useColorScheme as useSystemColorScheme } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -18,30 +18,21 @@ export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
       mode: 'dark',
-      setMode: (mode) => {
-        colorScheme.set(mode);
-        set({ mode });
-      },
-      cycleMode: () => {
-        const next = ORDER[(ORDER.indexOf(get().mode) + 1) % ORDER.length];
-        colorScheme.set(next);
-        set({ mode: next });
-      },
+      setMode: (mode) => set({ mode }),
+      cycleMode: () =>
+        set({ mode: ORDER[(ORDER.indexOf(get().mode) + 1) % ORDER.length] }),
     }),
     {
       name: 'multiverse-theme-v1',
       storage: createJSONStorage(() => AsyncStorage),
-      // Apply the stored choice as soon as it comes back off disk.
-      onRehydrateStorage: () => (state) => {
-        colorScheme.set(state?.mode ?? 'dark');
-      },
     },
   ),
 );
 
 /**
- * Imperative palette for the places `className` cannot reach: SVG strokes,
- * gradient stops, icon tints and status-bar styling.
+ * The app's only source of colour. Every component reads from this through
+ * `style` — there is no class-based styling left, because the class layer kept
+ * dropping inline styles on animated components and only on device.
  */
 export interface Palette {
   canvas: string;
@@ -97,8 +88,11 @@ const DARK: Palette = {
 };
 
 export function usePalette(): Palette & { isDark: boolean } {
-  const { colorScheme: scheme } = useColorScheme();
-  const isDark = scheme !== 'light';
+  const system = useSystemColorScheme();
+  const mode = useThemeStore((state) => state.mode);
+  // "system" follows the phone; anything else is an explicit choice. Dark is
+  // the default when the system reports nothing, which is this app's house style.
+  const isDark = mode === 'system' ? system !== 'light' : mode === 'dark';
   return useMemo(() => ({ ...(isDark ? DARK : LIGHT), isDark }), [isDark]);
 }
 

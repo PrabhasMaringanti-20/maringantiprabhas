@@ -11,6 +11,7 @@ import { Marker, Meter, Rule } from '@/components/common/Primitives';
 import { TIER_STYLE } from '@/components/tierlist/TierRow';
 import { useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { usePalette } from '@/hooks/useTheme';
+import { useTopInset } from '@/utils/layout';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { compareBoards, decodeBoard, encodeBoard, type SharedBoard } from '@/utils/shareCode';
 
@@ -19,6 +20,7 @@ const MAX_LIST = 12;
 export default function CompareScreen() {
   const palette = usePalette();
   const router = useRouter();
+  const topInset = useTopInset();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ code?: string }>();
 
@@ -74,7 +76,7 @@ export default function CompareScreen() {
     <View style={{ flex: 1, backgroundColor: palette.canvas }}>
       <ScrollView
         contentContainerStyle={{
-          paddingTop: insets.top + space.xl,
+          paddingTop: topInset + space.xl,
           paddingBottom: insets.bottom + space.huge,
         }}
         showsVerticalScrollIndicator={false}
