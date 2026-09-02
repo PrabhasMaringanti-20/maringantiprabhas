@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Dimensions, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
@@ -12,8 +12,6 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePalette } from '@/hooks/useTheme';
-
-const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 interface BottomSheetProps {
   visible: boolean;
@@ -39,8 +37,13 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
   const palette = usePalette();
-  const sheetHeight = SCREEN_HEIGHT * heightRatio;
-  const translateY = useSharedValue(sheetHeight);
+  // Measured per render, not once at module load. `Dimensions.get('window')`
+  // at module scope runs while the bundle is still loading behind the splash,
+  // and on Android it can report a window that has not been laid out yet — a
+  // short sheet whose content spills over whatever is behind it.
+  const { height: windowHeight } = useWindowDimensions();
+  const sheetHeight = windowHeight * heightRatio;
+  const translateY = useSharedValue(10000);
   const scrimOpacity = useSharedValue(0);
 
   useEffect(() => {
@@ -73,17 +76,31 @@ export function BottomSheet({
       }
     });
 
+  // Height lives inside the animated style rather than in a second style
+  // object beside it: `[animatedStyle, { height }]` had its plain half dropped
+  // on device, which collapsed the sheet and let the screen behind show
+  // through its own content.
   const sheetStyle = useAnimatedStyle(() => ({
+    height: sheetHeight,
     transform: [{ translateY: translateY.value }],
   }));
 
-  const scrimStyle = useAnimatedStyle(() => ({ opacity: scrimOpacity.value }));
+  // Fill folded in for the same reason as the sheet: an animated wrapper with
+  // no size of its own collapses the absolutely positioned child inside it.
+  const scrimStyle = useAnimatedStyle(() => ({
+    opacity: scrimOpacity.value,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }));
 
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={close} statusBarTranslucent>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <Animated.View style={[StyleSheet.absoluteFill, scrimStyle]}>
+          <Animated.View style={scrimStyle}>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Close"
@@ -98,10 +115,10 @@ export function BottomSheet({
           {/* The animated wrapper carries movement only. Everything that makes
               the sheet opaque lives on the plain View inside it, so the
               background can never depend on an animated component. */}
-          <Animated.View style={[sheetStyle, { height: sheetHeight }]}>
+          <Animated.View style={sheetStyle}>
             <View
               style={{
-                flex: 1,
+                height: sheetHeight,
                 paddingBottom: insets.bottom,
                 backgroundColor: palette.surface,
                 borderTopLeftRadius: 28,

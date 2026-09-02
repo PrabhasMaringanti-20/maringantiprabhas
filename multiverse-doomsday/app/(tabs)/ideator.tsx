@@ -25,6 +25,7 @@ import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { hasTmdbKey } from '@/hooks/useTMDB';
 import { usePalette, useThemeStore, type ThemeMode } from '@/hooks/useTheme';
 import { countdownLine, daysToDoomsday, quoteForDay, QUOTES } from '@/services/notifications';
+import { buildStamp } from '@/utils/buildInfo';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { useTabBarHeight } from '@/utils/layout';
 import { formatHoursCompact } from '@/utils/timeCalc';
@@ -71,6 +72,7 @@ export default function IdeatorScreen() {
   const setSpoilerSafe = useSettingsStore((state) => state.setSpoilerSafe);
 
   const previewQuote = quoteForDay(daysToDoomsday());
+  const build = buildStamp();
 
   const onScroll = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
@@ -414,6 +416,7 @@ export default function IdeatorScreen() {
                 hasTmdbKey ? 'TMDB connected' : 'TMDB key not set',
                 hasTmdbKey ? 'live posters and streaming links' : 'add one for posters + streaming',
               ],
+              [build.label, build.detail],
             ].map(([title, subtitle]) => (
               <View key={title}>
                 <View style={{ paddingVertical: space.md }}>

@@ -51,68 +51,78 @@ export function CollapsingHeader({ scrollY, title, large, trailing }: Collapsing
     opacity: interpolate(scrollY.value, [RANGE * 0.55, RANGE], [0, 1], Extrapolation.CLAMP),
   }));
 
-  const ruleStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [RANGE * 0.55, RANGE], [0, 1], Extrapolation.CLAMP),
-  }));
-
   return (
     <View
       pointerEvents="box-none"
       style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}
     >
-      {/* Compact bar */}
-      <Animated.View
-        style={[
-          barStyle,
-          {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            paddingTop: topInset,
-            height: topInset + HEADER_BAR,
-            backgroundColor: palette.canvas,
-            justifyContent: 'center',
-          },
-        ]}
+      {/* Compact bar. All of its geometry sits on plain Views — an
+          `[animatedStyle, { padding }]` pair had the padding half dropped on
+          device, which put every screen title under the status bar and hard
+          against the left edge. */}
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: topInset + HEADER_BAR,
+        }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: GUTTER }}>
-          <Text style={{ ...type.heading, color: palette.ink, flex: 1 }} numberOfLines={1}>
-            {title}
-          </Text>
-          {trailing}
-        </View>
-        <Animated.View
-          style={[
-            ruleStyle,
-            {
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: HAIRLINE,
-              backgroundColor: palette.line,
-            },
-          ]}
-        />
-      </Animated.View>
+        <Animated.View style={barStyle}>
+          <View
+            style={{
+              height: topInset + HEADER_BAR,
+              paddingTop: topInset,
+              backgroundColor: palette.canvas,
+              justifyContent: 'center',
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: GUTTER }}>
+              <Text style={{ ...type.heading, color: palette.ink, flex: 1 }} numberOfLines={1}>
+                {title}
+              </Text>
+              {trailing}
+            </View>
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: HAIRLINE,
+                backgroundColor: palette.line,
+              }}
+            />
+          </View>
+        </Animated.View>
+      </View>
 
       {/* Large title */}
       {large ? (
-        <Animated.View
+        <View
           pointerEvents="none"
-          style={[
-            largeStyle,
-            { paddingTop: topInset + space.sm, paddingHorizontal: GUTTER, paddingBottom: space.lg },
-          ]}
+          style={{
+            paddingTop: topInset + space.sm,
+            paddingHorizontal: GUTTER,
+            paddingBottom: space.lg,
+          }}
         >
-          {large.eyebrow ? <Marker>{large.eyebrow}</Marker> : null}
-          <Text
-            style={{ ...type.display, color: palette.ink, marginTop: large.eyebrow ? space.sm : 0 }}
-          >
-            {large.title}
-          </Text>
-        </Animated.View>
+          <Animated.View style={largeStyle}>
+            <View>
+              {large.eyebrow ? <Marker>{large.eyebrow}</Marker> : null}
+              <Text
+                style={{
+                  ...type.display,
+                  color: palette.ink,
+                  marginTop: large.eyebrow ? space.sm : 0,
+                }}
+              >
+                {large.title}
+              </Text>
+            </View>
+          </Animated.View>
+        </View>
       ) : null}
     </View>
   );
