@@ -35,6 +35,16 @@ interface RoadmapState {
 
   toggleWatched: (movieId: string) => boolean;
   setWatched: (movieId: string, watched: boolean) => void;
+  /** Bulk marking, so someone who has already seen a phase is not tapping 18 times. */
+  setManyWatched: (movieIds: string[], watched: boolean) => void;
+  /** Cleared once the catch-up flow has been offered. */
+  onboarded: boolean;
+  completeOnboarding: () => void;
+  /** Display name attached to shared codes. Empty until someone sets one. */
+  displayName: string;
+  setDisplayName: (name: string) => void;
+  /** Applies a decoded friend's progress to your own board. */
+  importProgress: (progress: Record<string, MovieProgress>) => void;
   setRating: (movieId: string, rating: number) => void;
   setTier: (movieId: string, tier: Tier | undefined) => void;
   setCharacterFilter: (characterId: string | null) => void;
@@ -47,6 +57,8 @@ export const useRoadmapStore = create<RoadmapState>()(
   persist(
     (set, get) => ({
       progress: {},
+      onboarded: false,
+      displayName: '',
       characterFilterId: null,
       hydrated: false,
 
@@ -78,6 +90,29 @@ export const useRoadmapStore = create<RoadmapState>()(
             },
           },
         })),
+
+      setManyWatched: (movieIds, watched) =>
+        set((state) => {
+          const progress = { ...state.progress };
+          // One timestamp for the batch: marking a phase is a single act, and
+          // spreading it across milliseconds would invent a streak.
+          const at = Date.now();
+          for (const movieId of movieIds) {
+            progress[movieId] = {
+              ...(progress[movieId] ?? EMPTY_PROGRESS),
+              isWatched: watched,
+              watchedAt: watched ? at : undefined,
+            };
+          }
+          return { progress };
+        }),
+
+      completeOnboarding: () => set({ onboarded: true }),
+
+      setDisplayName: (name) => set({ displayName: name.slice(0, 16) }),
+
+      importProgress: (incoming) =>
+        set((state) => ({ progress: { ...state.progress, ...incoming } })),
 
       setRating: (movieId, rating) =>
         set((state) => {
@@ -116,7 +151,11 @@ export const useRoadmapStore = create<RoadmapState>()(
     {
       name: 'multiverse-roadmap-v1',
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (state) => ({ progress: state.progress }),
+      partialize: (state) => ({
+        progress: state.progress,
+        onboarded: state.onboarded,
+        displayName: state.displayName,
+      }),
       // Fires once AsyncStorage has been read, so the UI can hold its animations
       // until real progress is on screen instead of flashing 0%.
       onRehydrateStorage: () => () => {

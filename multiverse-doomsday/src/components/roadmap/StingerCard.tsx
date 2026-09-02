@@ -6,6 +6,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Marker, Rule } from '@/components/common/Primitives';
 import { postCreditsFor, RELEVANCE_LABEL } from '@/hooks/usePostCredits';
+import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { usePalette } from '@/hooks/useTheme';
 import { motion, space, type } from '@/styles/tokens';
 import type { MovieItem, StingerRelevance } from '@/types';
@@ -36,6 +37,7 @@ export function StingerCard({ movie }: StingerCardProps) {
   const palette = usePalette();
   const [revealed, setRevealed] = useState(false);
   const tint = useRelevanceColour();
+  const spoilerSafe = useSettingsStore((state) => state.spoilerSafe);
 
   const entry = postCreditsFor(movie.id);
   if (!entry) return null;
@@ -65,7 +67,7 @@ export function StingerCard({ movie }: StingerCardProps) {
       <View style={{ marginTop: space.md }}>
         <Rule />
 
-        {revealed ? (
+        {revealed && !(spoilerSafe && !movie.isWatched) ? (
           <Animated.View entering={FadeIn.duration(motion.base)}>
             {entry.scenes.map((scene, index) => (
               <View key={index} style={{ paddingVertical: space.lg }}>
@@ -86,6 +88,7 @@ export function StingerCard({ movie }: StingerCardProps) {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Reveal post-credits scenes — contains spoilers"
+            disabled={spoilerSafe && !movie.isWatched}
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               setRevealed(true);
@@ -106,7 +109,8 @@ export function StingerCard({ movie }: StingerCardProps) {
                 marginLeft: space.sm,
               }}
             >
-              {entry.scenes.length} {entry.scenes.length === 1 ? 'scene' : 'scenes'} — tap to reveal
+              {entry.scenes.length} {entry.scenes.length === 1 ? 'scene' : 'scenes'} —{' '}
+              {spoilerSafe && !movie.isWatched ? 'hidden by spoiler-safe' : 'tap to reveal'}
             </Text>
           </Pressable>
         )}

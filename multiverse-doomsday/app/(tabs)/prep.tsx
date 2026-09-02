@@ -84,13 +84,39 @@ export default function PrepScreen() {
           </Text>
         </Animated.View>
 
-        {/* Two things to do */}
-        <Section title="Test yourself" index={1}>
+        {/* Get moving */}
+        <Section title="Get moving" index={1}>
           <Rule inset={GUTTER} />
+          <ActionLine
+            icon="time-outline"
+            title="What should I watch tonight?"
+            detail="Pick by how long you have"
+            tint={palette.accent}
+            onPress={() => router.push('/tonight')}
+          />
+          <ActionLine
+            icon="checkmark-done-outline"
+            title="Catch me up"
+            detail="Mark whole phases you have already seen"
+            tint={palette.accent}
+            onPress={() => router.push('/catchup')}
+          />
+        </Section>
+
+        {/* Against your friends */}
+        <Section title="Against your friends" index={2}>
+          <Rule inset={GUTTER} />
+          <ActionLine
+            icon="git-compare-outline"
+            title="Compare with a friend"
+            detail="Swap codes, see who is further ahead"
+            tint={palette.marvel}
+            onPress={() => router.push('/compare')}
+          />
           <ActionLine
             icon="help-circle-outline"
             title="Doomsday quiz"
-            detail="10 questions from the whole catalogue"
+            detail="10 questions · challenge a friend to the same round"
             tint={palette.marvel}
             onPress={() => router.push('/quiz')}
           />
@@ -104,7 +130,7 @@ export default function PrepScreen() {
         </Section>
 
         {/* Phases */}
-        <Section title="By phase" index={2}>
+        <Section title="By phase" index={3}>
           <View style={{ paddingHorizontal: GUTTER }}>
             {stats.phases.map((phase, index) => (
               <View key={phase.label} style={{ marginTop: index > 0 ? space.lg : 0 }}>
@@ -134,7 +160,7 @@ export default function PrepScreen() {
         {/* Ratings */}
         <Section
           title={stats.ratedCount > 0 ? `Ratings · avg ${stats.averageRating.toFixed(1)}` : 'Ratings'}
-          index={3}
+          index={4}
         >
           <View style={{ paddingHorizontal: GUTTER }}>
             {stats.ratedCount === 0 ? (
@@ -181,7 +207,7 @@ export default function PrepScreen() {
         </Section>
 
         {/* Tiers */}
-        <Section title="Tiers assigned" index={4}>
+        <Section title="Tiers assigned" index={5}>
           <View style={{ flexDirection: 'row', paddingHorizontal: GUTTER, gap: space.sm }}>
             {TIERS.map((tier: Tier) => {
               const count = stats.tierCounts[tier];
@@ -223,7 +249,7 @@ export default function PrepScreen() {
         </Section>
 
         {/* Milestones */}
-        <Section title={`Milestones · ${achieved}/${stats.milestones.length}`} index={5}>
+        <Section title={`Milestones · ${achieved}/${stats.milestones.length}`} index={6}>
           <Rule inset={GUTTER} />
           {stats.milestones.map((milestone) => (
             <View key={milestone.id}>

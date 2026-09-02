@@ -19,6 +19,7 @@ import { StreamWidget } from '@/components/roadmap/StreamWidget';
 import { TIER_STYLE } from '@/components/tierlist/TierRow';
 import { charactersForMovie } from '@/hooks/useCharacters';
 import { useMovie, useRoadmapStore } from '@/hooks/useRoadmapStore';
+import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { useTmdbDetails } from '@/hooks/useTMDB';
 import { usePalette } from '@/hooks/useTheme';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
@@ -42,6 +43,7 @@ export default function MovieDetailScreen() {
   const setRating = useRoadmapStore((state) => state.setRating);
   const setTier = useRoadmapStore((state) => state.setTier);
 
+  const spoilerSafe = useSettingsStore((state) => state.spoilerSafe);
   const [burstId, setBurstId] = useState(0);
   const { data: details, disabled: tmdbDisabled } = useTmdbDetails(movie);
 
@@ -168,7 +170,13 @@ export default function MovieDetailScreen() {
         </Section>
 
         {/* Overview */}
-        {details?.overview ? (
+        {spoilerSafe && movie && !movie.isWatched ? (
+          <Section title="Synopsis" index={2}>
+            <Text style={{ ...type.small, color: palette.inkFaint, paddingHorizontal: GUTTER }}>
+              Hidden — spoiler-safe mode is on and you have not logged this yet.
+            </Text>
+          </Section>
+        ) : details?.overview ? (
           <Section title="Synopsis" index={2}>
             <Text style={{ ...type.body, color: palette.inkSoft, paddingHorizontal: GUTTER }}>
               {details.overview}

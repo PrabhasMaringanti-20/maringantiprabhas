@@ -76,6 +76,17 @@ export default function RootLayout() {
                 gestureEnabled: true,
               }}
             />
+            {['catchup', 'compare', 'tonight'].map((name) => (
+              <Stack.Screen
+                key={name}
+                name={name}
+                options={{
+                  presentation: 'modal',
+                  animation: 'slide_from_bottom',
+                  gestureEnabled: true,
+                }}
+              />
+            ))}
           </Stack>
 
           {!introDone ? <DoomIntro onFinish={() => setIntroDone(true)} /> : null}

@@ -1,13 +1,14 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Pressable, ScrollView, Share, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInDown, FadeOut } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CustomButton } from '@/components/common/CustomButton';
 import { Marker, Meter, Rule } from '@/components/common/Primitives';
+import { useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { usePalette } from '@/hooks/useTheme';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { buildRound, gradeLabel, type QuizQuestion } from '@/utils/quiz';
@@ -19,7 +20,22 @@ export default function QuizScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const [seed, setSeed] = useState(() => Date.now() % 100000);
+  // A round is reproducible from its seed, which is the whole basis of a
+  // challenge: your friend plays the identical ten questions, not "a quiz".
+  const params = useLocalSearchParams<{ seed?: string; from?: string; target?: string }>();
+  const challengeSeed = Number(params.seed);
+  const challenge =
+    Number.isFinite(challengeSeed) && challengeSeed > 0
+      ? {
+          seed: challengeSeed,
+          from: params.from ?? 'A friend',
+          target: Number.isFinite(Number(params.target)) ? Number(params.target) : null,
+        }
+      : null;
+
+  const displayName = useRoadmapStore((state) => state.displayName);
+
+  const [seed, setSeed] = useState(() => challenge?.seed ?? Date.now() % 100000);
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -85,6 +101,19 @@ export default function QuizScreen() {
    * ---------------------------------------------------------------- */
   if (phase === 'done') {
     const grade = gradeLabel(score, round.length);
+    const beat = challenge?.target != null ? score - challenge.target : null;
+
+    const challengeFriend = async () => {
+      const who = displayName.trim() || 'Someone';
+      await Share.share({
+        message:
+          `I scored ${score}/${round.length} on the DOOM quiz. ` +
+          `Same ten questions, no excuses:\n\n` +
+          `multiversedoomsday://quiz?seed=${seed}&from=${encodeURIComponent(who)}&target=${score}`,
+      }).catch(() => {
+        // Dismissed — nothing to recover.
+      });
+    };
     return (
       <View style={{ flex: 1, backgroundColor: palette.canvas, paddingTop: insets.top + space.sm }}>
         <View style={{ paddingHorizontal: GUTTER, alignItems: 'flex-end' }}>{closeButton}</View>
@@ -115,12 +144,42 @@ export default function QuizScreen() {
             {grade.blurb}
           </Text>
 
+          {beat != null ? (
+            <Text
+              style={{
+                ...type.bodyStrong,
+                color: beat > 0 ? palette.accent : beat === 0 ? palette.inkSoft : palette.crimson,
+                marginTop: space.lg,
+              }}
+            >
+              {beat > 0
+                ? `You beat ${challenge?.from} by ${beat}.`
+                : beat === 0
+                  ? `Dead even with ${challenge?.from}.`
+                  : `${challenge?.from} beat you by ${-beat}.`}
+            </Text>
+          ) : null}
+
           <View style={{ marginTop: space.xxl, gap: space.md }}>
-            <CustomButton label="Play again" icon="refresh" size="lg" fullWidth onPress={restart} />
+            <CustomButton
+              label="Challenge a friend"
+              icon="share-outline"
+              size="lg"
+              fullWidth
+              onPress={challengeFriend}
+            />
+            <CustomButton
+              label="Play again"
+              icon="refresh"
+              variant="secondary"
+              size="lg"
+              fullWidth
+              onPress={restart}
+            />
             <CustomButton
               label="Back to prep"
               icon="arrow-back"
-              variant="secondary"
+              variant="ghost"
               size="lg"
               fullWidth
               onPress={router.back}
@@ -150,7 +209,9 @@ export default function QuizScreen() {
       <View style={{ paddingHorizontal: GUTTER, flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1, marginRight: space.md }}>
           <Marker>
-            {`${index + 1} of ${round.length} · ${score} right`}
+            {challenge
+              ? `${index + 1} of ${round.length} · beating ${challenge.from}'s ${challenge.target ?? '?'}`
+              : `${index + 1} of ${round.length} · ${score} right`}
           </Marker>
           <View style={{ marginTop: space.sm }}>
             <Meter value={progress * 100} />

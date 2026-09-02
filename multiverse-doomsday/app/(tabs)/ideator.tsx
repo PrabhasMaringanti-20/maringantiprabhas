@@ -21,6 +21,7 @@ import {
   useGlobalReadiness,
 } from '@/hooks/useRoadmapStore';
 import { REMINDER_TIMES, useNotificationStore } from '@/hooks/useNotificationStore';
+import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { hasTmdbKey } from '@/hooks/useTMDB';
 import { usePalette, useThemeStore, type ThemeMode } from '@/hooks/useTheme';
 import { countdownLine, daysToDoomsday, quoteForDay, QUOTES } from '@/services/notifications';
@@ -65,6 +66,9 @@ export default function IdeatorScreen() {
   const reminderDenied = useNotificationStore((state) => state.denied);
   const setRemindersEnabled = useNotificationStore((state) => state.setEnabled);
   const setReminderTime = useNotificationStore((state) => state.setTime);
+
+  const spoilerSafe = useSettingsStore((state) => state.spoilerSafe);
+  const setSpoilerSafe = useSettingsStore((state) => state.setSpoilerSafe);
 
   const previewQuote = quoteForDay(daysToDoomsday());
 
@@ -347,8 +351,59 @@ export default function IdeatorScreen() {
           </View>
         </Section>
 
+        {/* Spoilers */}
+        <Section title="Spoilers" index={5}>
+          <View style={{ paddingHorizontal: GUTTER }}>
+            <Rule />
+            <Pressable
+              accessibilityRole="switch"
+              accessibilityState={{ checked: spoilerSafe }}
+              accessibilityLabel="Spoiler-safe mode"
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setSpoilerSafe(!spoilerSafe);
+              }}
+              style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: space.lg }}
+            >
+              <View style={{ flex: 1, paddingRight: space.md }}>
+                <Text style={{ ...type.bodyStrong, color: palette.ink }}>Spoiler-safe mode</Text>
+                <Text style={{ ...type.small, color: palette.inkFaint, marginTop: 1 }}>
+                  Hides synopses and locks post-credits for anything you have not logged
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  height: 24,
+                  width: 42,
+                  borderRadius: radius.pill,
+                  padding: 2,
+                  justifyContent: 'center',
+                  backgroundColor: spoilerSafe ? palette.accent : palette.raised,
+                  borderWidth: spoilerSafe ? 0 : 1,
+                  borderColor: palette.line,
+                }}
+              >
+                <View
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: radius.pill,
+                    backgroundColor: spoilerSafe ? '#FFFFFF' : palette.inkFaint,
+                    transform: [{ translateX: spoilerSafe ? 18 : 0 }],
+                  }}
+                />
+              </View>
+            </Pressable>
+            <Rule />
+            <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.md }}>
+              {'“Why it matters” stays visible either way — it is written spoiler-free.'}
+            </Text>
+          </View>
+        </Section>
+
         {/* Under the hood */}
-        <Section title="Under the hood" index={5}>
+        <Section title="Under the hood" index={6}>
           <View style={{ paddingHorizontal: GUTTER }}>
             <Rule />
             {[
