@@ -1,17 +1,18 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView, Text, View } from 'react-native';
 
 import { BottomSheet } from '@/components/common/BottomSheet';
 import { CustomButton } from '@/components/common/CustomButton';
-import { CharacterAvatar } from '@/components/characters/CharacterAvatar';
-import { STATUS_COLOR } from '@/components/characters/CharacterCard';
+import { Marker, Rule } from '@/components/common/Primitives';
+import { STATUS_COLOR } from '@/components/characters/CharacterTile';
 import { characterPortrait } from '@/data/characterImages';
 import { useCharacterAppearances } from '@/hooks/useCharacters';
-import { AFFILIATION_ACCENT, AFFILIATION_GRADIENT } from '@/utils/imageHelper';
-import type { MarvelCharacter } from '@/types';
-
+import { useActorProfile } from '@/hooks/useTMDB';
 import { usePalette } from '@/hooks/useTheme';
+import { GUTTER, radius, space, type } from '@/styles/tokens';
+import { AFFILIATION_ACCENT, AFFILIATION_GRADIENT, initialsFor, profileUrl } from '@/utils/imageHelper';
+import type { MarvelCharacter } from '@/types';
 
 interface CharacterDetailModalProps {
   character: MarvelCharacter | null;
@@ -21,14 +22,23 @@ interface CharacterDetailModalProps {
   onShowAppearances: (character: MarvelCharacter) => void;
 }
 
-const PORTRAIT_W = 104;
+/**
+ * Portraits are 2:3. At the sheet's full width a short crop window shows only
+ * the top of the image — which for most of these is hair and shoulders, not a
+ * face — so the window is tall enough to include the head at any framing.
+ */
+const ART_HEIGHT = 360;
 
 /**
  * Character sheet.
  *
- * Colours come from the JS palette via `style`, never from Tailwind classes:
- * this renders inside a native `Modal`, which is its own window, and the
- * class-driven version came out transparent with overlapping text on device.
+ * Opens on the portrait at full bleed with the name laid over it — the same
+ * treatment as the tile it was tapped from, so the transition reads as the
+ * tile growing rather than a different screen appearing.
+ *
+ * Colours come from the JS palette via `style`, never Tailwind classes: this
+ * renders inside a native Modal, which is its own window, and the class-driven
+ * version came out transparent on device.
  */
 export function CharacterDetailModal({
   character,
@@ -38,211 +48,154 @@ export function CharacterDetailModal({
 }: CharacterDetailModalProps) {
   const palette = usePalette();
   const appearances = useCharacterAppearances(character ?? undefined);
+  const portrait = character ? characterPortrait(character.id) : undefined;
+  const actorProfile = useActorProfile(!character || portrait ? undefined : character.actor);
 
   if (!character) return null;
 
   const accent = AFFILIATION_ACCENT[character.affiliation];
   const gradient = AFFILIATION_GRADIENT[character.affiliation];
-  const hasPortrait = Boolean(characterPortrait(character.id));
+  const actorUri = portrait ? null : profileUrl(actorProfile);
 
-  const label = {
-    fontSize: 10,
-    fontWeight: '700' as const,
-    letterSpacing: 1.6,
-    textTransform: 'uppercase' as const,
-    color: palette.inkFaint,
-  };
-
-  const factBox = {
-    flex: 1,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: palette.line,
-    backgroundColor: palette.surface,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  };
+  const fact = (label: string, value: string) => (
+    <View style={{ flex: 1 }}>
+      <Marker>{label}</Marker>
+      <Text
+        style={{ ...type.bodyStrong, color: palette.ink, marginTop: space.xs }}
+        numberOfLines={2}
+      >
+        {value}
+      </Text>
+    </View>
+  );
 
   return (
     <BottomSheet visible={visible} onClose={onClose}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 36 }}
-      >
-        {/* Header */}
-        <LinearGradient
-          colors={[`${gradient[0]}${palette.isDark ? '55' : '1F'}`, palette.surface]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={{ paddingHorizontal: 20, paddingTop: 14, paddingBottom: 20 }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-            <View
-              style={{
-                borderWidth: 2,
-                borderColor: `${accent}99`,
-                borderRadius: 20,
-                padding: 3,
-              }}
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: space.xxxl }}>
+        {/* Portrait */}
+        <View style={{ height: ART_HEIGHT, backgroundColor: palette.raised }}>
+          {portrait ? (
+            <Image
+              source={portrait}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
+              contentPosition="top center"
+              transition={220}
+            />
+          ) : actorUri ? (
+            <Image
+              source={{ uri: actorUri }}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
+              contentPosition="top center"
+              transition={220}
+            />
+          ) : (
+            <LinearGradient
+              colors={[gradient[0], gradient[1]]}
+              start={{ x: 0.1, y: 0 }}
+              end={{ x: 0.9, y: 1 }}
+              style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
             >
-              <CharacterAvatar
-                character={character}
-                size={PORTRAIT_W}
-                rounded={15}
-                showFullPortrait={hasPortrait}
+              <Text style={{ fontSize: 68, fontWeight: '800', color: '#FFFFFF', opacity: 0.9 }}>
+                {initialsFor(character)}
+              </Text>
+            </LinearGradient>
+          )}
+
+          <LinearGradient
+            colors={['transparent', `${palette.surface}D9`, palette.surface]}
+            locations={[0, 0.62, 1]}
+            style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: ART_HEIGHT * 0.7 }}
+          />
+
+          <View style={{ position: 'absolute', left: GUTTER, right: GUTTER, bottom: space.md }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: space.sm }}>
+              <View
+                style={{
+                  height: 6,
+                  width: 6,
+                  borderRadius: radius.pill,
+                  backgroundColor: STATUS_COLOR[character.status],
+                  marginRight: space.sm,
+                }}
               />
-            </View>
-
-            <View style={{ flex: 1, marginLeft: 16, paddingTop: 2 }}>
-              <Text
-                style={{ fontSize: 23, lineHeight: 27, fontWeight: '900', color: palette.ink }}
-              >
-                {character.alias}
-              </Text>
-              <Text
-                style={{
-                  marginTop: 3,
-                  fontSize: 13,
-                  fontWeight: '600',
-                  color: palette.inkSoft,
-                }}
-              >
-                {character.name}
-              </Text>
-
+              <Marker color={STATUS_COLOR[character.status]}>{character.status}</Marker>
               <View
                 style={{
-                  marginTop: 10,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
+                  height: 2,
+                  width: 12,
+                  borderRadius: radius.pill,
+                  backgroundColor: accent,
+                  marginHorizontal: space.sm,
                 }}
-              >
-                <View
-                  style={{
-                    height: 7,
-                    width: 7,
-                    borderRadius: 999,
-                    marginRight: 6,
-                    backgroundColor: STATUS_COLOR[character.status],
-                  }}
-                />
-                <Text style={{ ...label, color: STATUS_COLOR[character.status] }}>
-                  {character.status}
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  marginTop: 8,
-                  alignSelf: 'flex-start',
-                  borderRadius: 999,
-                  borderWidth: 1,
-                  borderColor: `${accent}66`,
-                  backgroundColor: `${accent}1A`,
-                  paddingHorizontal: 10,
-                  paddingVertical: 4,
-                }}
-              >
-                <Text style={{ ...label, color: accent }}>{character.affiliation}</Text>
-              </View>
+              />
+              <Marker color={accent}>{character.affiliation}</Marker>
             </View>
-          </View>
 
-          <View style={{ marginTop: 18, flexDirection: 'row', gap: 10 }}>
-            <View style={factBox}>
-              <Text style={label}>Portrayed by</Text>
-              <Text
-                numberOfLines={2}
-                style={{ marginTop: 3, fontSize: 13, fontWeight: '700', color: palette.ink }}
-              >
-                {character.actor}
-              </Text>
-            </View>
-            <View style={factBox}>
-              <Text style={label}>MCU debut</Text>
-              <Text
-                numberOfLines={2}
-                style={{ marginTop: 3, fontSize: 13, fontWeight: '700', color: palette.ink }}
-              >
-                {character.mcuDebut}
-              </Text>
-            </View>
-          </View>
-        </LinearGradient>
-
-        {/* Comic origins vs MCU role */}
-        <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name="book-outline" size={15} color={accent} />
-            <Text style={{ ...label, marginLeft: 8, color: palette.ink, letterSpacing: 2 }}>
-              Comic origins vs MCU role
+            <Text style={{ ...type.display, fontSize: 32, lineHeight: 35, color: palette.ink }}>
+              {character.alias}
+            </Text>
+            <Text style={{ ...type.small, color: palette.inkSoft, marginTop: space.xs }}>
+              {character.name}
             </Text>
           </View>
+        </View>
 
-          <View
-            style={{
-              marginTop: 12,
-              borderRadius: 18,
-              borderWidth: 1,
-              borderColor: palette.line,
-              backgroundColor: palette.raised,
-              padding: 16,
-            }}
-          >
+        {/* Facts */}
+        <View style={{ paddingHorizontal: GUTTER, paddingTop: space.lg }}>
+          <Rule />
+          <View style={{ flexDirection: 'row', paddingVertical: space.lg, gap: space.lg }}>
+            {fact('Portrayed by', character.actor)}
+            {fact('MCU debut', character.mcuDebut)}
+          </View>
+          <Rule />
+        </View>
+
+        {/* Comic origins */}
+        <View style={{ paddingHorizontal: GUTTER, paddingTop: space.xxl }}>
+          <Marker>Comic origins vs MCU role</Marker>
+          <View style={{ marginTop: space.md }}>
             {character.comicBio.map((line, index) => (
-              <View
-                key={index}
-                style={{ flexDirection: 'row', marginTop: index > 0 ? 12 : 0 }}
-              >
+              <View key={index} style={{ flexDirection: 'row', marginTop: index > 0 ? space.md : 0 }}>
                 <View
                   style={{
-                    marginRight: 12,
-                    marginTop: 7,
-                    height: 6,
-                    width: 6,
-                    borderRadius: 999,
+                    width: 2,
+                    borderRadius: radius.pill,
                     backgroundColor: accent,
+                    opacity: 0.5,
+                    marginRight: space.md,
                   }}
                 />
-                <Text style={{ flex: 1, fontSize: 13, lineHeight: 20, color: palette.inkSoft }}>
-                  {line}
-                </Text>
+                <Text style={{ ...type.body, color: palette.inkSoft, flex: 1 }}>{line}</Text>
               </View>
             ))}
           </View>
         </View>
 
         {/* Powers */}
-        <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name="flash-outline" size={15} color={palette.marvel} />
-            <Text style={{ ...label, marginLeft: 8, color: palette.ink, letterSpacing: 2 }}>
-              Key powers & abilities
-            </Text>
-          </View>
-
-          <View style={{ marginTop: 12, flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        <View style={{ paddingHorizontal: GUTTER, paddingTop: space.xxl }}>
+          <Marker>Key powers & abilities</Marker>
+          <View style={{ marginTop: space.md, flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
             {character.powers.map((power) => (
               <View
                 key={power}
                 style={{
-                  borderRadius: 999,
+                  borderRadius: radius.pill,
                   borderWidth: 1,
-                  paddingHorizontal: 12,
-                  paddingVertical: 6,
-                  borderColor: `${accent}55`,
-                  backgroundColor: `${accent}14`,
+                  paddingHorizontal: space.md,
+                  paddingVertical: space.xs + 1,
+                  borderColor: `${accent}4D`,
                 }}
               >
-                <Text style={{ fontSize: 12, fontWeight: '600', color: accent }}>{power}</Text>
+                <Text style={{ ...type.small, color: accent }}>{power}</Text>
               </View>
             ))}
           </View>
         </View>
 
-        {/* Key appearances */}
-        <View style={{ paddingHorizontal: 20, paddingTop: 24 }}>
+        {/* Appearances */}
+        <View style={{ paddingHorizontal: GUTTER, paddingTop: space.xxl }}>
           <CustomButton
             label={`Key appearances (${appearances.length})`}
             icon="git-branch-outline"
@@ -254,10 +207,10 @@ export function CharacterDetailModal({
           />
           <Text
             style={{
-              marginTop: 10,
-              textAlign: 'center',
-              fontSize: 11,
+              ...type.small,
               color: palette.inkFaint,
+              textAlign: 'center',
+              marginTop: space.md,
             }}
           >
             Filters the Roadmap to every entry this character appears in.

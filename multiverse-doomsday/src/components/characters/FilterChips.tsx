@@ -1,11 +1,14 @@
 import * as Haptics from 'expo-haptics';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import {
   AFFILIATION_FILTERS,
   AFFILIATION_LABELS,
   type AffiliationFilter,
 } from '@/hooks/useCharacters';
+import { usePalette } from '@/hooks/useTheme';
+import { GUTTER, motion, space, type } from '@/styles/tokens';
 
 interface FilterChipsProps {
   value: AffiliationFilter;
@@ -13,49 +16,85 @@ interface FilterChipsProps {
   counts: Record<AffiliationFilter, number>;
 }
 
-/** Horizontal allegiance filter row with live counts. */
+/**
+ * Allegiance filter.
+ *
+ * Underlined text rather than pills: seven filled chips in a row was the
+ * loudest element on a screen whose subject is the portraits below it.
+ */
 export function FilterChips({ value, onChange, counts }: FilterChipsProps) {
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 20, gap: 8 }}
+      contentContainerStyle={{ paddingHorizontal: GUTTER, gap: space.xl, alignItems: 'center' }}
     >
-      {AFFILIATION_FILTERS.map((filter) => {
-        const isActive = filter === value;
-        return (
-          <Pressable
-            key={filter}
-            accessibilityRole="button"
-            accessibilityState={{ selected: isActive }}
-            onPress={() => {
-              Haptics.selectionAsync();
-              onChange(filter);
-            }}
-            className={`flex-row items-center rounded-full border px-3.5 py-2 ${
-              isActive ? 'border-accent bg-accent/15' : 'border-line bg-surface'
-            }`}
-          >
-            <Text
-              className={`text-xs font-bold ${isActive ? 'text-accent' : 'text-ink-soft'}`}
-              numberOfLines={1}
-            >
-              {AFFILIATION_LABELS[filter]}
-            </Text>
-            <View
-              className={`ml-2 rounded-full px-1.5 py-0.5 ${
-                isActive ? 'bg-accent/25' : 'bg-surface-raised'
-              }`}
-            >
-              <Text
-                className={`text-2xs font-bold ${isActive ? 'text-accent' : 'text-ink-faint'}`}
-              >
-                {counts[filter] ?? 0}
-              </Text>
-            </View>
-          </Pressable>
-        );
-      })}
+      {AFFILIATION_FILTERS.map((filter) => (
+        <Chip
+          key={filter}
+          label={AFFILIATION_LABELS[filter]}
+          count={counts[filter]}
+          active={filter === value}
+          onPress={() => {
+            Haptics.selectionAsync();
+            onChange(filter);
+          }}
+        />
+      ))}
     </ScrollView>
+  );
+}
+
+function Chip({
+  label,
+  count,
+  active,
+  onPress,
+}: {
+  label: string;
+  count: number;
+  active: boolean;
+  onPress: () => void;
+}) {
+  const palette = usePalette();
+  const progress = useSharedValue(active ? 1 : 0);
+
+  progress.value = withTiming(active ? 1 : 0, { duration: motion.quick });
+
+  const underlineStyle = useAnimatedStyle(() => ({
+    transform: [{ scaleX: progress.value }],
+    opacity: progress.value,
+  }));
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected: active }}
+      accessibilityLabel={`${label} ${count}`}
+      onPress={onPress}
+      style={{ paddingVertical: space.sm }}
+    >
+      <Text
+        style={{
+          ...type.bodyStrong,
+          color: active ? palette.ink : palette.inkFaint,
+        }}
+      >
+        {label}
+        <Text style={{ ...type.ordinal, color: palette.inkFaint }}> {count}</Text>
+      </Text>
+
+      <Animated.View
+        style={[
+          underlineStyle,
+          {
+            height: 2,
+            marginTop: space.xs,
+            borderRadius: 999,
+            backgroundColor: palette.accent,
+          },
+        ]}
+      />
+    </Pressable>
   );
 }

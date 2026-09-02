@@ -3,19 +3,19 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { FlatList, Pressable, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, {
+  FadeIn,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
+import { CollapsingHeader, useHeaderInset } from '@/components/common/CollapsingHeader';
 import { Poster } from '@/components/common/Poster';
-import { ScreenHeader } from '@/components/common/ScreenHeader';
-import { Surface } from '@/components/common/Surface';
-import {
-  RELEVANCE_LABEL,
-  useStingerCounts,
-  useStingers,
-  type StingerRow,
-} from '@/hooks/usePostCredits';
+import { Empty, Marker, Rule } from '@/components/common/Primitives';
+import { useRelevanceColour } from '@/components/roadmap/StingerCard';
+import { RELEVANCE_LABEL, useStingerCounts, useStingers, type StingerRow } from '@/hooks/usePostCredits';
 import { usePalette } from '@/hooks/useTheme';
-import { GUTTER, radius, space, type } from '@/styles/tokens';
+import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import type { StingerRelevance } from '@/types';
 
 type Filter = StingerRelevance | 'all';
@@ -23,148 +23,127 @@ type Filter = StingerRelevance | 'all';
 const FILTERS: { key: Filter; label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'direct', label: 'Feeds Doomsday' },
-  { key: 'thread', label: 'Loose threads' },
+  { key: 'thread', label: 'Threads' },
   { key: 'none', label: 'Self-contained' },
 ];
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList<StingerRow>);
 
 export default function PostCreditsScreen() {
   const palette = usePalette();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
+  const headerInset = useHeaderInset();
+  const scrollY = useSharedValue(0);
   const [filter, setFilter] = useState<Filter>('all');
 
   const rows = useStingers(filter);
   const counts = useStingerCounts();
+  const tint = useRelevanceColour();
 
-  // Relevance is the only colour signal on this screen, so it has to be legible
-  // at a glance and consistent with the rest of the app's palette.
-  const relevanceColour: Record<StingerRelevance, string> = {
-    direct: palette.marvel,
-    thread: palette.accent,
-    none: palette.inkFaint,
-    unreleased: palette.violet,
-  };
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
 
-  const renderRow = ({ item }: { item: StingerRow }) => {
+  const close = (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Close"
+      onPress={router.back}
+      hitSlop={12}
+    >
+      <Ionicons name="close" size={22} color={palette.ink} />
+    </Pressable>
+  );
+
+  const renderRow = ({ item, index }: { item: StingerRow; index: number }) => {
     const { movie, entry } = item;
-    const tint = relevanceColour[entry.relevance];
+    const colour = tint[entry.relevance];
 
     return (
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`Open ${movie.title}`}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          router.push(`/movie/${movie.id}`);
-        }}
-        style={{ paddingHorizontal: GUTTER, marginBottom: space.md }}
-      >
-        <Surface padded={false} style={{ overflow: 'hidden' }}>
-          <View style={{ flexDirection: 'row', padding: space.lg }}>
-            <Poster movie={movie} width={54} hideCaption disableFetch />
-
+      <Animated.View entering={FadeIn.delay(Math.min(index, 8) * motion.stagger).duration(motion.base)}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Open ${movie.title}`}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            router.push(`/movie/${movie.id}`);
+          }}
+          style={{ paddingHorizontal: GUTTER, paddingVertical: space.lg }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Poster movie={movie} width={38} hideCaption />
             <View style={{ flex: 1, marginLeft: space.md }}>
-              <Text style={{ ...type.bodyStrong, color: palette.ink }} numberOfLines={2}>
+              <Text style={{ ...type.bodyStrong, color: palette.ink }} numberOfLines={1}>
                 {movie.title}
               </Text>
-              <Text style={{ ...type.small, color: palette.inkFaint, marginTop: 2 }}>
+              <Text style={{ ...type.small, color: palette.inkFaint, marginTop: 1 }}>
                 {movie.releaseYear} · {entry.scenes.length}{' '}
                 {entry.scenes.length === 1 ? 'scene' : 'scenes'}
               </Text>
-
-              <View
-                style={{
-                  alignSelf: 'flex-start',
-                  marginTop: space.sm,
-                  paddingHorizontal: space.sm,
-                  paddingVertical: 3,
-                  borderRadius: radius.pill,
-                  backgroundColor: `${tint}1F`,
-                  borderWidth: 1,
-                  borderColor: `${tint}55`,
-                }}
-              >
-                <Text style={{ ...type.label, color: tint, textTransform: 'uppercase' }}>
-                  {RELEVANCE_LABEL[entry.relevance]}
-                </Text>
-              </View>
             </View>
+            <Marker color={colour}>{RELEVANCE_LABEL[entry.relevance]}</Marker>
           </View>
 
-          {/* Scenes */}
-          <View
-            style={{
-              borderTopWidth: 1,
-              borderTopColor: palette.line,
-              backgroundColor: palette.raised,
-              paddingHorizontal: space.lg,
-              paddingVertical: space.md,
-            }}
-          >
-            {entry.scenes.map((scene, index) => (
-              <View key={index} style={{ marginTop: index > 0 ? space.md : 0 }}>
-                <Text style={{ ...type.label, color: tint, textTransform: 'uppercase' }}>
-                  {scene.kind === 'mid' ? 'Mid-credits' : 'Post-credits'}
-                </Text>
-                <Text style={{ ...type.body, color: palette.ink, marginTop: space.xs }}>
-                  {scene.summary}
-                </Text>
-                <Text style={{ ...type.small, color: palette.inkSoft, marginTop: space.xs }}>
-                  Sets up: {scene.setsUp}
-                </Text>
+          <View style={{ marginTop: space.md, paddingLeft: 38 + space.md }}>
+            {entry.scenes.map((scene, sceneIndex) => (
+              <View key={sceneIndex} style={{ marginTop: sceneIndex > 0 ? space.md : 0 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View
+                    style={{
+                      width: 2,
+                      borderRadius: radius.pill,
+                      backgroundColor: colour,
+                      opacity: 0.55,
+                      marginRight: space.md,
+                    }}
+                  />
+                  <View style={{ flex: 1 }}>
+                    <Marker color={palette.inkFaint}>
+                      {scene.kind === 'mid' ? 'Mid-credits' : 'Post-credits'}
+                    </Marker>
+                    <Text style={{ ...type.body, color: palette.ink, marginTop: space.xs }}>
+                      {scene.summary}
+                    </Text>
+                    <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.xs }}>
+                      Sets up: {scene.setsUp}
+                    </Text>
+                  </View>
+                </View>
               </View>
             ))}
           </View>
-        </Surface>
-      </Pressable>
+        </Pressable>
+        <Rule inset={GUTTER} />
+      </Animated.View>
     );
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.canvas }}>
-      <FlatList
+      <AnimatedFlatList
         data={rows}
         keyExtractor={(item) => item.movie.id}
         renderItem={renderRow}
-        contentContainerStyle={{ paddingTop: insets.top + space.sm, paddingBottom: insets.bottom + space.xxxl }}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        contentContainerStyle={{ paddingTop: headerInset, paddingBottom: space.huge }}
         showsVerticalScrollIndicator={false}
         initialNumToRender={6}
         windowSize={9}
         ListHeaderComponent={
-          <View>
-            <ScreenHeader
-              eyebrow="Stingers"
-              title="Post-credits"
-              subtitle={`${counts.all} titles hide a scene. ${counts.direct} feed Doomsday directly.`}
-              trailing={
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Back"
-                  onPress={router.back}
-                  hitSlop={12}
-                  style={{
-                    height: 36,
-                    width: 36,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: radius.pill,
-                    borderWidth: 1,
-                    borderColor: palette.line,
-                    backgroundColor: palette.surface,
-                  }}
-                >
-                  <Ionicons name="close" size={18} color={palette.ink} />
-                </Pressable>
-              }
-            />
+          <View style={{ paddingBottom: space.md }}>
+            <Text style={{ ...type.small, color: palette.inkSoft, paddingHorizontal: GUTTER }}>
+              {counts.all} titles hide a scene. {counts.direct} feed Doomsday directly.
+            </Text>
 
             <View
               style={{
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                gap: space.sm,
+                gap: space.xl,
                 paddingHorizontal: GUTTER,
-                paddingBottom: space.lg,
+                paddingTop: space.xl,
+                paddingBottom: space.md,
               }}
             >
               {FILTERS.map(({ key, label }) => {
@@ -173,42 +152,45 @@ export default function PostCreditsScreen() {
                   <Pressable
                     key={key}
                     accessibilityRole="button"
+                    accessibilityState={{ selected: active }}
                     accessibilityLabel={label}
                     onPress={() => {
                       Haptics.selectionAsync();
                       setFilter(key);
                     }}
-                    style={{
-                      paddingHorizontal: space.md,
-                      paddingVertical: space.sm,
-                      borderRadius: radius.pill,
-                      borderWidth: 1,
-                      borderColor: active ? palette.accent : palette.line,
-                      backgroundColor: active ? `${palette.accent}1F` : palette.surface,
-                    }}
                   >
                     <Text
                       style={{
-                        ...type.small,
-                        fontWeight: '700',
-                        color: active ? palette.accent : palette.inkSoft,
+                        ...type.bodyStrong,
+                        color: active ? palette.ink : palette.inkFaint,
                       }}
                     >
-                      {label} {counts[key]}
+                      {label}
+                      <Text style={{ ...type.ordinal, color: palette.inkFaint }}> {counts[key]}</Text>
                     </Text>
+                    <View
+                      style={{
+                        height: 2,
+                        marginTop: space.xs,
+                        borderRadius: radius.pill,
+                        backgroundColor: active ? palette.accent : 'transparent',
+                      }}
+                    />
                   </Pressable>
                 );
               })}
             </View>
+            <Rule inset={GUTTER} />
           </View>
         }
-        ListEmptyComponent={
-          <View style={{ paddingHorizontal: GUTTER, paddingTop: space.xxl, alignItems: 'center' }}>
-            <Text style={{ ...type.body, color: palette.inkFaint, textAlign: 'center' }}>
-              Nothing in this bucket.
-            </Text>
-          </View>
-        }
+        ListEmptyComponent={<Empty icon="film-outline">Nothing in this bucket.</Empty>}
+      />
+
+      <CollapsingHeader
+        scrollY={scrollY}
+        title="Post-credits"
+        large={{ eyebrow: 'Stingers', title: 'Post-credits' }}
+        trailing={close}
       />
     </View>
   );

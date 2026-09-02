@@ -1,15 +1,15 @@
 import { useCallback, useRef, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+
 import * as Haptics from 'expo-haptics';
 import * as Sharing from 'expo-sharing';
 import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { captureRef } from 'react-native-view-shot';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Badge } from '@/components/common/Badge';
 import { BottomSheet } from '@/components/common/BottomSheet';
+import { CollapsingHeader, useHeaderInset } from '@/components/common/CollapsingHeader';
 import { CustomButton } from '@/components/common/CustomButton';
-import { ProgressBar } from '@/components/common/ProgressBar';
+import { Marker, Meter, Section } from '@/components/common/Primitives';
 import { StarRating } from '@/components/common/StarRating';
 import { DraggableItem } from '@/components/tierlist/DraggableItem';
 import { ShareCard } from '@/components/tierlist/ShareCard';
@@ -22,15 +22,18 @@ import {
 } from '@/hooks/useRoadmapStore';
 import { TIERS, type MovieItem, type Tier } from '@/types';
 
-import { CountdownBar } from '@/components/common/CountdownBar';
-import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
-import { useTabBarHeight } from '@/utils/layout';
+import { Ambience } from '@/components/common/Ambience';
 import { usePalette } from '@/hooks/useTheme';
+import { GUTTER, space, type } from '@/styles/tokens';
+import { useTabBarHeight } from '@/utils/layout';
+
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 export default function TierStudioScreen() {
   const palette = usePalette();
-  const insets = useSafeAreaInsets();
+  const headerInset = useHeaderInset();
   const tabBarHeight = useTabBarHeight();
+  const scrollY = useSharedValue(0);
   const { tiers, unranked } = useTierBoard();
   const stats = useGlobalReadiness();
   const favourite = useFavouriteMovie();
@@ -90,58 +93,46 @@ export default function TierStudioScreen() {
     setTier(movie.id, tier);
   };
 
-  return (
-    <View className="flex-1 bg-canvas">
-      <DoomAtmosphere particleCount={6} />
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
 
-      <ScrollView
+  return (
+    <View style={{ flex: 1, backgroundColor: palette.canvas }}>
+      <Ambience />
+
+      <AnimatedScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         contentContainerStyle={{
-          paddingTop: insets.top + 8,
-          paddingBottom: tabBarHeight + 24,
+          paddingTop: headerInset,
+          paddingBottom: tabBarHeight + space.xl,
         }}
         showsVerticalScrollIndicator={false}
       >
-        <View className="px-5">
-          <Text className="text-2xs font-semibold uppercase tracking-[3px] text-ink-faint">
-            Tier Studio
-          </Text>
-          <Text className="mt-1.5 text-[27px] font-black leading-8 tracking-tight text-ink">
-            Rank the Saga
-          </Text>
-          <Text className="mt-1 text-xs text-ink-soft">
-            Long-press a poster to drag it between tiers, or tap it to assign one.
-          </Text>
-
-          <View className="mt-4">
-            <CountdownBar compact />
-          </View>
-        </View>
-
-        {/* Readiness summary */}
-        <View className="mt-5 px-5">
-          <View className="rounded-2xl border border-line bg-surface p-4">
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-bold uppercase tracking-[2px] text-ink">
-                Overall readiness
-              </Text>
-              <Badge label={`${stats.percent}%`} tone="accent" compact />
-            </View>
-            <View className="mt-3">
-              <ProgressBar value={stats.percent / 100} height={8} />
-            </View>
-            <View className="mt-3 flex-row justify-between">
-              <Text className="text-2xs uppercase tracking-wider text-ink-faint">
-                {stats.watched}/{stats.total} watched
-              </Text>
-              <Text className="text-2xs uppercase tracking-wider text-ink-faint">
-                {rankedCount} ranked
-              </Text>
-            </View>
+        {/* One line of state, rather than a countdown card stacked on a
+            readiness card — both of those already lead the Roadmap and Prep. */}
+        <View style={{ paddingHorizontal: GUTTER }}>
+          <Meter value={stats.percent} />
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: space.sm }}>
+            <Text
+              style={{
+                ...type.small,
+                fontWeight: '600',
+                color: palette.ink,
+                fontVariant: ['tabular-nums'],
+              }}
+            >
+              {rankedCount} ranked
+            </Text>
+            <Text style={{ ...type.small, color: palette.inkFaint, marginLeft: space.sm, flex: 1 }}>
+              {stats.watched}/{stats.total} watched · long-press a poster to drag it
+            </Text>
           </View>
         </View>
 
         {/* Tier board */}
-        <View className="mt-6 px-5">
+        <View style={{ marginTop: space.xl }}>
           {TIERS.map((tier) => (
             <TierRow
               key={tier}
@@ -165,19 +156,27 @@ export default function TierStudioScreen() {
         </View>
 
         {/* Bench */}
-        <View className="mt-3 px-5">
-          <Text className="mb-2 text-xs font-bold uppercase tracking-[2px] text-ink-soft">
-            Watched · unranked ({unranked.length})
-          </Text>
+        <View style={{ marginTop: space.xl }}>
+          <View style={{ paddingHorizontal: GUTTER, marginBottom: space.md }}>
+            <Marker>{`Watched · unranked (${unranked.length})`}</Marker>
+          </View>
           <MeasuredDropZone
             target="unranked"
             onMeasure={handleMeasure}
             measureToken={measureToken}
-            className="rounded-2xl border border-dashed border-line bg-surface/60 p-3"
+            style={{ paddingHorizontal: GUTTER, paddingVertical: space.md }}
           >
-            <View className="min-h-[92px] flex-row flex-wrap items-center gap-2">
+            <View
+              style={{
+                minHeight: 78,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: space.sm,
+              }}
+            >
               {unranked.length === 0 ? (
-                <Text className="px-1 text-xs text-ink-faint">
+                <Text style={{ ...type.small, color: palette.inkFaint }}>
                   Everything you have watched is ranked. Mark more entries on the Roadmap.
                 </Text>
               ) : (
@@ -197,32 +196,29 @@ export default function TierStudioScreen() {
         </View>
 
         {/* Export */}
-        <View className="mt-7 px-5">
-          <View className="rounded-2xl border border-line bg-surface p-4">
-            <View className="flex-row items-center">
-              <Ionicons name="share-social-outline" size={16} color={palette.marvel} />
-              <Text className="ml-2 text-xs font-bold uppercase tracking-[2px] text-ink">
-                Social export studio
-              </Text>
-            </View>
-            <Text className="mt-2 text-xs leading-4 text-ink-soft">
-              Renders a branded 9:16 story card with your readiness score, favourite entry and top
-              tier — ready for Instagram or X.
+        <Section title="Share" index={2}>
+          <View style={{ paddingHorizontal: GUTTER }}>
+            <Text style={{ ...type.small, color: palette.inkSoft, marginBottom: space.lg }}>
+              Renders a 9:16 story card with your readiness, favourite entry and top tier.
             </Text>
-            <View className="mt-4">
-              <CustomButton
-                label={exporting ? 'Rendering…' : 'Export story card'}
-                icon="download-outline"
-                variant="primary"
-                size="lg"
-                fullWidth
-                loading={exporting}
-                onPress={exportStoryCard}
-              />
-            </View>
+            <CustomButton
+              label={exporting ? 'Rendering…' : 'Export story card'}
+              icon="download-outline"
+              variant="primary"
+              size="lg"
+              fullWidth
+              loading={exporting}
+              onPress={exportStoryCard}
+            />
           </View>
-        </View>
-      </ScrollView>
+        </Section>
+      </AnimatedScrollView>
+
+      <CollapsingHeader
+        scrollY={scrollY}
+        title="Tiers"
+        large={{ eyebrow: 'Tier studio', title: 'Rank the Saga' }}
+      />
 
       {/* Off-screen capture target */}
       <View style={{ position: 'absolute', left: -10000, top: 0 }} pointerEvents="none">
@@ -243,76 +239,67 @@ export default function TierStudioScreen() {
         heightRatio={0.52}
       >
         {selected ? (
-          <View className="px-5 pt-3">
-            <Text className="text-xl font-black leading-6 text-ink" numberOfLines={2}>
+          <View style={{ paddingHorizontal: GUTTER, paddingTop: space.md }}>
+            <Text style={{ ...type.title, color: palette.ink }} numberOfLines={2}>
               {selected.title}
             </Text>
-            <Text className="mt-1 text-xs text-ink-soft">
+            <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.xs }}>
               {selected.releaseYear} ·{' '}
               {typeof selected.phase === 'number' ? `Phase ${selected.phase}` : selected.phase}
             </Text>
 
-            <Text className="mt-5 text-2xs font-bold uppercase tracking-[2px] text-ink-faint">
-              Assign tier
-            </Text>
-            <View className="mt-3 flex-row gap-2">
-              {TIERS.map((tier) => {
-                const isActive = selected.tier === tier;
-                return (
-                  <Pressable
-                    key={tier}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Assign tier ${tier}`}
-                    onPress={() => {
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      assignTier(selected, isActive ? undefined : tier);
-                      setSelected({ ...selected, tier: isActive ? undefined : tier });
-                    }}
-                    className={`h-14 flex-1 items-center justify-center rounded-2xl border-2 ${
-                      isActive ? '' : 'bg-surface-raised'
-                    }`}
-                    style={{
-                      backgroundColor: isActive ? TIER_STYLE[tier].hex : undefined,
-                      borderColor: isActive ? TIER_STYLE[tier].hex : palette.line,
-                    }}
-                  >
-                    <Text
-                      className={`text-xl font-black ${isActive ? 'text-canvas' : 'text-ink'}`}
+            <View style={{ marginTop: space.xxl }}>
+              <Marker>Assign tier</Marker>
+              <View style={{ flexDirection: 'row', gap: space.sm, marginTop: space.md }}>
+                {TIERS.map((tier) => {
+                  const isActive = selected.tier === tier;
+                  return (
+                    <Pressable
+                      key={tier}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected: isActive }}
+                      accessibilityLabel={`Assign tier ${tier}`}
+                      onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        assignTier(selected, isActive ? undefined : tier);
+                        setSelected({ ...selected, tier: isActive ? undefined : tier });
+                      }}
+                      style={{
+                        flex: 1,
+                        height: 52,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 12,
+                        borderWidth: 1,
+                        borderColor: isActive ? TIER_STYLE[tier].hex : palette.line,
+                        backgroundColor: isActive ? `${TIER_STYLE[tier].hex}26` : 'transparent',
+                      }}
                     >
-                      {tier}
-                    </Text>
-                  </Pressable>
-                );
-              })}
+                      <Text
+                        style={{
+                          ...type.heading,
+                          color: isActive ? TIER_STYLE[tier].hex : palette.inkFaint,
+                        }}
+                      >
+                        {tier}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
             </View>
 
-            <Text className="mt-6 text-2xs font-bold uppercase tracking-[2px] text-ink-faint">
-              Your rating
-            </Text>
-            <View className="mt-3">
-              <StarRating
-                value={selected.userRating}
-                onChange={(rating) => {
-                  setRating(selected.id, rating);
-                  setSelected({
-                    ...selected,
-                    userRating: selected.userRating === rating ? 0 : rating,
-                  });
-                }}
-              />
-            </View>
-
-            <View className="mt-7">
-              <CustomButton
-                label="Remove from board"
-                icon="trash-outline"
-                variant="danger"
-                fullWidth
-                onPress={() => {
-                  assignTier(selected, undefined);
-                  setSelected(null);
-                }}
-              />
+            <View style={{ marginTop: space.xxl }}>
+              <Marker>Your rating</Marker>
+              <View style={{ marginTop: space.md }}>
+                <StarRating
+                  value={selected.userRating}
+                  onChange={(rating) => {
+                    setRating(selected.id, rating);
+                    setSelected({ ...selected, userRating: rating });
+                  }}
+                />
+              </View>
             </View>
           </View>
         ) : null}

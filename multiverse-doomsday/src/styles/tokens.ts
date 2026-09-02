@@ -1,17 +1,20 @@
+import { Platform } from 'react-native';
+
 /**
- * The app's design system, in one file.
+ * The design language, in one file.
  *
- * Everything visual that is not a colour lives here: one spacing scale, one
- * radius scale, one type ramp, one set of motion durations. Screens compose
- * these instead of inventing their own numbers, which is what keeps the app
- * reading as a single surface rather than five separately-designed ones.
+ * The app is deliberately *editorial* rather than card-based: content sits on
+ * the canvas separated by hairlines and space, not boxed in bordered panels.
+ * Panels are the exception, not the default. That is the single decision that
+ * gives every screen its density and its calm.
  *
- * Colours are deliberately absent — those come from usePalette(), because they
- * change with the theme and these do not.
+ * Colours are absent on purpose — those come from usePalette(), because they
+ * change with the theme and none of this does.
  */
 
 /** 4pt base. Only these values should appear as padding, margin or gap. */
 export const space = {
+  xxs: 2,
   xs: 4,
   sm: 8,
   md: 12,
@@ -19,46 +22,73 @@ export const space = {
   xl: 20,
   xxl: 28,
   xxxl: 40,
+  huge: 56,
 } as const;
 
-/** Screens share one horizontal gutter. Nothing sits closer to the edge. */
-export const GUTTER = space.xl;
+/** One horizontal gutter for the whole app. Nothing sits closer to the edge. */
+export const GUTTER = 22;
 
+/** Panels are rare, so there are only three radii and one of them is a pill. */
 export const radius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 20,
-  xxl: 28,
+  sm: 6,
+  md: 10,
+  lg: 14,
+  xl: 18,
   pill: 999,
 } as const;
 
+/** A real hairline, not a 1pt line pretending to be one. */
+export const HAIRLINE = Platform.select({ ios: 0.5, default: 0.7 }) as number;
+
 /**
- * Type ramp. `size`/`lineHeight` pairs are fixed together so vertical rhythm
- * survives a font change; `tracking` is widened only as text gets smaller,
- * which is the one place letter-spacing earns its keep.
+ * Numerals are tabular everywhere they appear in a column or tick over —
+ * countdowns, scores, runtimes. Proportional digits jitter as they change.
+ */
+export const numeric = {
+  fontVariant: ['tabular-nums' as const],
+} as const;
+
+/**
+ * Type ramp.
+ *
+ * The jump from `display` to `body` is deliberately violent: one enormous
+ * thing per screen and everything else quiet. That contrast is what makes a
+ * layout with no boxes still read as organised.
  */
 export const type = {
-  /** Screen title. One per screen, never two. */
-  display: { fontSize: 27, lineHeight: 32, fontWeight: '900', letterSpacing: -0.5 },
-  title: { fontSize: 22, lineHeight: 27, fontWeight: '800', letterSpacing: -0.3 },
-  heading: { fontSize: 17, lineHeight: 22, fontWeight: '700', letterSpacing: -0.1 },
-  body: { fontSize: 14, lineHeight: 20, fontWeight: '400', letterSpacing: 0 },
-  bodyStrong: { fontSize: 14, lineHeight: 20, fontWeight: '700', letterSpacing: 0 },
-  small: { fontSize: 12, lineHeight: 17, fontWeight: '500', letterSpacing: 0 },
-  /** Section labels and metadata. Always uppercase where it is used. */
-  label: { fontSize: 10, lineHeight: 13, fontWeight: '700', letterSpacing: 1.8 },
+  /** The one big number or word on a screen. */
+  hero: { fontSize: 64, lineHeight: 64, fontWeight: '800' as const, letterSpacing: -3 },
+  display: { fontSize: 40, lineHeight: 42, fontWeight: '800' as const, letterSpacing: -1.6 },
+  title: { fontSize: 25, lineHeight: 29, fontWeight: '700' as const, letterSpacing: -0.7 },
+  heading: { fontSize: 17, lineHeight: 22, fontWeight: '600' as const, letterSpacing: -0.3 },
+  body: { fontSize: 14, lineHeight: 20, fontWeight: '400' as const, letterSpacing: 0 },
+  bodyStrong: { fontSize: 14, lineHeight: 20, fontWeight: '600' as const, letterSpacing: -0.1 },
+  small: { fontSize: 12, lineHeight: 16, fontWeight: '400' as const, letterSpacing: 0 },
+  /** Section markers. Always uppercase, always widely tracked, always faint. */
+  marker: { fontSize: 10, lineHeight: 12, fontWeight: '600' as const, letterSpacing: 2.4 },
+  /** Row indices and other quiet ordinals. */
+  ordinal: { fontSize: 11, lineHeight: 14, fontWeight: '500' as const, letterSpacing: 0.5 },
 } as const;
 
-/** Motion. Short enough to feel immediate, long enough to be followed. */
+/**
+ * Motion.
+ *
+ * Two durations do almost all the work. Lists stagger by `stagger` so a screen
+ * assembles rather than appearing, which is most of what makes it feel smooth.
+ */
 export const motion = {
-  instant: 120,
-  quick: 200,
-  base: 280,
-  slow: 420,
-  /** Stagger between siblings in a list that animates in. */
-  stagger: 45,
+  instant: 110,
+  quick: 190,
+  base: 300,
+  slow: 460,
+  cinematic: 900,
+  stagger: 38,
 } as const;
 
-/** One spring for everything that springs, so nothing feels out of family. */
-export const spring = { damping: 20, stiffness: 220, mass: 0.7 } as const;
+/** One spring, so nothing in the app feels out of family with anything else. */
+export const spring = { damping: 22, stiffness: 240, mass: 0.7 } as const;
+/** A looser one, for things that should overshoot a little. */
+export const springBouncy = { damping: 13, stiffness: 200, mass: 0.7 } as const;
+
+/** Height of the collapsing header's pinned bar, excluding the safe-area inset. */
+export const HEADER_BAR = 46;

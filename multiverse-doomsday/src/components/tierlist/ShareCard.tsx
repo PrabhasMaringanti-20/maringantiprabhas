@@ -124,7 +124,7 @@ export const ShareCard = forwardRef<View, ShareCardProps>(function ShareCard(
               <Text className="text-xs text-ink-faint">Nothing ranked yet.</Text>
             ) : (
               topTier.slice(0, 4).map((movie) => (
-                <Poster key={movie.id} movie={movie} width={72} rounded="rounded-lg" />
+                <Poster key={movie.id} movie={movie} width={72} round={10} />
               ))
             )}
           </View>

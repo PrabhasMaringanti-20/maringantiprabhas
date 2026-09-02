@@ -89,7 +89,7 @@ export function DraggableItem({
     <GestureDetector gesture={Gesture.Exclusive(pan, tap)}>
       <Animated.View style={animatedStyle} accessibilityLabel={`${movie.title} tier tile`}>
         <View className="items-center" style={{ width: TILE_WIDTH }}>
-          <Poster movie={movie} width={TILE_WIDTH} rounded="rounded-lg" />
+          <Poster movie={movie} width={TILE_WIDTH} round={10} />
         </View>
       </Animated.View>
     </GestureDetector>

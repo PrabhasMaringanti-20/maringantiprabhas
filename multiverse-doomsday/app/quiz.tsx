@@ -7,7 +7,7 @@ import Animated, { FadeIn, FadeInDown, FadeOut } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CustomButton } from '@/components/common/CustomButton';
-import { Surface } from '@/components/common/Surface';
+import { Marker, Meter, Rule } from '@/components/common/Primitives';
 import { usePalette } from '@/hooks/useTheme';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { buildRound, gradeLabel, type QuizQuestion } from '@/utils/quiz';
@@ -93,9 +93,7 @@ export default function QuizScreen() {
           entering={FadeInDown.duration(motion.slow)}
           style={{ flex: 1, justifyContent: 'center', paddingHorizontal: GUTTER }}
         >
-          <Text style={{ ...type.label, color: palette.inkFaint, textTransform: 'uppercase' }}>
-            Round complete
-          </Text>
+          <Marker>Round complete</Marker>
 
           <Text
             style={{
@@ -151,26 +149,11 @@ export default function QuizScreen() {
       {/* Progress + close */}
       <View style={{ paddingHorizontal: GUTTER, flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1, marginRight: space.md }}>
-          <Text style={{ ...type.label, color: palette.inkFaint, textTransform: 'uppercase' }}>
-            {index + 1} of {round.length} · {score} right
-          </Text>
-          <View
-            style={{
-              height: 4,
-              borderRadius: radius.pill,
-              backgroundColor: palette.line,
-              marginTop: space.sm,
-              overflow: 'hidden',
-            }}
-          >
-            <View
-              style={{
-                height: '100%',
-                width: `${Math.round(progress * 100)}%`,
-                backgroundColor: palette.accent,
-                borderRadius: radius.pill,
-              }}
-            />
+          <Marker>
+            {`${index + 1} of ${round.length} · ${score} right`}
+          </Marker>
+          <View style={{ marginTop: space.sm }}>
+            <Meter value={progress * 100} />
           </View>
         </View>
         {closeButton}
@@ -247,9 +230,13 @@ export default function QuizScreen() {
 
           {phase === 'answered' ? (
             <Animated.View entering={FadeInDown.duration(motion.base)} exiting={FadeOut}>
-              <Surface tone="raised" style={{ marginTop: space.xl }}>
-                <Text style={{ ...type.body, color: palette.inkSoft }}>{question.explanation}</Text>
-              </Surface>
+              <View style={{ marginTop: space.xl }}>
+                <Rule />
+                <Text style={{ ...type.body, color: palette.inkSoft, paddingVertical: space.lg }}>
+                  {question.explanation}
+                </Text>
+                <Rule />
+              </View>
 
               <View style={{ marginTop: space.lg }}>
                 <CustomButton

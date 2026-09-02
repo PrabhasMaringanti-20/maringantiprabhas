@@ -1,16 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as Sharing from 'expo-sharing';
-import { MotiView } from 'moti';
 import { Pressable, ScrollView, Share, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
-import { Badge } from '@/components/common/Badge';
-import { CountdownBar } from '@/components/common/CountdownBar';
-import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
+import { Ambience } from '@/components/common/Ambience';
+import { CollapsingHeader, useHeaderInset } from '@/components/common/CollapsingHeader';
 import { CustomButton } from '@/components/common/CustomButton';
+import { Marker, Rule, Section, Stat } from '@/components/common/Primitives';
 import {
   CHARACTER_CATALOGUE,
   MOVIE_CATALOGUE,
@@ -21,10 +24,13 @@ import { REMINDER_TIMES, useNotificationStore } from '@/hooks/useNotificationSto
 import { hasTmdbKey } from '@/hooks/useTMDB';
 import { usePalette, useThemeStore, type ThemeMode } from '@/hooks/useTheme';
 import { countdownLine, daysToDoomsday, quoteForDay, QUOTES } from '@/services/notifications';
-import { formatHours } from '@/utils/timeCalc';
+import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { useTabBarHeight } from '@/utils/layout';
+import { formatHoursCompact } from '@/utils/timeCalc';
 
 const PROFILE_PHOTO = require('../../assets/images/prabhas.jpg');
+
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 const INTERESTS = [
   'Secret Wars theories',
@@ -43,33 +49,12 @@ const THEME_OPTIONS: { mode: ThemeMode; label: string; icon: keyof typeof Ionico
   { mode: 'dark', label: 'Doom', icon: 'skull-outline' },
 ];
 
-function SectionTitle({ icon, label }: { icon: keyof typeof Ionicons.glyphMap; label: string }) {
-  const palette = usePalette();
-  return (
-    <View className="mb-3 flex-row items-center">
-      <Ionicons name={icon} size={14} color={palette.accent} />
-      <Text className="ml-2 text-2xs font-bold uppercase tracking-[3px] text-ink-soft">{label}</Text>
-    </View>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <View className="flex-1 items-center rounded-2xl border border-line bg-surface px-2 py-3">
-      <Text className="text-xl font-black text-ink" numberOfLines={1}>
-        {value}
-      </Text>
-      <Text className="mt-0.5 text-center text-2xs font-bold uppercase tracking-wider text-ink-faint">
-        {label}
-      </Text>
-    </View>
-  );
-}
-
 export default function IdeatorScreen() {
   const palette = usePalette();
-  const insets = useSafeAreaInsets();
+  const headerInset = useHeaderInset();
   const tabBarHeight = useTabBarHeight();
+  const scrollY = useSharedValue(0);
+
   const stats = useGlobalReadiness();
   const favourite = useFavouriteMovie();
   const mode = useThemeStore((state) => state.mode);
@@ -83,10 +68,14 @@ export default function IdeatorScreen() {
 
   const previewQuote = quoteForDay(daysToDoomsday());
 
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+
   const shareApp = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const message =
-      `I'm ${stats.percent}% Doomsday ready on Multiverse Roadmap — ` +
+      `I'm ${stats.percent}% Doomsday ready on DOOM — ` +
       `${stats.watched}/${stats.total} titles logged. Built by PRABHAS.MAN. ` +
       `Catch up before Avengers: Doomsday and let's argue theories.`;
     try {
@@ -98,136 +87,116 @@ export default function IdeatorScreen() {
   };
 
   return (
-    <View className="flex-1 bg-canvas">
-      <DoomAtmosphere particleCount={8} />
+    <View style={{ flex: 1, backgroundColor: palette.canvas }}>
+      <Ambience />
 
-      <ScrollView
+      <AnimatedScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         contentContainerStyle={{
-          paddingTop: insets.top + 8,
-          paddingBottom: tabBarHeight + 24,
+          paddingTop: headerInset,
+          paddingBottom: tabBarHeight + space.xl,
         }}
         showsVerticalScrollIndicator={false}
       >
-        <View className="px-5 pb-4">
-          <Text className="text-2xs font-semibold uppercase tracking-[3px] text-ink-faint">
-            Ideator
-          </Text>
-          <Text className="mt-1.5 text-[27px] font-black leading-8 tracking-tight text-ink">
-            The one behind it
-          </Text>
-        </View>
-
-        {/* Identity card */}
-        <View className="px-5">
-          <MotiView
-            from={{ opacity: 0, translateY: 14 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{ type: 'timing', duration: 500 }}
-          >
-            <LinearGradient
-              colors={palette.gradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
+        {/* Identity — photo and words on the page, not in a gradient card */}
+        <Animated.View
+          entering={FadeInDown.duration(motion.slow)}
+          style={{ paddingHorizontal: GUTTER }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View
               style={{
-                borderRadius: 24,
+                width: 76,
+                height: 76,
+                borderRadius: radius.pill,
                 overflow: 'hidden',
-                borderWidth: 1,
-                borderColor: palette.line,
+                backgroundColor: palette.raised,
               }}
             >
-              <View className="items-center px-5 py-7">
-                <View
-                  style={{
-                    width: 96,
-                    height: 96,
-                    borderRadius: 48,
-                    borderWidth: 2,
-                    borderColor: palette.accent,
-                    overflow: 'hidden',
-                    backgroundColor: palette.raised,
-                  }}
-                >
-                  <Image
-                    source={PROFILE_PHOTO}
-                    style={{ width: '100%', height: '100%' }}
-                    contentFit="cover"
-                    transition={200}
-                  />
-                </View>
+              <Image
+                source={PROFILE_PHOTO}
+                style={{ width: '100%', height: '100%' }}
+                contentFit="cover"
+                transition={220}
+              />
+            </View>
 
-                <Text className="mt-4 text-2xl font-black tracking-tight text-ink">
-                  Maringanti Prabhas
-                </Text>
-                <Text className="mt-1 text-xs font-bold uppercase tracking-[3px] text-accent">
-                  Prabhas.man
-                </Text>
-
-                <Text className="mt-4 text-center text-sm leading-6 text-ink-soft">
-                  Huge Marvel fan, hopelessly addicted to superhero characters. I built this so my
-                  people can walk into Avengers: Doomsday actually ready — and so we finally have
-                  something to argue over properly.
-                </Text>
-
-                <View className="mt-5 flex-row flex-wrap justify-center gap-1.5">
-                  <Badge label="Theories" tone="accent" icon="bulb-outline" compact />
-                  <Badge label="Rumours" tone="marvel" icon="ear-outline" compact />
-                  <Badge label="Comic lore" tone="violet" icon="book-outline" compact />
-                </View>
-              </View>
-            </LinearGradient>
-          </MotiView>
-        </View>
-
-        {/* Live numbers */}
-        <View className="mt-6 px-5">
-          <SectionTitle icon="stats-chart-outline" label="Where you stand" />
-          <View className="flex-row gap-2">
-            <Stat value={`${stats.percent}%`} label="Ready" />
-            <Stat value={`${stats.watched}/${stats.total}`} label="Logged" />
-            <Stat value={formatHours(stats.minutesWatched)} label="Watched" />
+            <View style={{ flex: 1, marginLeft: space.lg }}>
+              <Text style={{ ...type.title, color: palette.ink }}>Maringanti Prabhas</Text>
+              <Marker color={palette.accent} style={{ marginTop: space.xs }}>
+                PRABHAS.MAN
+              </Marker>
+            </View>
           </View>
+
+          <Text style={{ ...type.body, color: palette.inkSoft, marginTop: space.xl }}>
+            Huge Marvel fan, hopelessly addicted to superhero characters. I built this so my people
+            can walk into Avengers: Doomsday actually ready — and so we finally have something to
+            argue over properly.
+          </Text>
+        </Animated.View>
+
+        {/* Where you stand */}
+        <Section title="Where you stand" index={1}>
+          <View style={{ flexDirection: 'row', paddingHorizontal: GUTTER }}>
+            <Stat value={`${stats.percent}%`} label="ready" />
+            <Stat value={`${stats.watched}/${stats.total}`} label="logged" />
+            <Stat value={formatHoursCompact(stats.minutesWatched)} label="watched" />
+          </View>
+
           {favourite ? (
-            <View className="mt-2 rounded-2xl border border-line bg-surface px-4 py-3">
-              <Text className="text-2xs font-bold uppercase tracking-wider text-ink-faint">
-                Your favourite so far
-              </Text>
-              <Text className="mt-0.5 text-sm font-bold text-ink" numberOfLines={1}>
-                {favourite.title}
-              </Text>
+            <View style={{ paddingHorizontal: GUTTER, marginTop: space.xl }}>
+              <Rule />
+              <View style={{ paddingVertical: space.md }}>
+                <Marker>Your favourite so far</Marker>
+                <Text
+                  style={{ ...type.bodyStrong, color: palette.ink, marginTop: space.xs }}
+                  numberOfLines={1}
+                >
+                  {favourite.title}
+                </Text>
+              </View>
+              <Rule />
             </View>
           ) : null}
-        </View>
-
-        {/* Countdown */}
-        <View className="mt-6 px-5">
-          <SectionTitle icon="hourglass-outline" label="What we're waiting for" />
-          <CountdownBar />
-        </View>
+        </Section>
 
         {/* Interests */}
-        <View className="mt-6 px-5">
-          <SectionTitle icon="chatbubbles-outline" label="Talk to me about" />
-          <View className="flex-row flex-wrap gap-2">
+        <Section title="Talk to me about" index={2}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: space.sm,
+              paddingHorizontal: GUTTER,
+            }}
+          >
             {INTERESTS.map((interest, index) => (
-              <MotiView
+              <Animated.View
                 key={interest}
-                from={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: 'timing', duration: 320, delay: index * 45 }}
+                entering={FadeIn.delay(index * motion.stagger).duration(motion.base)}
               >
-                <View className="rounded-full border border-line bg-surface px-3 py-1.5">
-                  <Text className="text-xs font-semibold text-ink-soft">{interest}</Text>
+                <View
+                  style={{
+                    borderRadius: radius.pill,
+                    borderWidth: 1,
+                    borderColor: palette.line,
+                    paddingHorizontal: space.md,
+                    paddingVertical: space.sm - 1,
+                  }}
+                >
+                  <Text style={{ ...type.small, color: palette.inkSoft }}>{interest}</Text>
                 </View>
-              </MotiView>
+              </Animated.View>
             ))}
           </View>
-        </View>
+        </Section>
 
-        {/* Daily reminders */}
-        <View className="mt-6 px-5">
-          <SectionTitle icon="notifications-outline" label="Daily reminder" />
-
-          <View className="overflow-hidden rounded-2xl border border-line bg-surface">
+        {/* Daily reminder */}
+        <Section title="Daily reminder" index={3}>
+          <View style={{ paddingHorizontal: GUTTER }}>
+            <Rule />
             <Pressable
               accessibilityRole="switch"
               accessibilityState={{ checked: remindersOn }}
@@ -236,11 +205,17 @@ export default function IdeatorScreen() {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 setRemindersEnabled(!remindersOn);
               }}
-              className="flex-row items-center justify-between px-4 py-3.5"
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: space.lg,
+              }}
             >
-              <View className="flex-1 pr-3">
-                <Text className="text-sm font-bold text-ink">A line a day, plus the count</Text>
-                <Text className="mt-0.5 text-2xs leading-4 text-ink-faint">
+              <View style={{ flex: 1, paddingRight: space.md }}>
+                <Text style={{ ...type.bodyStrong, color: palette.ink }}>
+                  A line a day, plus the count
+                </Text>
+                <Text style={{ ...type.small, color: palette.inkFaint, marginTop: 1 }}>
                   {remindersOn
                     ? `On · ${REMINDER_TIMES.find((t) => t.hour === reminderHour)?.label ?? 'daily'}`
                     : `${QUOTES.length} lines in rotation`}
@@ -248,19 +223,32 @@ export default function IdeatorScreen() {
               </View>
 
               <View
-                className={`h-6 w-11 justify-center rounded-full px-0.5 ${
-                  remindersOn ? 'bg-accent' : 'bg-surface-raised'
-                }`}
+                style={{
+                  height: 24,
+                  width: 42,
+                  borderRadius: radius.pill,
+                  padding: 2,
+                  justifyContent: 'center',
+                  backgroundColor: remindersOn ? palette.accent : palette.raised,
+                  borderWidth: remindersOn ? 0 : 1,
+                  borderColor: palette.line,
+                }}
               >
                 <View
-                  className="h-5 w-5 rounded-full bg-white"
-                  style={{ transform: [{ translateX: remindersOn ? 20 : 0 }] }}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: radius.pill,
+                    backgroundColor: remindersOn ? '#FFFFFF' : palette.inkFaint,
+                    transform: [{ translateX: remindersOn ? 18 : 0 }],
+                  }}
                 />
               </View>
             </Pressable>
+            <Rule />
 
             {remindersOn ? (
-              <View className="flex-row gap-2 border-t border-line px-4 py-3">
+              <View style={{ flexDirection: 'row', gap: space.xl, paddingVertical: space.md }}>
                 {REMINDER_TIMES.map((time) => {
                   const isActive = time.hour === reminderHour;
                   return (
@@ -273,12 +261,13 @@ export default function IdeatorScreen() {
                         Haptics.selectionAsync();
                         setReminderTime(time.hour, time.minute);
                       }}
-                      className={`flex-1 items-center rounded-xl border py-2 ${
-                        isActive ? 'border-accent bg-accent/10' : 'border-line'
-                      }`}
                     >
                       <Text
-                        className={`text-2xs font-bold ${isActive ? 'text-accent' : 'text-ink-faint'}`}
+                        style={{
+                          ...type.small,
+                          fontWeight: '600',
+                          color: isActive ? palette.accent : palette.inkFaint,
+                        }}
                       >
                         {time.label}
                       </Text>
@@ -289,35 +278,36 @@ export default function IdeatorScreen() {
             ) : null}
 
             {/* What one looks like */}
-            <View className="border-t border-line px-4 py-3">
-              <Text className="text-[13px] font-semibold leading-5 text-ink">
+            <View style={{ paddingVertical: space.lg }}>
+              <Text style={{ ...type.body, fontWeight: '600', color: palette.ink }}>
                 “{previewQuote.text}”
               </Text>
-              <Text className="mt-1 text-2xs text-ink-faint">
+              <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.xs }}>
                 {previewQuote.character} · {previewQuote.source}
               </Text>
-              <Text className="mt-1.5 text-2xs font-bold uppercase tracking-wider text-accent">
+              <Marker color={palette.accent} style={{ marginTop: space.sm }}>
                 {countdownLine(daysToDoomsday())}
-              </Text>
+              </Marker>
             </View>
+            <Rule />
+
+            <Text
+              style={{
+                ...type.small,
+                color: reminderDenied ? palette.crimson : palette.inkFaint,
+                marginTop: space.md,
+              }}
+            >
+              {reminderDenied
+                ? 'Notifications are switched off for this app. Enable them in system settings, then try again.'
+                : 'Scheduled on your device — no account, no server, works offline.'}
+            </Text>
           </View>
+        </Section>
 
-          {reminderDenied ? (
-            <Text className="mt-2 text-2xs leading-4 text-crimson">
-              Notifications are switched off for this app. Enable them in system settings, then
-              try again.
-            </Text>
-          ) : (
-            <Text className="mt-2 text-2xs leading-4 text-ink-faint">
-              Scheduled on your device — no account, no server, works offline.
-            </Text>
-          )}
-        </View>
-
-        {/* Theme */}
-        <View className="mt-6 px-5">
-          <SectionTitle icon="color-palette-outline" label="Appearance" />
-          <View className="flex-row gap-2">
+        {/* Appearance */}
+        <Section title="Appearance" index={4}>
+          <View style={{ flexDirection: 'row', gap: space.sm, paddingHorizontal: GUTTER }}>
             {THEME_OPTIONS.map((option) => {
               const isActive = mode === option.mode;
               return (
@@ -330,36 +320,37 @@ export default function IdeatorScreen() {
                     Haptics.selectionAsync();
                     setMode(option.mode);
                   }}
-                  className={`flex-1 items-center rounded-2xl border px-2 py-3 ${
-                    isActive ? 'border-accent bg-accent/10' : 'border-line bg-surface'
-                  }`}
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    paddingVertical: space.lg,
+                    borderRadius: radius.md,
+                    borderWidth: 1,
+                    borderColor: isActive ? palette.accent : palette.line,
+                    backgroundColor: isActive ? `${palette.accent}14` : 'transparent',
+                  }}
                 >
                   <Ionicons
                     name={option.icon}
-                    size={18}
+                    size={17}
                     color={isActive ? palette.accent : palette.inkFaint}
                   />
-                  <Text
-                    className={`mt-1 text-2xs font-bold uppercase tracking-wider ${
-                      isActive ? 'text-accent' : 'text-ink-faint'
-                    }`}
+                  <Marker
+                    color={isActive ? palette.accent : palette.inkFaint}
+                    style={{ marginTop: space.sm }}
                   >
                     {option.label}
-                  </Text>
+                  </Marker>
                 </Pressable>
               );
             })}
           </View>
-          <Text className="mt-2 text-2xs leading-4 text-ink-faint">
-            Doom mode runs the green smoke and drifting embers. Light mode keeps it clean for
-            daylight reading.
-          </Text>
-        </View>
+        </Section>
 
         {/* Under the hood */}
-        <View className="mt-6 px-5">
-          <SectionTitle icon="construct-outline" label="Under the hood" />
-          <View className="rounded-2xl border border-line bg-surface px-4 py-4">
+        <Section title="Under the hood" index={5}>
+          <View style={{ paddingHorizontal: GUTTER }}>
+            <Rule />
             {[
               [`${MOVIE_CATALOGUE.length} titles`, 'every film and series, in release order'],
               [`${CHARACTER_CATALOGUE.length} characters`, 'with comic-to-MCU context'],
@@ -369,41 +360,62 @@ export default function IdeatorScreen() {
                 hasTmdbKey ? 'live posters and streaming links' : 'add one for posters + streaming',
               ],
             ].map(([title, subtitle]) => (
-              <View key={title} className="flex-row items-start py-1.5">
-                <View className="mt-1.5 h-1 w-1 rounded-full bg-accent" />
-                <View className="ml-3 flex-1">
-                  <Text className="text-sm font-bold text-ink">{title}</Text>
-                  <Text className="text-xs text-ink-faint">{subtitle}</Text>
+              <View key={title}>
+                <View style={{ paddingVertical: space.md }}>
+                  <Text style={{ ...type.bodyStrong, color: palette.ink }}>{title}</Text>
+                  <Text style={{ ...type.small, color: palette.inkFaint, marginTop: 1 }}>
+                    {subtitle}
+                  </Text>
                 </View>
+                <Rule />
               </View>
             ))}
           </View>
-        </View>
+        </Section>
 
         {/* Share */}
-        <View className="mt-6 px-5">
+        <View style={{ paddingHorizontal: GUTTER, marginTop: space.xxl }}>
           <CustomButton
             label="Share your readiness"
             icon="share-social-outline"
+            size="lg"
             onPress={shareApp}
             fullWidth
           />
         </View>
 
-        <View className="mt-8 items-center px-8">
-          <Text className="text-2xs font-bold uppercase tracking-[4px] text-ink-faint">
-            Created by
-          </Text>
-          <Text className="mt-1 text-sm font-black uppercase tracking-[3px] text-ink">
-            Prabhas.man
+        <View style={{ alignItems: 'center', paddingHorizontal: space.xxxl, marginTop: space.huge }}>
+          <Marker>Created by</Marker>
+          <Text
+            style={{
+              ...type.heading,
+              color: palette.ink,
+              letterSpacing: 3,
+              marginTop: space.sm,
+            }}
+          >
+            PRABHAS.MAN
           </Text>
 
           {/* Required by TMDB's terms of use whenever their API is used. */}
-          <Text className="mt-5 text-center text-2xs leading-4 text-ink-faint">
+          <Text
+            style={{
+              ...type.small,
+              color: palette.inkFaint,
+              textAlign: 'center',
+              marginTop: space.xxl,
+            }}
+          >
             This product uses the TMDB API but is not endorsed or certified by TMDB.
           </Text>
         </View>
-      </ScrollView>
+      </AnimatedScrollView>
+
+      <CollapsingHeader
+        scrollY={scrollY}
+        title="Ideator"
+        large={{ eyebrow: 'Ideator', title: 'The one behind it' }}
+      />
     </View>
   );
 }

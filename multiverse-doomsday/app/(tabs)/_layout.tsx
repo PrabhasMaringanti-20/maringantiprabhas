@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePalette } from '@/hooks/useTheme';
+import { HAIRLINE, type } from '@/styles/tokens';
 import { TAB_BAR_BASE } from '@/utils/layout';
 
 export default function TabsLayout() {
@@ -19,16 +20,16 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: palette.surface,
           borderTopColor: palette.line,
-          borderTopWidth: 1,
+          borderTopWidth: HAIRLINE,
           height: TAB_BAR_BASE + insets.bottom,
           paddingTop: 6,
           paddingBottom: insets.bottom,
           elevation: 0,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
-          fontWeight: '700',
-          letterSpacing: 0.3,
+          ...type.marker,
+          letterSpacing: 0.8,
+          textTransform: 'uppercase',
         },
       }}
     >
@@ -37,7 +38,7 @@ export default function TabsLayout() {
         options={{
           title: 'Roadmap',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="git-branch-outline" size={size ?? 21} color={color} />
+            <Ionicons name="git-branch-outline" size={19} color={color} />
           ),
         }}
       />
@@ -46,7 +47,7 @@ export default function TabsLayout() {
         options={{
           title: 'Vault',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people-outline" size={size ?? 21} color={color} />
+            <Ionicons name="people-outline" size={19} color={color} />
           ),
         }}
       />
@@ -55,7 +56,7 @@ export default function TabsLayout() {
         options={{
           title: 'Tiers',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="trophy-outline" size={size ?? 21} color={color} />
+            <Ionicons name="trophy-outline" size={19} color={color} />
           ),
         }}
       />
@@ -64,7 +65,7 @@ export default function TabsLayout() {
         options={{
           title: 'Prep',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="stats-chart-outline" size={size ?? 21} color={color} />
+            <Ionicons name="stats-chart-outline" size={19} color={color} />
           ),
         }}
       />
@@ -73,7 +74,7 @@ export default function TabsLayout() {
         options={{
           title: 'Ideator',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="sparkles-outline" size={size ?? 21} color={color} />
+            <Ionicons name="sparkles-outline" size={19} color={color} />
           ),
         }}
       />

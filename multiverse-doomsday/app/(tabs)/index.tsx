@@ -3,33 +3,39 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Pressable, SectionList, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { MotiView } from 'moti';
-
-import { DoomAtmosphere } from '@/components/common/DoomAtmosphere';
-import { ScreenHeader } from '@/components/common/ScreenHeader';
-import { Surface } from '@/components/common/Surface';
-import { MovieRow, type RowStatus } from '@/components/roadmap/MovieRow';
-import { RoadmapSummary } from '@/components/roadmap/RoadmapSummary';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
+import { CollapsingHeader, useHeaderInset } from '@/components/common/CollapsingHeader';
+import { Ambience } from '@/components/common/Ambience';
+import { Empty, Marker, Panel } from '@/components/common/Primitives';
+import { CountdownHero } from '@/components/roadmap/CountdownHero';
+import { TitleLine, type LineStatus } from '@/components/roadmap/TitleLine';
 import { CHARACTER_CATALOGUE, usePathMovies, useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { usePalette } from '@/hooks/useTheme';
-import { GUTTER, radius, space, type } from '@/styles/tokens';
+import { GUTTER, HAIRLINE, space, type } from '@/styles/tokens';
 import { useTabBarHeight } from '@/utils/layout';
 import { computeReadiness } from '@/utils/timeCalc';
 import type { MovieItem } from '@/types';
 
+const AnimatedSectionList = Animated.createAnimatedComponent(
+  SectionList<MovieItem, PhaseSection>,
+);
+
 interface PhaseSection {
   title: string;
   watched: number;
+  offset: number;
   data: MovieItem[];
 }
 
 export default function RoadmapScreen() {
   const palette = usePalette();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
+  const headerInset = useHeaderInset(false);
   const tabBarHeight = useTabBarHeight();
+  const scrollY = useSharedValue(0);
 
   const movies = usePathMovies();
   const toggleWatched = useRoadmapStore((state) => state.toggleWatched);
@@ -42,15 +48,20 @@ export default function RoadmapScreen() {
     ? CHARACTER_CATALOGUE.find((character) => character.id === characterFilterId)
     : undefined;
 
-  // Release order is still release order — the phase headings only give a
-  // 68-entry feed something to hold on to while scrolling.
+  // Release order stays release order; the phase markers only give a long
+  // scroll something to hold on to. `offset` keeps numbering continuous.
   const sections = useMemo<PhaseSection[]>(() => {
     const out: PhaseSection[] = [];
+    let running = 0;
     for (const movie of movies) {
       const title = typeof movie.phase === 'number' ? `Phase ${movie.phase}` : String(movie.phase);
       const last = out[out.length - 1];
-      if (last && last.title === title) last.data.push(movie);
-      else out.push({ title, watched: 0, data: [movie] });
+      if (last && last.title === title) {
+        last.data.push(movie);
+      } else {
+        out.push({ title, watched: 0, offset: running, data: [movie] });
+      }
+      running += 1;
     }
     for (const section of out) {
       section.watched = section.data.filter((movie) => movie.isWatched).length;
@@ -59,72 +70,58 @@ export default function RoadmapScreen() {
   }, [movies]);
 
   const nextUpId = stats.nextUp?.id;
-  const statusFor = (movie: MovieItem): RowStatus => {
-    if (movie.isWatched) return 'completed';
-    return movie.id === nextUpId ? 'next' : 'upcoming';
-  };
+  const statusFor = (movie: MovieItem): LineStatus =>
+    movie.isWatched ? 'completed' : movie.id === nextUpId ? 'next' : 'upcoming';
 
-  const openMovie = (movie: MovieItem) => {
-    router.push({ pathname: '/movie/[id]', params: { id: movie.id } });
-  };
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
 
-  // Hold the feed until AsyncStorage has been read, so progress does not
-  // flash empty before the real numbers arrive.
   if (!hydrated) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.canvas }}>
-        <MotiView
-          from={{ opacity: 0.35, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: 'timing', duration: 900, loop: true }}
-        >
-          <Ionicons name="planet" size={40} color={palette.accent} />
-        </MotiView>
-        <Text style={{ ...type.label, color: palette.inkSoft, marginTop: space.lg, textTransform: 'uppercase' }}>
-          Restoring your timeline
-        </Text>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: palette.canvas,
+        }}
+      >
+        <Marker>Restoring your timeline</Marker>
       </View>
     );
   }
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.canvas }}>
-      <DoomAtmosphere />
+      <Ambience />
 
-      <SectionList
+      <AnimatedSectionList
         sections={sections}
         keyExtractor={(movie) => movie.id}
         stickySectionHeadersEnabled
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         contentContainerStyle={{
-          paddingTop: insets.top + space.sm,
+          paddingTop: headerInset,
           paddingBottom: tabBarHeight + space.xl,
         }}
         showsVerticalScrollIndicator={false}
-        initialNumToRender={10}
+        initialNumToRender={12}
         windowSize={11}
         ListHeaderComponent={
-          <View>
-            <ScreenHeader eyebrow="Multiverse roadmap" title="Guide to Doomsday" />
-
-            <View style={{ paddingHorizontal: GUTTER }}>
-              <RoadmapSummary stats={stats} />
-            </View>
+          <View style={{ paddingBottom: space.sm }}>
+            <CountdownHero stats={stats} />
 
             {filterCharacter ? (
-              <View style={{ paddingHorizontal: GUTTER, marginTop: space.md }}>
-                <Surface
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    borderColor: `${palette.accent}66`,
-                    backgroundColor: `${palette.accent}14`,
-                  }}
-                >
+              <View style={{ paddingHorizontal: GUTTER, marginTop: space.xl }}>
+                <Panel tint={palette.accent} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flex: 1, paddingRight: space.md }}>
-                    <Text style={{ ...type.label, color: palette.accent, textTransform: 'uppercase' }}>
-                      Filtered by character
-                    </Text>
-                    <Text style={{ ...type.bodyStrong, color: palette.ink, marginTop: 2 }} numberOfLines={1}>
+                    <Marker color={palette.accent}>Filtered by character</Marker>
+                    <Text
+                      style={{ ...type.bodyStrong, color: palette.ink, marginTop: space.xs }}
+                      numberOfLines={1}
+                    >
                       {filterCharacter.alias} — {movies.length} appearance
                       {movies.length === 1 ? '' : 's'}
                     </Text>
@@ -140,72 +137,45 @@ export default function RoadmapScreen() {
                   >
                     <Ionicons name="close-circle" size={22} color={palette.accent} />
                   </Pressable>
-                </Surface>
+                </Panel>
               </View>
             ) : null}
-
-            <View style={{ height: space.lg }} />
           </View>
         }
-        renderSectionHeader={({ section }) => {
-          const { title, watched, data } = section as PhaseSection;
-          return (
+        renderSectionHeader={({ section }) => (
+          <View style={{ backgroundColor: palette.canvas }}>
             <View
               style={{
-                paddingHorizontal: GUTTER,
-                paddingTop: space.md,
-                paddingBottom: space.sm,
-                backgroundColor: palette.canvas,
                 flexDirection: 'row',
                 alignItems: 'center',
+                paddingHorizontal: GUTTER,
+                paddingTop: space.xl,
+                paddingBottom: space.sm,
               }}
             >
-              <Text style={{ ...type.label, color: palette.inkSoft, textTransform: 'uppercase', flex: 1 }}>
-                {title}
-              </Text>
-              <View
-                style={{
-                  paddingHorizontal: space.sm,
-                  paddingVertical: 2,
-                  borderRadius: radius.pill,
-                  backgroundColor: palette.raised,
-                  borderWidth: 1,
-                  borderColor: palette.line,
-                }}
+              <Marker style={{ flex: 1 }}>{section.title}</Marker>
+              <Text
+                style={{ ...type.ordinal, color: palette.inkFaint, fontVariant: ['tabular-nums'] }}
               >
-                <Text style={{ ...type.label, color: palette.inkFaint }}>
-                  {watched}/{data.length}
-                </Text>
-              </View>
+                {section.watched}/{section.data.length}
+              </Text>
             </View>
-          );
-        }}
-        renderItem={({ item, index, section }) => {
-          // Numbering runs across the whole feed, not per section.
-          const offset = sections
-            .slice(0, sections.indexOf(section as PhaseSection))
-            .reduce((sum, s) => sum + s.data.length, 0);
-          return (
-            <View style={{ paddingHorizontal: GUTTER, paddingBottom: space.sm }}>
-              <MovieRow
-                movie={item}
-                index={offset + index}
-                status={statusFor(item)}
-                onPress={openMovie}
-                onToggleWatched={(movie) => toggleWatched(movie.id)}
-              />
-            </View>
-          );
-        }}
-        ListEmptyComponent={
-          <View style={{ alignItems: 'center', paddingHorizontal: space.xxxl, paddingVertical: 64 }}>
-            <Ionicons name="planet-outline" size={40} color={palette.line} />
-            <Text style={{ ...type.body, color: palette.inkSoft, marginTop: space.md, textAlign: 'center' }}>
-              Nothing matches that filter.
-            </Text>
+            <View style={{ height: HAIRLINE, backgroundColor: palette.line }} />
           </View>
-        }
+        )}
+        renderItem={({ item, index, section }) => (
+          <TitleLine
+            movie={item}
+            index={section.offset + index}
+            status={statusFor(item)}
+            onPress={(movie) => router.push({ pathname: '/movie/[id]', params: { id: movie.id } })}
+            onToggleWatched={(movie) => toggleWatched(movie.id)}
+          />
+        )}
+        ListEmptyComponent={<Empty icon="planet-outline">Nothing matches that filter.</Empty>}
       />
+
+      <CollapsingHeader scrollY={scrollY} title="Guide to Doomsday" />
     </View>
   );
 }

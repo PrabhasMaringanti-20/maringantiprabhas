@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, type ViewStyle } from 'react-native';
 
+import { usePalette } from '@/hooks/useTheme';
+import { GUTTER, radius, space, type } from '@/styles/tokens';
 import type { MovieItem, Tier } from '@/types';
 
 export type DropTarget = Tier | 'unranked';
@@ -19,7 +21,7 @@ interface MeasuredDropZoneProps {
   /** Absolute window Y range, re-reported whenever `measureToken` changes. */
   onMeasure: (target: DropTarget, top: number, bottom: number) => void;
   measureToken: number;
-  className?: string;
+  style?: ViewStyle;
   children: React.ReactNode;
 }
 
@@ -31,7 +33,7 @@ export function MeasuredDropZone({
   target,
   onMeasure,
   measureToken,
-  className,
+  style,
   children,
 }: MeasuredDropZoneProps) {
   const ref = useRef<View>(null);
@@ -45,7 +47,7 @@ export function MeasuredDropZone({
   useEffect(measure, [measureToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <View ref={ref} onLayout={measure} className={className}>
+    <View ref={ref} onLayout={measure} style={style}>
       {children}
     </View>
   );
@@ -68,26 +70,54 @@ export function TierRow({
   measureToken,
   isDropTarget = false,
 }: TierRowProps) {
-  const style = TIER_STYLE[tier];
+  const palette = usePalette();
+  const hex = TIER_STYLE[tier].hex;
 
   return (
     <MeasuredDropZone
       target={tier}
       onMeasure={onMeasure}
       measureToken={measureToken}
-      className={`mb-2 flex-row overflow-hidden rounded-2xl border bg-surface ${
-        isDropTarget ? 'border-accent' : 'border-line'
-      }`}
+      style={{
+        paddingHorizontal: GUTTER,
+        paddingVertical: space.md,
+        backgroundColor: isDropTarget ? `${palette.accent}14` : 'transparent',
+      }}
     >
-      <View className="w-14 items-center justify-center" style={{ backgroundColor: style.hex }}>
-        <Text className="text-2xl font-black text-white">{tier}</Text>
-        <Text className="text-2xs font-bold text-white opacity-80">{movies.length}</Text>
+      {/* The tier letter is a label with a coloured rule under it, not a
+          filled block — five saturated slabs down the page were the loudest
+          thing in the app. */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: space.sm }}>
+        <Text style={{ ...type.heading, color: hex, width: 18 }}>{tier}</Text>
+        <View
+          style={{
+            flex: 1,
+            height: 2,
+            borderRadius: radius.pill,
+            backgroundColor: hex,
+            opacity: 0.4,
+            marginHorizontal: space.md,
+          }}
+        />
+        <Text
+          style={{ ...type.ordinal, color: palette.inkFaint, fontVariant: ['tabular-nums'] }}
+        >
+          {movies.length}
+        </Text>
       </View>
 
-      <View className="min-h-[92px] flex-1 flex-row flex-wrap items-center gap-2 p-2.5">
+      <View
+        style={{
+          minHeight: 78,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: space.sm,
+        }}
+      >
         {movies.length === 0 ? (
-          <Text className="px-1 text-xs text-ink-faint">
-            Drop a poster here — or tap one and pick {tier}.
+          <Text style={{ ...type.small, color: palette.inkFaint }}>
+            Drop a poster here, or tap one and pick {tier}.
           </Text>
         ) : (
           children

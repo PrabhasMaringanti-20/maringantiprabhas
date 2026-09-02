@@ -1,5 +1,4 @@
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
@@ -14,7 +13,8 @@ interface PosterProps {
   width: number;
   /** Poster aspect is 2:3; override for square thumbnails. */
   aspectRatio?: number;
-  rounded?: string;
+  /** Corner radius. Defaults to the small radius used across the app. */
+  round?: number;
   /** Skip the network call for dense lists that already show a title. */
   disableFetch?: boolean;
   /** Hide the title plate — used where the title already sits alongside. */
@@ -34,13 +34,7 @@ function acronym(title: string): string {
     .join('');
 }
 
-/** Each era gets its own tint, so a scrolled feed reads as a spectrum. */
-function eraTint(phase: number | string, palette: ReturnType<typeof usePalette>): string {
-  if (typeof phase === 'string') return palette.violet;
-  if (phase <= 3) return palette.marvel;
-  if (phase <= 5) return palette.accent;
-  return palette.crimson;
-}
+
 
 /**
  * Poster art, in order of preference:
@@ -55,7 +49,7 @@ export function Poster({
   movie,
   width,
   aspectRatio = 2 / 3,
-  rounded = 'rounded-xl',
+  round = 6,
   disableFetch = false,
   hideCaption = false,
 }: PosterProps) {
@@ -65,7 +59,6 @@ export function Poster({
   const bundled = localPoster(movie.id);
   const height = width / aspectRatio;
   const isNarrow = width < 76;
-  const tint = eraTint(movie.phase, palette);
 
   // A poster URL that 404s used to leave an empty rectangle; fall through to
   // the typographic card instead.
@@ -75,8 +68,15 @@ export function Poster({
   if ((remoteUri && !failed) || bundled) {
     return (
       <View
-        className={`overflow-hidden border border-line bg-surface-raised ${rounded}`}
-        style={{ width, height }}
+        style={{
+          width,
+          height,
+          borderRadius: round,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: palette.line,
+          backgroundColor: palette.raised,
+        }}
       >
         <Image
           source={remoteUri && !failed ? { uri: remoteUri } : bundled}
@@ -90,39 +90,52 @@ export function Poster({
     );
   }
 
+  // The placeholder stands in for artwork that has not loaded — it should read
+  // as an absence, not as a design element. An earlier version set the acronym
+  // in era-tinted colour at 30% of the tile width, which made a feed of
+  // unloaded posters louder than one full of real ones.
   return (
     <View
-      className={`overflow-hidden border border-line ${rounded}`}
-      style={{ width, height }}
+      style={{
+        width,
+        height,
+        borderRadius: round,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: palette.line,
+        backgroundColor: palette.raised,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 4,
+      }}
     >
-      <LinearGradient
-        colors={[`${tint}${palette.isDark ? '2E' : '1A'}`, palette.raised, palette.surface]}
-        locations={[0, 0.55, 1]}
-        start={{ x: 0.1, y: 0 }}
-        end={{ x: 0.9, y: 1 }}
-        style={{ flex: 1 }}
+      <Text
+        style={{
+          fontSize: Math.max(9, Math.min(13, width * 0.24)),
+          fontWeight: '700',
+          letterSpacing: 0.4,
+          color: palette.inkFaint,
+        }}
+        numberOfLines={1}
       >
-        <View className="flex-1 items-center justify-center px-1.5">
-          <Text
-            className="font-black tracking-tight"
-            style={{ fontSize: Math.max(15, width * 0.3), color: tint }}
-            numberOfLines={1}
-          >
-            {acronym(movie.title)}
-          </Text>
+        {acronym(movie.title)}
+      </Text>
 
-          {!isNarrow && !hideCaption ? (
-            <Text
-              className="mt-1.5 text-center text-[10px] font-bold uppercase leading-tight tracking-wide text-ink-soft"
-              numberOfLines={3}
-            >
-              {movie.title}
-            </Text>
-          ) : null}
-
-          <Text className="mt-1 text-2xs font-bold text-ink-faint">{movie.releaseYear}</Text>
-        </View>
-      </LinearGradient>
+      {!isNarrow && !hideCaption ? (
+        <Text
+          style={{
+            marginTop: 4,
+            fontSize: 9,
+            lineHeight: 12,
+            fontWeight: '500',
+            textAlign: 'center',
+            color: palette.inkFaint,
+          }}
+          numberOfLines={3}
+        >
+          {movie.title}
+        </Text>
+      ) : null}
     </View>
   );
 }

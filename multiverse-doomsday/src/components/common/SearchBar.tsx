@@ -2,7 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Pressable, TextInput, View } from 'react-native';
 
+import { Rule } from '@/components/common/Primitives';
 import { usePalette } from '@/hooks/useTheme';
+import { space, type } from '@/styles/tokens';
 
 interface SearchBarProps {
   value: string;
@@ -11,6 +13,7 @@ interface SearchBarProps {
   autoFocus?: boolean;
 }
 
+/** An underlined field rather than a boxed one, to match the editorial layout. */
 export function SearchBar({
   value,
   onChangeText,
@@ -20,34 +23,44 @@ export function SearchBar({
   const palette = usePalette();
 
   return (
-    <View className="flex-row items-center rounded-2xl border border-line bg-surface px-3 py-2.5">
-      <Ionicons name="search" size={16} color={palette.inkFaint} />
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={palette.inkFaint}
-        autoFocus={autoFocus}
-        autoCorrect={false}
-        autoCapitalize="none"
-        returnKeyType="search"
-        clearButtonMode="never"
-        className="ml-2 flex-1 p-0 text-[15px] text-ink"
-        accessibilityLabel={placeholder}
-      />
-      {value.length > 0 ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Clear search"
-          hitSlop={10}
-          onPress={() => {
-            Haptics.selectionAsync();
-            onChangeText('');
+    <View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: space.sm }}>
+        <Ionicons name="search" size={15} color={palette.inkFaint} />
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor={palette.inkFaint}
+          autoFocus={autoFocus}
+          autoCorrect={false}
+          autoCapitalize="none"
+          returnKeyType="search"
+          clearButtonMode="never"
+          accessibilityLabel={placeholder}
+          style={{
+            flex: 1,
+            marginLeft: space.sm,
+            padding: 0,
+            ...type.body,
+            fontSize: 15,
+            color: palette.ink,
           }}
-        >
-          <Ionicons name="close-circle" size={18} color={palette.inkFaint} />
-        </Pressable>
-      ) : null}
+        />
+        {value.length > 0 ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Clear search"
+            hitSlop={10}
+            onPress={() => {
+              Haptics.selectionAsync();
+              onChangeText('');
+            }}
+          >
+            <Ionicons name="close-circle" size={17} color={palette.inkFaint} />
+          </Pressable>
+        ) : null}
+      </View>
+      <Rule />
     </View>
   );
 }
