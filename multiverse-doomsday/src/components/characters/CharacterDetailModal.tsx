@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
 
 import { BottomSheet } from '@/components/common/BottomSheet';
 import { CustomButton } from '@/components/common/CustomButton';
@@ -23,11 +23,12 @@ interface CharacterDetailModalProps {
 }
 
 /**
- * Portraits are 2:3. At the sheet's full width a short crop window shows only
- * the top of the image — which for most of these is hair and shoulders, not a
- * face — so the window is tall enough to include the head at any framing.
+ * Portraits are 300x450 and are already tight head-and-shoulders crops, so at
+ * the sheet's full width the image scales up a long way. A short window cut
+ * chins off; 460 is the point at which every portrait in the set shows a whole
+ * face, capped on short screens so the sheet still has room for content.
  */
-const ART_HEIGHT = 360;
+const ART_MAX = 460;
 
 /**
  * Character sheet.
@@ -47,6 +48,7 @@ export function CharacterDetailModal({
   onShowAppearances,
 }: CharacterDetailModalProps) {
   const palette = usePalette();
+  const { height: windowHeight } = useWindowDimensions();
   const appearances = useCharacterAppearances(character ?? undefined);
   const portrait = character ? characterPortrait(character.id) : undefined;
   const actorProfile = useActorProfile(!character || portrait ? undefined : character.actor);
@@ -56,6 +58,7 @@ export function CharacterDetailModal({
   const accent = AFFILIATION_ACCENT[character.affiliation];
   const gradient = AFFILIATION_GRADIENT[character.affiliation];
   const actorUri = portrait ? null : profileUrl(actorProfile);
+  const artHeight = Math.min(ART_MAX, Math.round(windowHeight * 0.55));
 
   const fact = (label: string, value: string) => (
     <View style={{ flex: 1 }}>
@@ -73,7 +76,7 @@ export function CharacterDetailModal({
     <BottomSheet visible={visible} onClose={onClose}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: space.xxxl }}>
         {/* Portrait */}
-        <View style={{ height: ART_HEIGHT, backgroundColor: palette.raised }}>
+        <View style={{ height: artHeight, backgroundColor: palette.raised }}>
           {portrait ? (
             <Image
               source={portrait}
@@ -97,16 +100,16 @@ export function CharacterDetailModal({
               end={{ x: 0.9, y: 1 }}
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
             >
-              <Text style={{ fontSize: 68, fontWeight: '800', color: '#FFFFFF', opacity: 0.9 }}>
+              <Text style={{ fontSize: 56, fontWeight: '700', color: palette.inkFaint }}>
                 {initialsFor(character)}
               </Text>
             </LinearGradient>
           )}
 
           <LinearGradient
-            colors={['transparent', `${palette.surface}D9`, palette.surface]}
-            locations={[0, 0.62, 1]}
-            style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: ART_HEIGHT * 0.7 }}
+            colors={['transparent', `${palette.surface}CC`, palette.surface]}
+            locations={[0, 0.55, 1]}
+            style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: artHeight * 0.45 }}
           />
 
           <View style={{ position: 'absolute', left: GUTTER, right: GUTTER, bottom: space.md }}>

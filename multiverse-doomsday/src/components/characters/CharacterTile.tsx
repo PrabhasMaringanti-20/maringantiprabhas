@@ -14,12 +14,7 @@ import { characterPortrait } from '@/data/characterImages';
 import { useActorProfile } from '@/hooks/useTMDB';
 import { usePalette } from '@/hooks/useTheme';
 import { motion, radius, space, spring, type } from '@/styles/tokens';
-import {
-  AFFILIATION_ACCENT,
-  AFFILIATION_GRADIENT,
-  initialsFor,
-  profileUrl,
-} from '@/utils/imageHelper';
+import { AFFILIATION_ACCENT, initialsFor, profileUrl } from '@/utils/imageHelper';
 import type { CharacterStatus, MarvelCharacter } from '@/types';
 
 export const STATUS_COLOR: Record<CharacterStatus, string> = {
@@ -57,7 +52,6 @@ interface CharacterTileProps {
 export function CharacterTile({ character, width, onPress }: CharacterTileProps) {
   const palette = usePalette();
   const accent = AFFILIATION_ACCENT[character.affiliation];
-  const gradient = AFFILIATION_GRADIENT[character.affiliation];
   const portrait = characterPortrait(character.id);
 
   // Comic art is the house style; an actor headshot only fills the gaps.
@@ -109,16 +103,21 @@ export function CharacterTile({ character, width, onPress }: CharacterTileProps)
             transition={220}
           />
         ) : (
-          <LinearGradient
-            colors={[gradient[0], gradient[1]]}
-            start={{ x: 0.1, y: 0 }}
-            end={{ x: 0.9, y: 1 }}
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          // No art for this character. The plate stands in for a missing
+          // portrait, so it stays quiet — a saturated gradient with 30%-width
+          // initials made the handful of gaps the loudest tiles in the grid.
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: palette.raised,
+            }}
           >
-            <Text style={{ fontSize: width * 0.3, fontWeight: '800', color: '#FFFFFF', opacity: 0.9 }}>
+            <Text style={{ ...type.title, color: palette.inkFaint }}>
               {initialsFor(character)}
             </Text>
-          </LinearGradient>
+          </View>
         )}
 
         {/* Scrim — dark enough for white type at any brightness of art */}
