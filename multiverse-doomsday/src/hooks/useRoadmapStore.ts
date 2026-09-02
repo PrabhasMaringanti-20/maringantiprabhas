@@ -10,9 +10,7 @@ import type {
   MovieCatalogueItem,
   MovieItem,
   MovieProgress,
-  PathTag,
   ReadinessStats,
-  RoadmapPath,
   Tier,
 } from '@/types';
 
@@ -23,48 +21,6 @@ import type {
 export const MOVIE_CATALOGUE = moviesJson as MovieCatalogueItem[];
 export const CHARACTER_CATALOGUE = charactersJson as MarvelCharacter[];
 
-export const ROADMAP_PATHS: RoadmapPath[] = [
-  {
-    id: 'express',
-    label: 'Express',
-    tagline: 'The 9 essentials',
-    description:
-      'The shortest honest route. Nine titles that carry every rule, grudge and Incursion you need before Doomsday.',
-    accent: 'doom',
-  },
-  {
-    id: 'doom-f4',
-    label: 'Doom & F4 Lore',
-    tagline: "Marvel's First Family",
-    description:
-      'Everything feeding Victor Von Doom, the Fantastic Four and the cosmic scale they operate at.',
-    accent: 'infinity',
-  },
-  {
-    id: 'xmen-incursions',
-    label: 'Mutants & Incursions',
-    tagline: 'The Fox legacy',
-    description:
-      'The dying timeline next door: legacy X-Men, anchor beings and the collisions that follow.',
-    accent: 'incursion',
-  },
-  {
-    id: 'avengers',
-    label: 'The New Avengers',
-    tagline: "Who's left standing",
-    description:
-      'The roster forming right now — the shield-bearers, the Thunderbolts and the vacuum they fill.',
-    accent: 'doom',
-  },
-  {
-    id: 'completionist',
-    label: 'Completionist',
-    tagline: 'Everything, in order',
-    description:
-      'The full run in release order. No shortcuts, no gaps, about eight and a half days of screen time.',
-    accent: 'infinity',
-  },
-];
 
 /* ------------------------------------------------------------------ *
  * Store
@@ -73,18 +29,15 @@ export const ROADMAP_PATHS: RoadmapPath[] = [
 interface RoadmapState {
   /** Per-movie user data, keyed by movie id. */
   progress: Record<string, MovieProgress>;
-  activePath: PathTag;
   /** Set from the Character Vault's "Key Appearances" action. */
   characterFilterId: string | null;
   hydrated: boolean;
 
-  setActivePath: (path: PathTag) => void;
   toggleWatched: (movieId: string) => boolean;
   setWatched: (movieId: string, watched: boolean) => void;
   setRating: (movieId: string, rating: number) => void;
   setTier: (movieId: string, tier: Tier | undefined) => void;
   setCharacterFilter: (characterId: string | null) => void;
-  markPathWatched: (path: PathTag, watched: boolean) => void;
   resetProgress: () => void;
 }
 
@@ -94,11 +47,9 @@ export const useRoadmapStore = create<RoadmapState>()(
   persist(
     (set, get) => ({
       progress: {},
-      activePath: 'express',
       characterFilterId: null,
       hydrated: false,
 
-      setActivePath: (path) => set({ activePath: path, characterFilterId: null }),
 
       toggleWatched: (movieId) => {
         const current = get().progress[movieId] ?? EMPTY_PROGRESS;
@@ -160,29 +111,12 @@ export const useRoadmapStore = create<RoadmapState>()(
 
       setCharacterFilter: (characterId) => set({ characterFilterId: characterId }),
 
-      markPathWatched: (path, watched) =>
-        set((state) => {
-          const progress = { ...state.progress };
-          for (const movie of MOVIE_CATALOGUE) {
-            if (!movie.pathTags.includes(path)) continue;
-            progress[movie.id] = {
-              ...(progress[movie.id] ?? EMPTY_PROGRESS),
-              isWatched: watched,
-              watchedAt: watched ? Date.now() : undefined,
-            };
-          }
-          return { progress };
-        }),
-
       resetProgress: () => set({ progress: {}, characterFilterId: null }),
     }),
     {
       name: 'multiverse-roadmap-v1',
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (state) => ({
-        progress: state.progress,
-        activePath: state.activePath,
-      }),
+      partialize: (state) => ({ progress: state.progress }),
       // Fires once AsyncStorage has been read, so the UI can hold its animations
       // until real progress is on screen instead of flashing 0%.
       onRehydrateStorage: () => () => {
