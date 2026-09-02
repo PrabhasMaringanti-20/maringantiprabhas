@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
 
 /**
@@ -8,7 +9,9 @@ import * as Updates from 'expo-updates';
  * and those need opposite responses. This puts the answer on screen.
  */
 export function buildStamp(): { label: string; detail: string } {
-  const runtime = Updates.runtimeVersion ?? '—';
+  // Updates.runtimeVersion is null outside a built app (and on web), so fall
+  // back to the configured version rather than printing an empty label.
+  const runtime = Updates.runtimeVersion || Constants.expoConfig?.version || '—';
   const channel = Updates.channel ?? 'embedded';
 
   if (Updates.isEmbeddedLaunch || !Updates.updateId) {
