@@ -522,9 +522,37 @@
     ]
   },
   {
-    "id": "shuri",
-    "name": "Shuri",
+    "id": "t-challa",
+    "name": "T'Challa",
     "alias": "Black Panther",
+    "actor": "Chadwick Boseman",
+    "affiliation": "Avengers",
+    "status": "Deceased",
+    "mcuDebut": "Captain America: Civil War (2016)",
+    "comicBio": [
+      "King of Wakanda and the Black Panther — a head of state first, a hero second, which is exactly Doom's own shape.",
+      "He opened Wakanda to the world, then died off-screen, leaving the throne and the mantle unsettled.",
+      "Comic T'Challa sits on the Illuminati, the body that debated destroying other Earths to save its own.",
+      "That Illuminati question — who is allowed to decide which universe survives — is the Incursion argument in miniature."
+    ],
+    "powers": [
+      "Panther habit",
+      "Vibranium suit",
+      "Master tactician",
+      "Wakandan resources"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "civil-war",
+      "black-panther",
+      "infinity-war",
+      "endgame"
+    ]
+  },
+  {
+    "id": "shuri",
+    "name": "Black Panther (successor)",
+    "alias": "Shuri",
     "actor": "Letitia Wright",
     "affiliation": "Avengers",
     "status": "Active",
@@ -742,9 +770,41 @@
     ]
   },
   {
-    "id": "yelena-belova",
-    "name": "Yelena Belova",
+    "id": "natasha-romanoff",
+    "name": "Natasha Romanoff",
     "alias": "Black Widow",
+    "actor": "Scarlett Johansson",
+    "affiliation": "Avengers",
+    "status": "Deceased",
+    "mcuDebut": "Iron Man 2 (2010)",
+    "comicBio": [
+      "Red Room graduate turned SHIELD agent turned founding Avenger — the one with no powers and the longest ledger.",
+      "She traded herself for the Soul Stone on Vormir so the snap could be undone.",
+      "Comic Natasha has died and returned more than once; the Widow name is a mantle, not a person.",
+      "Every Widow who follows — Yelena included — is measured against the debt she settled."
+    ],
+    "powers": [
+      "Master spy",
+      "Peak human combat",
+      "Widow's Bite",
+      "Tactical leadership"
+    ],
+    "avatarUrl": "",
+    "relatedMovieIds": [
+      "iron-man-2",
+      "the-avengers",
+      "winter-soldier-film",
+      "age-of-ultron",
+      "civil-war",
+      "infinity-war",
+      "endgame",
+      "black-widow"
+    ]
+  },
+  {
+    "id": "yelena-belova",
+    "name": "Black Widow (successor)",
+    "alias": "Yelena Belova",
     "actor": "Florence Pugh",
     "affiliation": "Thunderbolts",
     "status": "Active",

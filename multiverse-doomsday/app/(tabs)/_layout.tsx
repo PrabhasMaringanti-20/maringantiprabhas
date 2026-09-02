@@ -60,6 +60,15 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="prep"
+        options={{
+          title: 'Prep',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="stats-chart-outline" size={size ?? 21} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="ideator"
         options={{
           title: 'Ideator',

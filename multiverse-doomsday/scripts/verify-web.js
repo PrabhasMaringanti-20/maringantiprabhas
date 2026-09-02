@@ -55,7 +55,7 @@ const check = (name, ok, detail = '') => {
 
   await page.waitForTimeout(4200);
   const introNodes = await page.evaluate(() =>
-    [...document.querySelectorAll('*')].filter((el) => el.textContent === 'GUIDE TO DOOMSDAY').length);
+    [...document.querySelectorAll('*')].filter((el) => el.textContent === 'CREATED BY').length);
   check('intro dismisses itself', introNodes === 0, `${introNodes} nodes left`);
 
   // --- Character tab ---
@@ -69,7 +69,7 @@ const check = (name, ok, detail = '') => {
   });
 
   let m = await measure();
-  check('all 45 character cards present', m.count === 45, `count=${m.count}`);
+  check('all 47 character cards present', m.count === 47, `count=${m.count}`);
   check('no collapsed cards at top', m.min > 200, `min height=${m.min}px max=${m.max}px`);
   check('card heights uniform', m.max - m.min < 2, `spread=${m.max - m.min}px`);
 

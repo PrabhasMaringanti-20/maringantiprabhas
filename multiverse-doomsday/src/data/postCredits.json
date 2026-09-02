@@ -1,0 +1,678 @@
+{
+  "iron-man": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Nick Fury is waiting in the dark of Tony's house and says the words \"the Avenger Initiative\".",
+        "setsUp": "The first stinger Marvel ever ran, and the template for every one since."
+      }
+    ]
+  },
+  "incredible-hulk": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Tony Stark walks into a bar and tells General Ross they're putting a team together.",
+        "setsUp": "Ross's long grudge against enhanced people, which he is still carrying as President."
+      }
+    ]
+  },
+  "iron-man-2": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Agent Coulson pulls over in New Mexico and radios in a crater with a hammer in it.",
+        "setsUp": "Thor, and SHIELD quietly cataloguing things it does not understand."
+      }
+    ]
+  },
+  "thor-1": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Selvig is shown the Tesseract by Fury while Loki, unseen, whispers in his ear.",
+        "setsUp": "The Space Stone — the first Infinity Stone the films put on the board."
+      }
+    ]
+  },
+  "first-avenger": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Fury tells a thawed Steve Rogers the world has moved on, and that he has a mission.",
+        "setsUp": "The Avengers."
+      }
+    ]
+  },
+  "the-avengers": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "The Other presents his failure to a purple figure on a floating throne, who smiles.",
+        "setsUp": "Thanos, six years before he takes the field."
+      },
+      {
+        "kind": "post",
+        "summary": "The team eats shawarma in silence.",
+        "setsUp": "Nothing. It is a joke, and a good one."
+      }
+    ]
+  },
+  "iron-man-3": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Tony's entire narration turns out to have been a therapy session with a sleeping Bruce Banner.",
+        "setsUp": "Nothing plot-bearing."
+      }
+    ]
+  },
+  "dark-world": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Sif and Volstagg hand the Aether to the Collector, who notes that one Infinity Stone is already in Asgard.",
+        "setsUp": "The Reality Stone's route to Thanos, and the Collector as a keeper of dangerous things."
+      },
+      {
+        "kind": "post",
+        "summary": "A Jotunheim beast is still loose on Earth.",
+        "setsUp": "Nothing."
+      }
+    ]
+  },
+  "winter-soldier-film": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Baron von Strucker has Loki's sceptre and two enhanced prisoners — a boy who moves fast and a girl who does stranger things.",
+        "setsUp": "Wanda Maximoff, whose grief later cracks the multiverse wide open."
+      },
+      {
+        "kind": "post",
+        "summary": "Bucky reads his own file at the Smithsonian.",
+        "setsUp": "Bucky choosing to go looking for himself."
+      }
+    ]
+  },
+  "guardians-1": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "The Collector drinks among his ruined collection with Howard the Duck.",
+        "setsUp": "Nothing, beyond the joke."
+      }
+    ]
+  },
+  "age-of-ultron": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Thanos opens a vault, takes up the Infinity Gauntlet and says he will do it himself.",
+        "setsUp": "Infinity War."
+      }
+    ]
+  },
+  "ant-man-1": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Hank shows Hope a finished Wasp prototype built for her mother.",
+        "setsUp": "The Wasp."
+      },
+      {
+        "kind": "post",
+        "summary": "Cap and Falcon have found Bucky, and agree they cannot call Tony.",
+        "setsUp": "Civil War."
+      }
+    ]
+  },
+  "civil-war": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Bucky goes back into cryo in Wakanda, at his own request.",
+        "setsUp": "Wakanda as the place the MCU keeps hiding its wounded."
+      },
+      {
+        "kind": "post",
+        "summary": "Peter tests the web-shooter signal Tony built into his suit.",
+        "setsUp": "Homecoming."
+      }
+    ]
+  },
+  "doctor-strange": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Strange offers Thor help finding Odin, on the condition Loki leaves Earth afterwards.",
+        "setsUp": "Ragnarok."
+      },
+      {
+        "kind": "post",
+        "summary": "Mordo strips a sorcerer of his magic and says the world has too many sorcerers.",
+        "setsUp": "Mordo's turn — still unresolved, and still owed a payoff."
+      }
+    ]
+  },
+  "guardians-2": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Ayesha builds a new being in a birthing pod and names him Adam.",
+        "setsUp": "Adam Warlock."
+      },
+      {
+        "kind": "post",
+        "summary": "Stakar reassembles the original Ravager team; Kraglin practises with Yondu's arrow; the Watchers walk away from their informant.",
+        "setsUp": "The Watchers, who are the reason anyone is narrating the multiverse at all."
+      }
+    ]
+  },
+  "homecoming": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Scorpion tells Vulture he has friends on the outside who want Spider-Man dead.",
+        "setsUp": "The Sinister Six that never quite arrived."
+      },
+      {
+        "kind": "post",
+        "summary": "Captain America delivers a PSA about patience.",
+        "setsUp": "Nothing. It is a joke at your expense."
+      }
+    ]
+  },
+  "thor-ragnarok": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "A vast ship pulls alongside the Asgardian refugee vessel.",
+        "setsUp": "The opening massacre of Infinity War."
+      },
+      {
+        "kind": "post",
+        "summary": "The Grandmaster surrenders to the Sakaaran revolution and calls it a draw.",
+        "setsUp": "Nothing."
+      }
+    ]
+  },
+  "black-panther": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "T'Challa tells the UN that Wakanda will open itself to the world.",
+        "setsUp": "Wakanda as a world power rather than a secret."
+      },
+      {
+        "kind": "post",
+        "summary": "Bucky wakes in Wakanda; the children call him White Wolf.",
+        "setsUp": "Infinity War."
+      }
+    ]
+  },
+  "infinity-war": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Fury and Hill turn to dust; Fury's pager finishes sending its signal.",
+        "setsUp": "Captain Marvel."
+      }
+    ]
+  },
+  "ant-man-2": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Scott is in the quantum realm when the team pulling him out is dusted, stranding him.",
+        "setsUp": "Endgame's entire plan — the quantum realm as the road back."
+      },
+      {
+        "kind": "post",
+        "summary": "An empty house and an emergency broadcast.",
+        "setsUp": "The scale of the snap."
+      }
+    ]
+  },
+  "captain-marvel": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Carol answers Fury's page and walks into Avengers HQ asking where he is.",
+        "setsUp": "Endgame."
+      },
+      {
+        "kind": "post",
+        "summary": "Goose coughs the Tesseract onto Fury's desk.",
+        "setsUp": "Where the Space Stone was hiding."
+      }
+    ]
+  },
+  "endgame": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "far-from-home": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Mysterio's doctored footage frames Peter for murder, and J. Jonah Jameson broadcasts his name.",
+        "setsUp": "No Way Home, and therefore the multiverse."
+      },
+      {
+        "kind": "post",
+        "summary": "Talos and Soren have been standing in for Fury and Hill all film.",
+        "setsUp": "Secret Invasion."
+      }
+    ]
+  },
+  "wandavision": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Wanda, alone in a cabin, reads the Darkhold while her astral form works — and hears her children calling.",
+        "setsUp": "Multiverse of Madness, and the search that drives it."
+      }
+    ]
+  },
+  "falcon-winter-soldier": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Sharon Carter, pardoned and reinstated, sells government secrets as the Power Broker.",
+        "setsUp": "A traitor still in place inside the US intelligence apparatus."
+      }
+    ]
+  },
+  "loki-s1": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "A TVA handbook is stamped: Loki will return in season two.",
+        "setsUp": "Nothing narrative — but the Sacred Timeline is already broken by this point."
+      }
+    ]
+  },
+  "black-widow": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Yelena visits Natasha's grave; Valentina points her at the man she blames — Clint Barton.",
+        "setsUp": "Hawkeye, and Val quietly assembling the Thunderbolts."
+      }
+    ]
+  },
+  "what-if-s1": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "shang-chi": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Wong brings Shang-Chi and Katy to Banner and Carol; the rings are broadcasting a signal to something.",
+        "setsUp": "The rings' true origin, still unanswered."
+      },
+      {
+        "kind": "post",
+        "summary": "Xialing has taken over the Ten Rings rather than dissolving it.",
+        "setsUp": "Her own war."
+      }
+    ]
+  },
+  "eternals": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Eros and Pip the Troll arrive to help the missing Eternals.",
+        "setsUp": "Thanos's brother, loose in the MCU."
+      },
+      {
+        "kind": "post",
+        "summary": "Dane Whitman reaches for the Ebony Blade as Blade's voice warns him off.",
+        "setsUp": "The Black Knight, and Blade."
+      }
+    ]
+  },
+  "hawkeye": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "moon-knight": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Harrow is collected by Jake Lockley, a third alter Marc did not know he had.",
+        "setsUp": "Khonshu still having a hand on the wheel."
+      }
+    ]
+  },
+  "multiverse-of-madness": {
+    "relevance": "direct",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Clea opens an incursion in the street and tells Strange he caused one, and is coming to fix it.",
+        "setsUp": "An incursion — the exact event Doomsday is built around — named on screen and left unresolved."
+      },
+      {
+        "kind": "post",
+        "summary": "Pizza Poppa's fingers finally stop punching him.",
+        "setsUp": "Nothing."
+      }
+    ]
+  },
+  "ms-marvel": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Kamala's bangle swaps her with Carol Danvers.",
+        "setsUp": "The Marvels."
+      }
+    ]
+  },
+  "love-and-thunder": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Zeus sends Hercules to kill Thor.",
+        "setsUp": "A grudge nobody has collected on."
+      },
+      {
+        "kind": "post",
+        "summary": "Jane arrives in Valhalla and is welcomed by Heimdall.",
+        "setsUp": "Nothing."
+      }
+    ]
+  },
+  "she-hulk": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "werewolf-by-night": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Elsa Bloodstone is cornered by Man-Thing, who is only playing.",
+        "setsUp": "Nothing."
+      }
+    ]
+  },
+  "wakanda-forever": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Nakia introduces Shuri to Toussaint — T'Challa's son, raised in Haiti.",
+        "setsUp": "The next Black Panther, and the reason the mantle stays in the family."
+      }
+    ]
+  },
+  "holiday-special": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "no-way-home": {
+    "relevance": "direct",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Eddie Brock is pulled home, leaving a piece of the symbiote behind in a bar.",
+        "setsUp": "Venom in this universe."
+      },
+      {
+        "kind": "post",
+        "summary": "A full trailer for Multiverse of Madness.",
+        "setsUp": "The incursions."
+      }
+    ]
+  },
+  "quantumania": {
+    "relevance": "direct",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "A council of thousands of Kangs convenes; He Who Remains was the one holding them back.",
+        "setsUp": "The variant war — the shape the Doomsday conflict inherited when Kang was written out."
+      },
+      {
+        "kind": "post",
+        "summary": "Loki and Mobius watch Victor Timely lecture in 1901.",
+        "setsUp": "Loki season two."
+      }
+    ]
+  },
+  "guardians-vol-3": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "A new Guardians team forms under Rocket.",
+        "setsUp": "A team that has not been seen since."
+      },
+      {
+        "kind": "post",
+        "summary": "The Legendary Star-Lord will return.",
+        "setsUp": "A promise, not a scene."
+      }
+    ]
+  },
+  "secret-invasion": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "loki-s2": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "the-marvels": {
+    "relevance": "direct",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Monica wakes in a bed beside Beast — in a universe that is not hers, where the X-Men exist.",
+        "setsUp": "Mutants as a neighbouring reality, which is exactly the Incursion setup."
+      }
+    ]
+  },
+  "what-if-s2": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "echo": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Wilson Fisk heads back to New York, already being told he should run for mayor.",
+        "setsUp": "Daredevil: Born Again."
+      }
+    ]
+  },
+  "deadpool-and-wolverine": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Archive footage of the Fox Marvel era plays over Deadpool insisting those films mattered.",
+        "setsUp": "The Fox universe as a real, mourned timeline — the well Doomsday's cast is drawn from."
+      }
+    ]
+  },
+  "what-if-s3": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "agatha-all-along": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Billy sets out to find his brother, with Agatha's ghost attached to him.",
+        "setsUp": "Wiccan, and the Young Avengers bench."
+      }
+    ]
+  },
+  "brave-new-world": {
+    "relevance": "direct",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Samuel Sterns tells Sam Wilson to enjoy his world while it lasts — visitors from other worlds are coming.",
+        "setsUp": "The clearest in-universe warning of an incursion yet given."
+      }
+    ]
+  },
+  "daredevil-born-again": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "A tease for the Punisher's own outing.",
+        "setsUp": "More Frank Castle."
+      }
+    ]
+  },
+  "thunderbolts": {
+    "relevance": "direct",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "The team is rebranded, over their objections, as the New Avengers.",
+        "setsUp": "Who holds the Avengers name when Doomsday starts."
+      },
+      {
+        "kind": "post",
+        "summary": "Fourteen months later, a ship bearing the Fantastic Four's mark enters this universe from another.",
+        "setsUp": "The single most direct on-ramp to Doomsday in the whole run."
+      }
+    ]
+  },
+  "ironheart": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Parker Robbins' benefactor makes Riri an offer, and he is not subtle about what he is.",
+        "setsUp": "Mephisto, in the MCU, making deals."
+      }
+    ]
+  },
+  "eyes-of-wakanda": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "marvel-zombies": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "wonder-man": {
+    "relevance": "unreleased",
+    "scenes": []
+  },
+  "fantastic-four-first-steps": {
+    "relevance": "direct",
+    "scenes": [
+      {
+        "kind": "mid",
+        "summary": "Four years on, Franklin is approached in the Baxter Building by a masked figure in green.",
+        "setsUp": "Doom, arriving for the child who can rewrite reality."
+      },
+      {
+        "kind": "post",
+        "summary": "An animated Fantastic Four sting.",
+        "setsUp": "Nothing."
+      }
+    ]
+  },
+  "daredevil-born-again-s2": {
+    "relevance": "unreleased",
+    "scenes": []
+  },
+  "brand-new-day": {
+    "relevance": "unreleased",
+    "scenes": []
+  },
+  "visionquest": {
+    "relevance": "unreleased",
+    "scenes": []
+  },
+  "x-men-2000": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "x2": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "x-men-first-class": {
+    "relevance": "none",
+    "scenes": []
+  },
+  "days-of-future-past": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "A crowd chants for En Sabah Nur as he raises pyramids with his mind.",
+        "setsUp": "Apocalypse."
+      }
+    ]
+  },
+  "deadpool": {
+    "relevance": "none",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Deadpool, in a bathrobe, promises Cable will be in the sequel.",
+        "setsUp": "Cable."
+      }
+    ]
+  },
+  "deadpool-2": {
+    "relevance": "thread",
+    "scenes": [
+      {
+        "kind": "post",
+        "summary": "Deadpool steals Cable's time device and undoes the film's damage — and a few of Ryan Reynolds' career choices.",
+        "setsUp": "Time travel as something the Fox films did too, which the TVA later had opinions about."
+      }
+    ]
+  },
+  "logan": {
+    "relevance": "none",
+    "scenes": []
+  }
+}

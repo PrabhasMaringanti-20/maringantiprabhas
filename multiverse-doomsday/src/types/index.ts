@@ -142,3 +142,23 @@ export interface StreamingAvailability {
 }
 
 export type AsyncState = 'idle' | 'loading' | 'success' | 'error';
+
+/* ------------------------------------------------------------------ *
+ * Post-credits scenes
+ * ------------------------------------------------------------------ */
+
+/** How much a stinger actually bears on Doomsday. Drives sorting and colour. */
+export type StingerRelevance = 'direct' | 'thread' | 'none' | 'unreleased';
+
+export interface PostCreditsScene {
+  /** Mid-credits scenes land before the crawl ends; post-credits after it. */
+  kind: 'mid' | 'post';
+  summary: string;
+  /** What the scene pays off — "Nothing" where it is purely a joke. */
+  setsUp: string;
+}
+
+export interface PostCreditsEntry {
+  relevance: StingerRelevance;
+  scenes: PostCreditsScene[];
+}

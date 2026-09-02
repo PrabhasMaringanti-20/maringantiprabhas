@@ -40,8 +40,10 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "esbuild": "^0.25.0",
     "eslint": "^9.39.5",
     "eslint-config-expo": "^10.0.0",
+    "playwright": "^1.49.1",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -52,7 +54,10 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "posters": "node scripts/generate-poster-map.mjs",
-    "verify": "node scripts/verify-web.js"
+    "verify": "node scripts/verify-web.js",
+    "verify:quiz": "esbuild scripts/verify-quiz.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-quiz.cjs --log-level=error && node node_modules/.cache/verify-quiz.cjs",
+    "verify:streaks": "node scripts/verify-streaks.js",
+    "verify:data": "npm run verify:quiz && npm run verify:streaks"
   },
   "private": true
 }

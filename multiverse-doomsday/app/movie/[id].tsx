@@ -13,6 +13,7 @@ import { CustomButton } from '@/components/common/CustomButton';
 import { Poster } from '@/components/common/Poster';
 import { StarRating } from '@/components/common/StarRating';
 import { CharacterAvatar } from '@/components/characters/CharacterAvatar';
+import { StingerCard } from '@/components/roadmap/StingerCard';
 import { StreamWidget } from '@/components/roadmap/StreamWidget';
 import { TIER_STYLE } from '@/components/tierlist/TierRow';
 import { charactersForMovie } from '@/hooks/useCharacters';
@@ -314,6 +315,11 @@ export default function MovieDetailScreen() {
               })}
             </View>
           </View>
+        </View>
+
+        {/* Post-credits */}
+        <View className="mt-6 px-5">
+          <StingerCard movie={movie} />
         </View>
 
         {/* Streaming */}
