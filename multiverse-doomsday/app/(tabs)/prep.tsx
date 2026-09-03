@@ -17,6 +17,8 @@ import { usePalette } from '@/hooks/useTheme';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { useTabBarHeight } from '@/utils/layout';
 import { formatHoursCompact } from '@/utils/timeCalc';
+import { countdownTo } from '@/utils/countdown';
+import { doomVerdict, variantFor } from '@/utils/verdict';
 import { TIERS, type Tier } from '@/types';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
@@ -31,6 +33,17 @@ export default function PrepScreen() {
   const stats = useStats();
   const stingers = useStingerCounts();
   const achieved = stats.milestones.filter((m) => m.achieved).length;
+
+  // Doom is told the same numbers the screen shows, so his line can never
+  // contradict the figures printed directly above it.
+  const verdict = doomVerdict({
+    percent: stats.percent,
+    watched: stats.watched,
+    total: stats.total,
+    streakDays: stats.streakDays,
+    daysToDoomsday: countdownTo().days,
+  });
+  const variant = variantFor(stats);
 
   const onScroll = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
@@ -58,11 +71,23 @@ export default function PrepScreen() {
             </Text>
             <Text style={{ ...type.title, color: palette.inkFaint, marginLeft: space.xs }}>%</Text>
           </View>
-          <Marker>Ready for Doomsday</Marker>
+          <Marker color={palette.marvel}>{verdict.rank}</Marker>
 
           <View style={{ marginTop: space.xl }}>
             <Meter value={stats.percent} />
           </View>
+
+          {/* The number is the fact; this is the opinion. */}
+          <Text
+            style={{
+              ...type.body,
+              color: palette.inkSoft,
+              marginTop: space.lg,
+              lineHeight: 21,
+            }}
+          >
+            {verdict.line}
+          </Text>
 
           <View style={{ flexDirection: 'row', marginTop: space.xl }}>
             <Stat value={`${stats.watched}/${stats.total}`} label="logged" />
@@ -106,6 +131,13 @@ export default function PrepScreen() {
         {/* Against your friends */}
         <Section title="Against your friends" index={2}>
           <Rule inset={GUTTER} />
+          <ActionLine
+            icon="sparkles-outline"
+            title="Which variant are you?"
+            detail={variant.name}
+            tint={palette.marvel}
+            onPress={() => router.push('/variant')}
+          />
           <ActionLine
             icon="git-compare-outline"
             title="Compare with a friend"
