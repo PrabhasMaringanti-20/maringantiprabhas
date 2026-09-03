@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -27,7 +27,12 @@ interface PhaseSection {
   title: string;
   watched: number;
   offset: number;
+  /** Every title in the phase, regardless of whether the section is open. */
+  all: MovieItem[];
+  /** What the list renders — empty while collapsed. */
   data: MovieItem[];
+  complete: boolean;
+  collapsed: boolean;
 }
 
 export default function RoadmapScreen() {
@@ -46,6 +51,32 @@ export default function RoadmapScreen() {
   const onboarded = useRoadmapStore((state) => state.onboarded);
 
   const stats = useMemo(() => computeReadiness(movies), [movies]);
+
+  // A finished phase folds itself away — twenty ticked rows are just scrolling
+  // between you and the part of the list you still have to act on. Reopening
+  // one is a tap, and that choice is remembered for as long as the screen is.
+  const [reopened, setReopened] = useState<Set<string>>(new Set());
+  const [closed, setClosed] = useState<Set<string>>(new Set());
+
+  const toggleSection = (section: PhaseSection) => {
+    Haptics.selectionAsync();
+    const collapsedNow = section.collapsed;
+    if (section.complete) {
+      setReopened((current) => {
+        const next = new Set(current);
+        if (collapsedNow) next.add(section.title);
+        else next.delete(section.title);
+        return next;
+      });
+      return;
+    }
+    setClosed((current) => {
+      const next = new Set(current);
+      if (collapsedNow) next.delete(section.title);
+      else next.add(section.title);
+      return next;
+    });
+  };
   const filterCharacter = characterFilterId
     ? CHARACTER_CATALOGUE.find((character) => character.id === characterFilterId)
     : undefined;
@@ -53,23 +84,34 @@ export default function RoadmapScreen() {
   // Release order stays release order; the phase markers only give a long
   // scroll something to hold on to. `offset` keeps numbering continuous.
   const sections = useMemo<PhaseSection[]>(() => {
-    const out: PhaseSection[] = [];
+    const groups: { title: string; offset: number; all: MovieItem[] }[] = [];
     let running = 0;
     for (const movie of movies) {
       const title = typeof movie.phase === 'number' ? `Phase ${movie.phase}` : String(movie.phase);
-      const last = out[out.length - 1];
-      if (last && last.title === title) {
-        last.data.push(movie);
-      } else {
-        out.push({ title, watched: 0, offset: running, data: [movie] });
-      }
+      const last = groups[groups.length - 1];
+      if (last && last.title === title) last.all.push(movie);
+      else groups.push({ title, offset: running, all: [movie] });
       running += 1;
     }
-    for (const section of out) {
-      section.watched = section.data.filter((movie) => movie.isWatched).length;
-    }
-    return out;
-  }, [movies]);
+
+    return groups.map((group) => {
+      const watched = group.all.filter((movie) => movie.isWatched).length;
+      const complete = watched === group.all.length;
+      // Finished phases start closed; unfinished ones start open. Either can be
+      // overridden, and the two overrides are tracked separately so a phase you
+      // reopened does not snap shut the moment you tick its last title.
+      const collapsed = complete ? !reopened.has(group.title) : closed.has(group.title);
+      return {
+        title: group.title,
+        offset: group.offset,
+        all: group.all,
+        data: collapsed ? [] : group.all,
+        watched,
+        complete,
+        collapsed,
+      };
+    });
+  }, [movies, reopened, closed]);
 
   const nextUpId = stats.nextUp?.id;
   const statusFor = (movie: MovieItem): LineStatus =>
@@ -173,10 +215,18 @@ export default function RoadmapScreen() {
           </View>
         }
         renderSectionHeader={({ section }) => {
-          const allWatched = section.watched === section.data.length;
+          const allWatched = section.complete;
           return (
             <View style={{ backgroundColor: palette.canvas }}>
-              <View
+              <Pressable
+                accessibilityRole="button"
+                accessibilityState={{ expanded: !section.collapsed }}
+                accessibilityLabel={
+                  section.collapsed
+                    ? `Show ${section.title}, ${section.watched} of ${section.all.length} watched`
+                    : `Hide ${section.title}`
+                }
+                onPress={() => toggleSection(section)}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -185,7 +235,22 @@ export default function RoadmapScreen() {
                   paddingBottom: space.sm,
                 }}
               >
-                <Marker style={{ flex: 1 }}>{section.title}</Marker>
+                <Ionicons
+                  name={section.collapsed ? 'chevron-forward' : 'chevron-down'}
+                  size={13}
+                  color={palette.inkFaint}
+                  style={{ marginRight: space.sm }}
+                />
+                <Marker color={allWatched ? palette.accent : undefined}>{section.title}</Marker>
+                {allWatched ? (
+                  <Ionicons
+                    name="checkmark-circle"
+                    size={13}
+                    color={palette.accent}
+                    style={{ marginLeft: space.sm }}
+                  />
+                ) : null}
+                <View style={{ flex: 1 }} />
                 <Text
                   style={{
                     ...type.ordinal,
@@ -194,7 +259,7 @@ export default function RoadmapScreen() {
                     marginRight: space.md,
                   }}
                 >
-                  {section.watched}/{section.data.length}
+                  {section.watched}/{section.all.length}
                 </Text>
                 {/* Marking a phase you have already seen, without eighteen taps. */}
                 <Pressable
@@ -208,7 +273,7 @@ export default function RoadmapScreen() {
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                     setManyWatched(
-                      section.data.map((movie) => movie.id),
+                      section.all.map((movie) => movie.id),
                       !allWatched,
                     );
                   }}
@@ -219,7 +284,7 @@ export default function RoadmapScreen() {
                     color={allWatched ? palette.inkFaint : palette.accent}
                   />
                 </Pressable>
-              </View>
+              </Pressable>
               <View style={{ height: HAIRLINE, backgroundColor: palette.line }} />
             </View>
           );
