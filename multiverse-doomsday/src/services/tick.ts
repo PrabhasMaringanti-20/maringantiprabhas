@@ -65,10 +65,10 @@ function stopHaptics(): void {
 /**
  * Start ticking. Safe to call repeatedly; the second call does nothing.
  *
- * The sound is a two-second loop carrying one tick and one tock, so the
- * player is left looping rather than re-triggered every second — restarting a
- * clip on a timer drifts audibly and wakes the audio hardware sixty times a
- * minute for no reason.
+ * The clip is a loop carrying one tick and one tock, so the player is left
+ * looping rather than re-triggered on a timer — restarting a clip from JS
+ * drifts audibly and wakes the audio hardware for no reason. The pace lives
+ * in the file, not here: see scripts/generate-tick.py to retune it.
  */
 export function startTicking(): void {
   if (running) return;
