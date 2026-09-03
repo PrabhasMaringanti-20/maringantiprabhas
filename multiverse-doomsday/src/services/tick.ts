@@ -65,10 +65,13 @@ function stopHaptics(): void {
 /**
  * Start ticking. Safe to call repeatedly; the second call does nothing.
  *
- * The clip is a loop carrying one tick and one tock, so the player is left
- * looping rather than re-triggered on a timer — restarting a clip from JS
- * drifts audibly and wakes the audio hardware for no reason. The pace lives
- * in the file, not here: see scripts/generate-tick.py to retune it.
+ * The clip is one cycle of a real clock — cut from scripts/audio-source/
+ * doomsday-clock-source.mp3 by scripts/extract-tick-loop.py — so the player
+ * is left looping rather than re-triggered on a timer — restarting a clip
+ * from JS drifts audibly and wakes the audio hardware for no reason. The
+ * pace and the tone both live in that file, not here: run the extraction
+ * script to retune the loop point, or scripts/generate-tick.py for a
+ * synthesised fallback if a licensable recording is ever needed instead.
  */
 export function startTicking(): void {
   if (running) return;

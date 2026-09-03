@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Synthesises the clock tick used by the countdown hero.
+Synthesises a clock tick for the countdown hero.
 
-The sound is generated rather than sourced so it is reproducible, carries no
-licensing question, and can be retuned by editing numbers instead of hunting
-for another file.
+NOT what's currently shipped: assets/audio/tick.wav is now cut from a real
+recording by scripts/extract-tick-loop.py. This generator is kept as a
+fallback with no licensing question at all, for if the recording is ever
+lost or a placeholder is needed — point --out at assets/audio/tick.wav to
+put it back in service.
 
-    python3 scripts/generate-tick.py                 # writes the shipped tick
+    python3 scripts/generate-tick.py --out assets/audio/tick.wav
     python3 scripts/generate-tick.py --interval 3.0 --out /tmp/slower.wav
 
 A mechanical tick is a very short broadband transient with a resonant peak —
