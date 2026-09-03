@@ -1,4 +1,12 @@
 import moviesJson from '@/data/movies.json';
+import {
+  BitReader,
+  BitWriter,
+  MAX_NAME_BYTES,
+  encodeName,
+  fromBase64Url,
+  toBase64Url,
+} from '@/utils/bitcode';
 import { TIERS, type MovieCatalogueItem, type MovieProgress, type Tier } from '@/types';
 
 /**
@@ -23,7 +31,6 @@ const MOVIE_CATALOGUE = moviesJson as MovieCatalogueItem[];
 
 const FORMAT_VERSION = 1;
 const BITS_PER_TITLE = 7; // 1 watched, 3 tier (0 = none, 1-5), 3 rating (0-5)
-const MAX_NAME_BYTES = 16;
 
 export interface SharedBoard {
   name: string;
@@ -34,112 +41,8 @@ export interface SharedBoard {
 }
 
 /* ------------------------------------------------------------------ *
- * base64url — no padding, safe in a URL and in a chat message
- * ------------------------------------------------------------------ */
-
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-
-function toBase64Url(bytes: number[]): string {
-  let out = '';
-  for (let i = 0; i < bytes.length; i += 3) {
-    const b0 = bytes[i];
-    const b1 = bytes[i + 1];
-    const b2 = bytes[i + 2];
-    const has1 = b1 !== undefined;
-    const has2 = b2 !== undefined;
-
-    out += ALPHABET[b0 >> 2];
-    out += ALPHABET[((b0 & 0x03) << 4) | (has1 ? b1 >> 4 : 0)];
-    if (has1) out += ALPHABET[((b1 & 0x0f) << 2) | (has2 ? b2 >> 6 : 0)];
-    if (has2) out += ALPHABET[b2 & 0x3f];
-  }
-  return out;
-}
-
-function fromBase64Url(text: string): number[] | null {
-  const bytes: number[] = [];
-  let buffer = 0;
-  let bits = 0;
-
-  for (const char of text) {
-    const value = ALPHABET.indexOf(char);
-    if (value < 0) return null; // reject rather than skip: a typo must not decode
-    buffer = (buffer << 6) | value;
-    bits += 6;
-    if (bits >= 8) {
-      bits -= 8;
-      bytes.push((buffer >> bits) & 0xff);
-    }
-  }
-  return bytes;
-}
-
-/* ------------------------------------------------------------------ *
- * Bit packing
- * ------------------------------------------------------------------ */
-
-class BitWriter {
-  private bytes: number[] = [];
-  private current = 0;
-  private filled = 0;
-
-  write(value: number, width: number): void {
-    for (let i = width - 1; i >= 0; i -= 1) {
-      this.current = (this.current << 1) | ((value >> i) & 1);
-      this.filled += 1;
-      if (this.filled === 8) {
-        this.bytes.push(this.current);
-        this.current = 0;
-        this.filled = 0;
-      }
-    }
-  }
-
-  finish(): number[] {
-    if (this.filled > 0) {
-      this.bytes.push(this.current << (8 - this.filled));
-      this.current = 0;
-      this.filled = 0;
-    }
-    return this.bytes;
-  }
-}
-
-class BitReader {
-  private index = 0;
-
-  constructor(private readonly bytes: number[]) {}
-
-  read(width: number): number {
-    let value = 0;
-    for (let i = 0; i < width; i += 1) {
-      const byte = this.bytes[this.index >> 3] ?? 0;
-      const bit = (byte >> (7 - (this.index & 7))) & 1;
-      value = (value << 1) | bit;
-      this.index += 1;
-    }
-    return value;
-  }
-
-  get remainingBits(): number {
-    return this.bytes.length * 8 - this.index;
-  }
-}
-
-/* ------------------------------------------------------------------ *
  * Encode / decode
  * ------------------------------------------------------------------ */
-
-function encodeName(name: string): number[] {
-  const bytes: number[] = [];
-  for (const char of name) {
-    const code = char.codePointAt(0) ?? 0;
-    // ASCII only: a code has to survive being pasted through any chat client.
-    if (code >= 32 && code < 127) bytes.push(code);
-    if (bytes.length >= MAX_NAME_BYTES) break;
-  }
-  return bytes;
-}
 
 export function encodeBoard(
   name: string,

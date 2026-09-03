@@ -1,0 +1,127 @@
+[
+  {
+    "id": "doom-face",
+    "question": "Why does Doom have Tony Stark's face?",
+    "note": "Robert Downey Jr. plays Victor von Doom. Nobody has said whether the film explains it.",
+    "options": [
+      { "id": "variant", "label": "He is a Stark variant" },
+      { "id": "built", "label": "He built the face on purpose" },
+      { "id": "never", "label": "Never addressed, just a coincidence" },
+      { "id": "someone", "label": "Someone else is under the mask" }
+    ]
+  },
+  {
+    "id": "original",
+    "question": "Which original Avenger turns up?",
+    "note": "Doomsday is billed as the biggest cast Marvel has assembled. Reunions are the obvious lever.",
+    "options": [
+      { "id": "steve", "label": "Steve Rogers" },
+      { "id": "thor", "label": "Thor, and only Thor" },
+      { "id": "several", "label": "Several of them" },
+      { "id": "none", "label": "None of them" }
+    ]
+  },
+  {
+    "id": "wolverine",
+    "question": "How big is Wolverine's part?",
+    "note": "Hugh Jackman is back in the fold after Deadpool & Wolverine.",
+    "options": [
+      { "id": "lead", "label": "A full role" },
+      { "id": "cameo", "label": "A cameo" },
+      { "id": "stinger", "label": "Post-credits only" },
+      { "id": "absent", "label": "Not in it" }
+    ]
+  },
+  {
+    "id": "spidey",
+    "question": "Does Spider-Man appear?",
+    "note": "Brand New Day lands months before Doomsday. Whether the timelines meet is the argument.",
+    "options": [
+      { "id": "yes", "label": "Yes, in the film" },
+      { "id": "stinger", "label": "Post-credits only" },
+      { "id": "no", "label": "No" }
+    ]
+  },
+  {
+    "id": "ff",
+    "question": "How many of the Fantastic Four are alive at the end?",
+    "note": "First Steps put them on the board. Doom has a history with this family.",
+    "options": [
+      { "id": "four", "label": "All four" },
+      { "id": "three", "label": "Three" },
+      { "id": "two", "label": "Two or fewer" },
+      { "id": "none", "label": "None" }
+    ]
+  },
+  {
+    "id": "death",
+    "question": "Does a named hero die on screen?",
+    "note": "Every Avengers finale has taken someone. The question is how many.",
+    "options": [
+      { "id": "one", "label": "Exactly one" },
+      { "id": "many", "label": "More than one" },
+      { "id": "none", "label": "Nobody dies" }
+    ]
+  },
+  {
+    "id": "kang",
+    "question": "Is Kang mentioned by name?",
+    "note": "The Kang Dynasty became Doomsday. Whether the film acknowledges that is a real question.",
+    "options": [
+      { "id": "yes", "label": "Said out loud" },
+      { "id": "implied", "label": "Implied, never named" },
+      { "id": "no", "label": "No trace of him" }
+    ]
+  },
+  {
+    "id": "loki",
+    "question": "Does Loki appear?",
+    "note": "He is holding the branches of the multiverse together at the end of his own series.",
+    "options": [
+      { "id": "person", "label": "In person" },
+      { "id": "glimpse", "label": "A glimpse or a voice" },
+      { "id": "no", "label": "Not at all" }
+    ]
+  },
+  {
+    "id": "ending",
+    "question": "Where does the film leave everyone?",
+    "note": "Secret Wars follows in 2027, so the ending has to hand something over.",
+    "options": [
+      { "id": "616", "label": "Back on Earth-616" },
+      { "id": "battleworld", "label": "On Battleworld" },
+      { "id": "scattered", "label": "Scattered across universes" },
+      { "id": "ambiguous", "label": "Deliberately unresolved" }
+    ]
+  },
+  {
+    "id": "stingers",
+    "question": "How many post-credits scenes?",
+    "note": "Marvel has run zero, one and two. A handover film usually runs two.",
+    "options": [
+      { "id": "zero", "label": "None" },
+      { "id": "one", "label": "One" },
+      { "id": "two", "label": "Two" }
+    ]
+  },
+  {
+    "id": "xmen",
+    "question": "Do the X-Men stay in the main universe?",
+    "note": "Several Fox-era actors are on the cast list. Whether they stay is the whole point.",
+    "options": [
+      { "id": "stay", "label": "They stay" },
+      { "id": "return", "label": "They go home" },
+      { "id": "unresolved", "label": "Left hanging for Secret Wars" }
+    ]
+  },
+  {
+    "id": "secretwars",
+    "question": "How openly is Secret Wars set up?",
+    "note": "It is already dated. The only question is how loudly Doomsday says so.",
+    "options": [
+      { "id": "named", "label": "Named on screen" },
+      { "id": "teased", "label": "Teased without the name" },
+      { "id": "nothing", "label": "Not set up at all" }
+    ]
+  }
+]

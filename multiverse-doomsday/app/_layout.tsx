@@ -74,7 +74,7 @@ export default function RootLayout() {
                 gestureEnabled: true,
               }}
             />
-            {['catchup', 'compare', 'tonight', 'variant'].map((name) => (
+            {['catchup', 'compare', 'tonight', 'variant', 'court'].map((name) => (
               <Stack.Screen
                 key={name}
                 name={name}

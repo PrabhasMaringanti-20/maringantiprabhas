@@ -12,6 +12,7 @@ import { CollapsingHeader, useHeaderInset } from '@/components/common/Collapsing
 import { Marker, Meter, Rule, Section, Stat } from '@/components/common/Primitives';
 import { TIER_STYLE } from '@/components/tierlist/TierRow';
 import { useStingerCounts } from '@/hooks/usePostCredits';
+import { useCourtStore } from '@/hooks/useCourtStore';
 import { useStats } from '@/hooks/useStats';
 import { usePalette } from '@/hooks/useTheme';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
@@ -19,6 +20,7 @@ import { useTabBarHeight } from '@/utils/layout';
 import { formatHoursCompact } from '@/utils/timeCalc';
 import { countdownTo } from '@/utils/countdown';
 import { doomVerdict, variantFor } from '@/utils/verdict';
+import { PREDICTIONS } from '@/utils/predictions';
 import { TIERS, type Tier } from '@/types';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
@@ -44,6 +46,8 @@ export default function PrepScreen() {
     daysToDoomsday: countdownTo().days,
   });
   const variant = variantFor(stats);
+  const calledCount = useCourtStore((state) => Object.keys(state.ballot).length);
+  const courtLocked = useCourtStore((state) => state.lockedAt !== null);
 
   const onScroll = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
@@ -137,6 +141,17 @@ export default function PrepScreen() {
             detail={variant.name}
             tint={palette.marvel}
             onPress={() => router.push('/variant')}
+          />
+          <ActionLine
+            icon="hammer-outline"
+            title="Casting court"
+            detail={
+              courtLocked
+                ? `Ballot locked · ${calledCount}/${PREDICTIONS.length} called`
+                : `Call ${PREDICTIONS.length} Doomsday questions before anyone knows`
+            }
+            tint={palette.marvel}
+            onPress={() => router.push('/court')}
           />
           <ActionLine
             icon="git-compare-outline"

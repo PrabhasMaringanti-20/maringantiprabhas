@@ -55,11 +55,12 @@
     "verify": "node scripts/verify-web.js",
     "verify:quiz": "esbuild scripts/verify-quiz.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-quiz.cjs --log-level=error && node node_modules/.cache/verify-quiz.cjs",
     "verify:streaks": "node scripts/verify-streaks.js",
-    "verify:data": "npm run verify:styling && npm run verify:quiz && npm run verify:streaks && npm run verify:sharecode && npm run verify:notifications && npm run verify:verdict",
+    "verify:data": "npm run verify:styling && npm run verify:quiz && npm run verify:streaks && npm run verify:sharecode && npm run verify:notifications && npm run verify:verdict && npm run verify:predictions",
     "verify:sharecode": "esbuild scripts/verify-sharecode.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-sharecode.cjs --log-level=error && node node_modules/.cache/verify-sharecode.cjs",
     "verify:styling": "node scripts/verify-styling.js",
     "verify:notifications": "esbuild scripts/verify-notifications.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-notifications.cjs --log-level=error && node node_modules/.cache/verify-notifications.cjs",
-    "verify:verdict": "esbuild scripts/verify-verdict.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-verdict.cjs --log-level=error && node node_modules/.cache/verify-verdict.cjs"
+    "verify:verdict": "esbuild scripts/verify-verdict.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-verdict.cjs --log-level=error && node node_modules/.cache/verify-verdict.cjs",
+    "verify:predictions": "esbuild scripts/verify-predictions.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-predictions.cjs --log-level=error && node node_modules/.cache/verify-predictions.cjs"
   },
   "private": true
 }
