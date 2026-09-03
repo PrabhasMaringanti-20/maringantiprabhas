@@ -88,8 +88,9 @@ export default function VariantScreen() {
             style={{ paddingHorizontal: GUTTER, marginTop: space.xxl }}
           >
             <Text style={{ ...type.body, color: palette.inkSoft, lineHeight: 21 }}>
-              There is no quiz. The TVA already has your file: {stats.watched} titles logged,
-              {stats.ratedCount > 0 ? ` ${stats.ratedCount} rated,` : ''} across{' '}
+              There is no quiz. The TVA already has your file: {stats.watched}{' '}
+              {stats.watched === 1 ? 'title' : 'titles'} logged
+              {stats.ratedCount > 0 ? `, ${stats.ratedCount} rated,` : ''} across{' '}
               {stats.activeDays} {stats.activeDays === 1 ? 'day' : 'days'}. That is enough to say
               which branch you are on.
             </Text>
