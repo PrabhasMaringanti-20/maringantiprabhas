@@ -154,9 +154,9 @@ export default function PrepScreen() {
             onPress={() => router.push('/court')}
           />
           <ActionLine
-            icon="git-compare-outline"
-            title="Compare with a friend"
-            detail="Swap codes, see who is further ahead"
+            icon="flash-outline"
+            title="The Incursion"
+            detail="Collide your universe with a friend's. One survives."
             tint={palette.marvel}
             onPress={() => router.push('/compare')}
           />

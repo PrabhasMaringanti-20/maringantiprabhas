@@ -7,13 +7,14 @@ import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CustomButton } from '@/components/common/CustomButton';
-import { Marker, Meter, Rule } from '@/components/common/Primitives';
+import { Marker, Meter, Panel, Rule } from '@/components/common/Primitives';
 import { TIER_STYLE } from '@/components/tierlist/TierRow';
 import { useRoadmapStore } from '@/hooks/useRoadmapStore';
 import { usePalette } from '@/hooks/useTheme';
 import { useTopInset } from '@/utils/layout';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { compareBoards, decodeBoard, encodeBoard, type SharedBoard } from '@/utils/shareCode';
+import { incursion } from '@/utils/incursion';
 
 const MAX_LIST = 12;
 
@@ -48,12 +49,41 @@ export default function CompareScreen() {
     [friend, progress],
   );
 
+  // Two universes touching is an event with a survivor, not a leaderboard.
+  const result = useMemo(
+    () =>
+      comparison && friend
+        ? incursion({
+            yourName: name,
+            theirName: friend.name,
+            yourWatched: comparison.yourWatched,
+            theirWatched: comparison.theirWatched,
+            total: comparison.total,
+            bothSeen: comparison.bothSeen,
+            onlyYours: comparison.youveSeen.length,
+            onlyTheirs: comparison.theyveSeen.length,
+            disagreements: comparison.disagreements.length,
+          })
+        : null,
+    [comparison, friend, name],
+  );
+
   const shareMine = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     if (name.trim()) setDisplayName(name.trim());
     await Share.share({
       message:
-        `Here's my Doomsday board. Paste this into DOOM → Compare and see how far behind you are:\n\n${myCode}`,
+        `My universe, before the incursion. Paste this into DOOM → The Incursion and find out which one survives:\n\n${myCode}`,
+    }).catch(() => {
+      // Dismissed — nothing to recover.
+    });
+  };
+
+  const shareResult = async () => {
+    if (!result) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    await Share.share({
+      message: `${result.headline}. ${result.line}\n\nRun your own incursion in DOOM.`,
     }).catch(() => {
       // Dismissed — nothing to recover.
     });
@@ -63,7 +93,7 @@ export default function CompareScreen() {
     const decoded = decodeBoard(input);
     if (!decoded) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      setError('That code could not be read. Ask them to send it again.');
+      setError('That universe could not be read. Ask them to send it again.');
       setFriend(null);
       return;
     }
@@ -90,9 +120,9 @@ export default function CompareScreen() {
           }}
         >
           <View style={{ flex: 1 }}>
-            <Marker>Head to head</Marker>
+            <Marker>Two universes, one survivor</Marker>
             <Text style={{ ...type.display, color: palette.ink, marginTop: space.sm }}>
-              Compare
+              The Incursion
             </Text>
           </View>
           <Pressable
@@ -107,17 +137,17 @@ export default function CompareScreen() {
 
         {/* Your code */}
         <View style={{ paddingHorizontal: GUTTER, marginTop: space.xxl }}>
-          <Marker>Your code</Marker>
+          <Marker>Your universe</Marker>
 
           <View style={{ marginTop: space.md }}>
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="Your name"
+              placeholder="Name your universe"
               placeholderTextColor={palette.inkFaint}
               maxLength={16}
               autoCorrect={false}
-              accessibilityLabel="Your name"
+              accessibilityLabel="Name your universe"
               style={{
                 ...type.body,
                 fontSize: 15,
@@ -153,7 +183,7 @@ export default function CompareScreen() {
 
           <View style={{ marginTop: space.md }}>
             <CustomButton
-              label="Send my code"
+              label="Send my universe"
               icon="share-outline"
               size="lg"
               fullWidth
@@ -167,7 +197,7 @@ export default function CompareScreen() {
 
         {/* Their code */}
         <View style={{ paddingHorizontal: GUTTER, marginTop: space.xxl }}>
-          <Marker>Their code</Marker>
+          <Marker>The other universe</Marker>
 
           <View style={{ marginTop: space.md }}>
             <TextInput
@@ -176,12 +206,12 @@ export default function CompareScreen() {
                 setInput(text);
                 setError(null);
               }}
-              placeholder="Paste a friend's code"
+              placeholder="Paste their universe"
               placeholderTextColor={palette.inkFaint}
               autoCorrect={false}
               autoCapitalize="none"
               multiline
-              accessibilityLabel="Friend's code"
+              accessibilityLabel="Their universe"
               style={{
                 ...type.body,
                 fontSize: 14,
@@ -201,8 +231,8 @@ export default function CompareScreen() {
 
           <View style={{ marginTop: space.md }}>
             <CustomButton
-              label="Compare"
-              icon="git-compare-outline"
+              label="Collide"
+              icon="flash-outline"
               size="lg"
               fullWidth
               disabled={input.trim().length === 0}
@@ -215,11 +245,47 @@ export default function CompareScreen() {
         {friend && comparison ? (
           <Animated.View entering={FadeIn.duration(motion.base)}>
             <View style={{ paddingHorizontal: GUTTER, marginTop: space.huge }}>
-              <Marker>
-                {`You vs ${friend.name || 'them'}`}
-              </Marker>
+              {result ? (
+                <Panel tint={result.survivor === 'yours' ? palette.accent : palette.marvel}>
+                  <Marker color={result.survivor === 'yours' ? palette.accent : palette.marvel}>
+                    Outcome
+                  </Marker>
+                  <Text style={{ ...type.title, color: palette.ink, marginTop: space.sm }}>
+                    {result.headline}
+                  </Text>
+                  <Text
+                    style={{
+                      ...type.body,
+                      color: palette.inkSoft,
+                      marginTop: space.sm,
+                      lineHeight: 20,
+                    }}
+                  >
+                    {result.line}
+                  </Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Send the result"
+                    onPress={shareResult}
+                    hitSlop={8}
+                    style={{ flexDirection: 'row', alignItems: 'center', marginTop: space.md }}
+                  >
+                    <Ionicons name="share-outline" size={14} color={palette.marvel} />
+                    <Text
+                      style={{
+                        ...type.small,
+                        fontWeight: '600',
+                        color: palette.marvel,
+                        marginLeft: space.sm,
+                      }}
+                    >
+                      Send the result
+                    </Text>
+                  </Pressable>
+                </Panel>
+              ) : null}
 
-              <View style={{ marginTop: space.lg }}>
+              <View style={{ marginTop: space.xl }}>
                 <Side
                   label="You"
                   watched={comparison.yourWatched}
@@ -236,7 +302,7 @@ export default function CompareScreen() {
               </View>
 
               <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.lg }}>
-                {comparison.bothSeen} titles you have both seen
+                {comparison.bothSeen} titles exist in both universes
                 {friend.unknownCount > 0
                   ? ` · ${friend.unknownCount} titles from a newer build were skipped`
                   : ''}
@@ -244,7 +310,7 @@ export default function CompareScreen() {
             </View>
 
             {comparison.disagreements.length > 0 ? (
-              <Block title={`Where you disagree · ${comparison.disagreements.length}`}>
+              <Block title={`Contested ground · ${comparison.disagreements.length}`}>
                 {comparison.disagreements.slice(0, MAX_LIST).map((row) => (
                   <View key={row.movieId}>
                     <View
@@ -277,13 +343,13 @@ export default function CompareScreen() {
             ) : null}
 
             {comparison.theyveSeen.length > 0 ? (
-              <Block title={`They have seen · ${comparison.theyveSeen.length}`}>
+              <Block title={`Only in their universe · ${comparison.theyveSeen.length}`}>
                 <TitleList items={comparison.theyveSeen} />
               </Block>
             ) : null}
 
             {comparison.youveSeen.length > 0 ? (
-              <Block title={`You have seen · ${comparison.youveSeen.length}`}>
+              <Block title={`Only in yours · ${comparison.youveSeen.length}`}>
                 <TitleList items={comparison.youveSeen} />
               </Block>
             ) : null}
