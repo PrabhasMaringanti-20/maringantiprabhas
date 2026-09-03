@@ -13,6 +13,16 @@ interface SettingsState {
    */
   spoilerSafe: boolean;
   setSpoilerSafe: (value: boolean) => void;
+
+  /**
+   * Whether the countdown ticks out loud.
+   *
+   * Off by default, and deliberately so: an app that starts making noise the
+   * moment it opens is one people close. It is offered on the countdown
+   * itself, where the sound makes sense, rather than buried in settings.
+   */
+  countdownTicking: boolean;
+  setCountdownTicking: (value: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -20,6 +30,8 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       spoilerSafe: false,
       setSpoilerSafe: (value) => set({ spoilerSafe: value }),
+      countdownTicking: false,
+      setCountdownTicking: (value) => set({ countdownTicking: value }),
     }),
     {
       name: 'multiverse-settings-v1',

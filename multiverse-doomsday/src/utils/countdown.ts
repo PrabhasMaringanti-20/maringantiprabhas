@@ -1,8 +1,21 @@
 /**
- * Avengers: Doomsday — theatrical release.
- * Marvel has moved this date before; change it here and every countdown follows.
+ * Avengers: Doomsday — theatrical release, 18 December 2026.
+ *
+ * The date is held as **local midnight**, not UTC. That is not a detail: a
+ * countdown pinned to UTC midnight reaches zero at 05:30 in India and 19:00
+ * the previous evening in New York, while the label beside it still reads
+ * "18 December". The clock and the date it prints have to agree, and what a
+ * person means by "18 December" is midnight where they are standing.
+ *
+ * Marvel has moved this date before. Change the three numbers here and every
+ * countdown, notification and deadline in the app follows.
  */
-export const DOOMSDAY_RELEASE = new Date('2026-12-18T00:00:00Z');
+const RELEASE_YEAR = 2026;
+/** 0-indexed, because Date is. 11 is December. */
+const RELEASE_MONTH = 11;
+const RELEASE_DAY = 18;
+
+export const DOOMSDAY_RELEASE = new Date(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY, 0, 0, 0, 0);
 
 export interface Countdown {
   days: number;
@@ -42,6 +55,25 @@ export function releaseDateLabel(target: Date = DOOMSDAY_RELEASE): string {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-    timeZone: 'UTC',
   });
+}
+
+/** "Friday 18 December 2026" — the hero has room to say which day it lands on. */
+export function releaseDayLabel(target: Date = DOOMSDAY_RELEASE): string {
+  return target
+    .toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+    .replace(',', '');
+}
+
+/**
+ * "Midnight, your time" — says out loud what the clock is counting to, so the
+ * hour it hits zero is never a surprise.
+ */
+export function releaseMomentLabel(): string {
+  return 'midnight, your time';
 }

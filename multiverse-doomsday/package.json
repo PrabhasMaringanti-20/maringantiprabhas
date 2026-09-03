@@ -6,6 +6,7 @@
     "@expo/vector-icons": "^15.1.1",
     "@react-native-async-storage/async-storage": "^3.1.1",
     "expo": "~57.0.15",
+    "expo-audio": "~57.0.4",
     "expo-blur": "~57.0.2",
     "expo-constants": "~57.0.13",
     "expo-device": "~57.0.1",
@@ -55,13 +56,15 @@
     "verify": "node scripts/verify-web.js",
     "verify:quiz": "esbuild scripts/verify-quiz.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-quiz.cjs --log-level=error && node node_modules/.cache/verify-quiz.cjs",
     "verify:streaks": "node scripts/verify-streaks.js",
-    "verify:data": "npm run verify:styling && npm run verify:quiz && npm run verify:streaks && npm run verify:sharecode && npm run verify:notifications && npm run verify:verdict && npm run verify:predictions && npm run verify:incursion",
+    "verify:data": "npm run verify:styling && npm run verify:quiz && npm run verify:streaks && npm run verify:sharecode && npm run verify:notifications && npm run verify:verdict && npm run verify:predictions && npm run verify:incursion && npm run verify:countdown && npm run verify:tick",
     "verify:sharecode": "esbuild scripts/verify-sharecode.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-sharecode.cjs --log-level=error && node node_modules/.cache/verify-sharecode.cjs",
     "verify:styling": "node scripts/verify-styling.js",
     "verify:notifications": "esbuild scripts/verify-notifications.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-notifications.cjs --log-level=error && node node_modules/.cache/verify-notifications.cjs",
     "verify:verdict": "esbuild scripts/verify-verdict.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-verdict.cjs --log-level=error && node node_modules/.cache/verify-verdict.cjs",
     "verify:predictions": "esbuild scripts/verify-predictions.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-predictions.cjs --log-level=error && node node_modules/.cache/verify-predictions.cjs",
-    "verify:incursion": "esbuild scripts/verify-incursion.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-incursion.cjs --log-level=error && node node_modules/.cache/verify-incursion.cjs"
+    "verify:incursion": "esbuild scripts/verify-incursion.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-incursion.cjs --log-level=error && node node_modules/.cache/verify-incursion.cjs",
+    "verify:countdown": "esbuild scripts/verify-countdown.ts --bundle --platform=node --format=cjs --loader:.json=json --alias:@=./src --outfile=node_modules/.cache/verify-countdown.cjs --log-level=error && node node_modules/.cache/verify-countdown.cjs",
+    "verify:tick": "npx esbuild scripts/verify-tick.ts --bundle --platform=node --format=cjs --loader:.json=json --loader:.wav=file --alias:@=./src --alias:expo-haptics=./scripts/stubs/expo-haptics.js --alias:expo-audio=./scripts/stubs/expo-audio-missing.js --define:AUDIO_PRESENT=false --outfile=node_modules/.cache/verify-tick-old.cjs --log-level=error && node node_modules/.cache/verify-tick-old.cjs && npx esbuild scripts/verify-tick.ts --bundle --platform=node --format=cjs --loader:.json=json --loader:.wav=file --alias:@=./src --alias:expo-haptics=./scripts/stubs/expo-haptics.js --alias:expo-audio=./scripts/stubs/expo-audio-present.js --define:AUDIO_PRESENT=true --outfile=node_modules/.cache/verify-tick-new.cjs --log-level=error && node node_modules/.cache/verify-tick-new.cjs"
   },
   "private": true
 }

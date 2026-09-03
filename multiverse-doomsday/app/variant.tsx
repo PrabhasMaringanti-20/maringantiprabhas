@@ -10,7 +10,7 @@ import { CustomButton } from '@/components/common/CustomButton';
 import { Marker, Panel, Rule, Stat } from '@/components/common/Primitives';
 import { useStats } from '@/hooks/useStats';
 import { usePalette } from '@/hooks/useTheme';
-import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
+import { GUTTER, motion, space, type } from '@/styles/tokens';
 import { useTopInset } from '@/utils/layout';
 import { VARIANTS, VARIANT_ORDER, variantFor } from '@/utils/verdict';
 
