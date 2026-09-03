@@ -21,10 +21,12 @@ import {
   useGlobalReadiness,
 } from '@/hooks/useRoadmapStore';
 import { REMINDER_TIMES, useNotificationStore } from '@/hooks/useNotificationStore';
+import { useNotificationScheduler } from '@/hooks/useNotificationScheduler';
+import { VOICE_LABEL } from '@/services/notificationPlan';
 import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { hasTmdbKey } from '@/hooks/useTMDB';
 import { usePalette, useThemeStore, type ThemeMode } from '@/hooks/useTheme';
-import { countdownLine, daysToDoomsday, quoteForDay, QUOTES } from '@/services/notifications';
+import { QUOTES } from '@/services/notifications';
 import { buildStamp } from '@/utils/buildInfo';
 import { GUTTER, motion, radius, space, type } from '@/styles/tokens';
 import { useTabBarHeight } from '@/utils/layout';
@@ -71,7 +73,10 @@ export default function IdeatorScreen() {
   const spoilerSafe = useSettingsStore((state) => state.spoilerSafe);
   const setSpoilerSafe = useSettingsStore((state) => state.setSpoilerSafe);
 
-  const previewQuote = quoteForDay(daysToDoomsday());
+  // The queue rebuilds itself from progress; this also gives us the next few
+  // messages to show, so the preview is the real thing rather than a mock-up.
+  const { plan } = useNotificationScheduler();
+  const upcoming = plan.slice(0, 3);
   const build = buildStamp();
 
   const onScroll = useAnimatedScrollHandler((event) => {
@@ -209,7 +214,7 @@ export default function IdeatorScreen() {
               accessibilityLabel="Daily Marvel reminder"
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                setRemindersEnabled(!remindersOn);
+                setRemindersEnabled(!remindersOn, plan);
               }}
               style={{
                 flexDirection: 'row',
@@ -224,7 +229,7 @@ export default function IdeatorScreen() {
                 <Text style={{ ...type.small, color: palette.inkFaint, marginTop: 1 }}>
                   {remindersOn
                     ? `On · ${REMINDER_TIMES.find((t) => t.hour === reminderHour)?.label ?? 'daily'}`
-                    : `${QUOTES.length} lines in rotation`}
+                    : `${QUOTES.length} lines · four voices`}
                 </Text>
               </View>
 
@@ -283,17 +288,41 @@ export default function IdeatorScreen() {
               </View>
             ) : null}
 
-            {/* What one looks like */}
-            <View style={{ paddingVertical: space.lg }}>
-              <Text style={{ ...type.body, fontWeight: '600', color: palette.ink }}>
-                “{previewQuote.text}”
-              </Text>
-              <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.xs }}>
-                {previewQuote.character} · {previewQuote.source}
-              </Text>
-              <Marker color={palette.accent} style={{ marginTop: space.sm }}>
-                {countdownLine(daysToDoomsday())}
-              </Marker>
+            {/* The next few, exactly as they will arrive */}
+            <View style={{ paddingVertical: space.md }}>
+              {upcoming.length === 0 ? (
+                <Text style={{ ...type.small, color: palette.inkFaint }}>
+                  Nothing queued.
+                </Text>
+              ) : (
+                upcoming.map((item, index) => (
+                  <View key={item.id} style={{ marginTop: index > 0 ? space.lg : 0 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Marker color={palette.accent}>{VOICE_LABEL[item.voice]}</Marker>
+                      <Marker style={{ marginLeft: space.sm }}>
+                        {new Date(item.at).toLocaleDateString(undefined, {
+                          weekday: 'short',
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        })}
+                      </Marker>
+                    </View>
+                    <Text
+                      style={{
+                        ...type.body,
+                        fontWeight: '600',
+                        color: palette.ink,
+                        marginTop: space.xs,
+                      }}
+                    >
+                      {item.title}
+                    </Text>
+                    <Text style={{ ...type.small, color: palette.inkFaint, marginTop: 2 }}>
+                      {item.body}
+                    </Text>
+                  </View>
+                ))
+              )}
             </View>
             <Rule />
 

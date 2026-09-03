@@ -2,24 +2,14 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
-import quotesJson from '@/data/quotes.json';
+import { buildPlan, QUOTES, quoteForDay, VOICE_LABEL, type PlannedNotification } from '@/services/notificationPlan';
 import { countdownTo, DOOMSDAY_RELEASE } from '@/utils/countdown';
 
-export interface Quote {
-  text: string;
-  character: string;
-  source: string;
-}
-
-export const QUOTES = quotesJson as Quote[];
+export { QUOTES, quoteForDay };
+export type { Quote } from '@/services/notificationPlan';
+export type { PlanInput, PlannedNotification } from '@/services/notificationPlan';
 
 const CHANNEL_ID = 'doomsday-countdown';
-/**
- * How far ahead to schedule. Each notification carries its own quote and its
- * own day count, so they are scheduled individually rather than as one repeat,
- * and topped up whenever the app opens.
- */
-const HORIZON_DAYS = 30;
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -29,11 +19,6 @@ Notifications.setNotificationHandler({
     shouldShowList: true,
   }),
 });
-
-/** Deterministic pick, so a given day always gets the same line. */
-export function quoteForDay(dayIndex: number): Quote {
-  return QUOTES[Math.abs(dayIndex) % QUOTES.length];
-}
 
 export function daysToDoomsday(from: Date = new Date()): number {
   return countdownTo(DOOMSDAY_RELEASE, from).days;
@@ -76,42 +61,36 @@ export async function cancelAll(): Promise<void> {
 }
 
 /**
- * Schedules one notification a day for the next month: a Marvel line, and how
- * many days are left. Existing schedules are cleared first, so calling this
- * repeatedly is safe — it is how the queue is topped up on each launch.
+ * Applies a plan.
+ *
+ * Everything about *what* to say lives in notificationPlan.ts, which is pure
+ * and tested. This function only knows how to hand it to the OS. Existing
+ * schedules are cleared first, so calling it repeatedly is safe — it is how the
+ * queue is rebuilt whenever progress changes.
  */
-export async function scheduleDailyReminders(hour: number, minute: number): Promise<number> {
+export async function applyPlan(plan: PlannedNotification[]): Promise<number> {
   const granted = await requestPermission();
   if (!granted) return 0;
 
   await cancelAll();
 
-  const now = new Date();
   let scheduled = 0;
-
-  for (let offset = 0; offset < HORIZON_DAYS; offset += 1) {
-    const fireDate = new Date(now);
-    fireDate.setDate(now.getDate() + offset);
-    fireDate.setHours(hour, minute, 0, 0);
-
-    if (fireDate <= now) continue;
-    if (fireDate > DOOMSDAY_RELEASE) break;
-
-    const days = daysToDoomsday(fireDate);
-    const quote = quoteForDay(
-      Math.floor(fireDate.getTime() / 86_400_000) + fireDate.getMonth(),
-    );
+  for (const item of plan) {
+    const date = new Date(item.at);
+    if (date <= new Date()) continue;
 
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: `"${quote.text}"`,
-        body: `${quote.character} · ${quote.source}\n${countdownLine(days)}`,
-        data: { days, source: quote.source },
+        title: item.title,
+        // The speaker is named on its own line so the cast is legible at a
+        // glance on the lock screen.
+        body: `${item.body}\n${VOICE_LABEL[item.voice]}`,
+        data: { kind: item.kind, voice: item.voice },
         ...(Platform.OS === 'android' ? { channelId: CHANNEL_ID } : {}),
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
-        date: fireDate,
+        date,
       },
     });
     scheduled += 1;
@@ -119,6 +98,8 @@ export async function scheduleDailyReminders(hour: number, minute: number): Prom
 
   return scheduled;
 }
+
+export { buildPlan };
 
 /** Fires one immediately, so the user can see what they signed up for. */
 export async function sendPreview(): Promise<boolean> {

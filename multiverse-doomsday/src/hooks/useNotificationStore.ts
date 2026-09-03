@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { cancelAll, scheduleDailyReminders } from '@/services/notifications';
+import { applyPlan, cancelAll } from '@/services/notifications';
+import type { PlannedNotification } from '@/services/notificationPlan';
 
 /** Reminder times offered in the UI, as 24-hour {hour, minute} pairs. */
 export const REMINDER_TIMES = [
@@ -21,10 +22,16 @@ interface NotificationState {
   /** Set when permission was refused, so the UI can explain itself. */
   denied: boolean;
 
-  setEnabled: (enabled: boolean) => Promise<void>;
-  setTime: (hour: number, minute: number) => Promise<void>;
-  /** Re-arms the rolling queue. Called on launch when reminders are on. */
-  refresh: () => Promise<void>;
+  setEnabled: (enabled: boolean, plan?: PlannedNotification[]) => Promise<void>;
+  setTime: (hour: number, minute: number) => void;
+  /**
+   * Replaces the queue with a freshly built plan.
+   *
+   * The plan is passed in rather than built here: what to say depends on watch
+   * progress, and reaching from this store into the roadmap store would couple
+   * the two in both directions. The app layer assembles it and hands it over.
+   */
+  reschedule: (plan: PlannedNotification[]) => Promise<void>;
 }
 
 export const useNotificationStore = create<NotificationState>()(
@@ -36,32 +43,25 @@ export const useNotificationStore = create<NotificationState>()(
       queued: 0,
       denied: false,
 
-      setEnabled: async (enabled) => {
+      setEnabled: async (enabled, plan) => {
         if (!enabled) {
           await cancelAll();
           set({ enabled: false, queued: 0 });
           return;
         }
 
-        const { hour, minute } = get();
-        const count = await scheduleDailyReminders(hour, minute);
+        const count = plan ? await applyPlan(plan) : 0;
         set({ enabled: count > 0, queued: count, denied: count === 0 });
       },
 
-      setTime: async (hour, minute) => {
-        set({ hour, minute });
-        if (!get().enabled) return;
-        const count = await scheduleDailyReminders(hour, minute);
-        set({ queued: count, denied: count === 0 });
-      },
+      // Only records the preference. The scheduler picks the change up and
+      // rebuilds, so the time can be changed without a permission round-trip.
+      setTime: (hour, minute) => set({ hour, minute }),
 
-      // The queue is a rolling month of individually dated reminders, so it
-      // needs topping up whenever the app is opened.
-      refresh: async () => {
+      reschedule: async (plan) => {
         if (!get().enabled) return;
-        const { hour, minute } = get();
-        const count = await scheduleDailyReminders(hour, minute);
-        set({ queued: count });
+        const count = await applyPlan(plan);
+        set({ queued: count, denied: count === 0 });
       },
     }),
     {
@@ -72,9 +72,7 @@ export const useNotificationStore = create<NotificationState>()(
         hour: state.hour,
         minute: state.minute,
       }),
-      onRehydrateStorage: () => (state) => {
-        state?.refresh();
-      },
+
     },
   ),
 );
