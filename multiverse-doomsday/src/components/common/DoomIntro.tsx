@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Image, useWindowDimensions, View } from 'react-native';
+import { Image, Text, useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   Easing,
@@ -12,6 +12,8 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg';
+
+import { useTopInset } from '@/utils/layout';
 
 import geometry from '../../../assets/images/intro/geometry.json';
 
@@ -74,7 +76,10 @@ const BEAT = {
   figure: 420,
   orb: 1000,
   sweep: 1900,
-  // Nothing new starts between the sweep and the exit. That silence is the
+  // Late, and after the figure has settled: a signature belongs at the end of
+  // a title sequence, not competing with its reveal.
+  credit: 1600,
+  // Nothing else starts between the sweep and the exit. That silence is the
   // point: the composition is allowed to just sit there for a moment.
   out: 4300,
 } as const;
@@ -99,6 +104,7 @@ interface DoomIntroProps {
  */
 export function DoomIntro({ onFinish }: DoomIntroProps) {
   const { width: winW, height: winH } = useWindowDimensions();
+  const topInset = useTopInset();
 
   // Fit the poster to the screen, anchored to the bottom. On a tall phone the
   // stage is full width and dark space sits above it; on a squarer screen it
@@ -121,6 +127,7 @@ export function DoomIntro({ onFinish }: DoomIntroProps) {
   const pulse = useSharedValue(0);
   const sweep = useSharedValue(-0.25);
   const sweepGate = useSharedValue(0);
+  const credit = useSharedValue(0);
   const outro = useSharedValue(0);
 
   useEffect(() => {
@@ -151,6 +158,8 @@ export function DoomIntro({ onFinish }: DoomIntroProps) {
       BEAT.text,
       withRepeat(withTiming(1, { duration: 3600, easing: Easing.inOut(Easing.sin) }), -1, true),
     );
+
+    credit.value = withDelay(BEAT.credit, withTiming(1, { duration: 900, easing: ease }));
 
     // One slow pass of red light across D-O-O-M, then a residual ember.
     sweepGate.value = withDelay(BEAT.sweep, withTiming(1, { duration: 500 }));
@@ -202,6 +211,16 @@ export function DoomIntro({ onFinish }: DoomIntroProps) {
     height: stageH,
     opacity: 1 - outro.value,
     transform: [{ scale: 1 + outro.value * 0.045 }],
+  }));
+
+  const creditStyle = useAnimatedStyle(() => ({
+    position: 'absolute',
+    top: topInset + 26,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    opacity: credit.value,
+    transform: [{ translateY: (1 - credit.value) * 8 }],
   }));
 
   /* --- DOOM lockup ------------------------------------------------ */
@@ -378,6 +397,31 @@ export function DoomIntro({ onFinish }: DoomIntroProps) {
           style={{ flex: 1 }}
         />
       </View>
+
+      {/* Signature */}
+      <Animated.View style={creditStyle}>
+        <Text
+          style={{
+            fontSize: 10,
+            fontWeight: '600',
+            letterSpacing: 4.5,
+            color: 'rgba(255,255,255,0.4)',
+          }}
+        >
+          CREATED BY
+        </Text>
+        <Text
+          style={{
+            marginTop: 8,
+            fontSize: 12,
+            fontWeight: '700',
+            letterSpacing: 6,
+            color: '#FFFFFF',
+          }}
+        >
+          PRABHAS.MAN
+        </Text>
+      </Animated.View>
     </Animated.View>
   );
 }
