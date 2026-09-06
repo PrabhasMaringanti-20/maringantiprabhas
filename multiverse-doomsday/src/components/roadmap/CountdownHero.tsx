@@ -1,8 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import * as Haptics from 'expo-haptics';
-import { useFocusEffect } from 'expo-router';
-import { AppState, Pressable, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Text, View } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -10,12 +7,12 @@ import Animated, {
   useSharedValue,
   withSequence,
   withTiming,
+  type SharedValue,
 } from 'react-native-reanimated';
 
 import { Marker, Meter } from '@/components/common/Primitives';
-import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { usePalette } from '@/hooks/useTheme';
-import { GUTTER, HAIRLINE, motion, radius, space, type } from '@/styles/tokens';
+import { GUTTER, motion, space, type } from '@/styles/tokens';
 import {
   countdownTo,
   pad,
@@ -23,7 +20,6 @@ import {
   releaseMomentLabel,
   type Countdown,
 } from '@/utils/countdown';
-import { hasTickAudio, releaseTicking, startTicking, stopTicking } from '@/services/tick';
 import { formatHoursCompact } from '@/utils/timeCalc';
 import type { ReadinessStats } from '@/types';
 
@@ -32,21 +28,17 @@ interface CountdownHeroProps {
 }
 
 /**
- * The one enormous thing on the roadmap: days to Doomsday, with the clock
- * running underneath it.
+ * The one enormous thing on the roadmap: the time left until Doomsday, as one
+ * counter rather than a day count with a clock loose underneath it.
  *
- * The clock is set large enough to read at arm's length, with the seconds
- * carrying the accent and pulsing as they turn — that pulse is the whole
- * reason it feels like a countdown rather than a date. Only the seconds are
- * animated; four big rolling numbers read as a bomb timer, which is louder
- * than this screen wants to be.
+ * Days, hours, minutes and seconds are read as a single row so it can only be
+ * a countdown — an hours:minutes:seconds line on its own reads as a time of
+ * day. Only the seconds are animated; four rolling numbers would read as a
+ * bomb timer, which is louder than this screen wants to be.
  */
 export function CountdownHero({ stats }: CountdownHeroProps) {
   const palette = usePalette();
   const [time, setTime] = useState<Countdown>(() => countdownTo());
-
-  const ticking = useSettingsStore((state) => state.countdownTicking);
-  const setTicking = useSettingsStore((state) => state.setCountdownTicking);
 
   const pulse = useSharedValue(1);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -79,45 +71,6 @@ export function CountdownHero({ stats }: CountdownHeroProps) {
     };
   }, [pulse]);
 
-  /* --- The ticking sound ------------------------------------------- */
-
-  // Focus and foreground are tracked as state, and exactly one effect below
-  // turns the sound on and off. Letting the toggle and the focus handler both
-  // drive the player races them against each other — pause lands on top of a
-  // play that has not finished starting, and the clip never runs.
-  const [focused, setFocused] = useState(false);
-  const [foreground, setForeground] = useState(() => AppState.currentState === 'active');
-
-  useFocusEffect(
-    useCallback(() => {
-      setFocused(true);
-      return () => setFocused(false);
-    }, []),
-  );
-
-  useEffect(() => {
-    const sub = AppState.addEventListener('change', (state) => setForeground(state === 'active'));
-    return () => sub.remove();
-  }, []);
-
-  // Never tick into a pocket: the sound needs the toggle on, the tab in front,
-  // and the app on screen.
-  useEffect(() => {
-    if (ticking && focused && foreground) startTicking();
-    else stopTicking();
-  }, [ticking, focused, foreground]);
-
-  useEffect(() => () => releaseTicking(), []);
-
-  const toggleTicking = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setTicking(!ticking);
-  };
-
-  const secondsStyle = useAnimatedStyle(() => ({ transform: [{ scale: pulse.value }] }));
-
-  const clockColor = time.released ? palette.inkFaint : palette.ink;
-
   return (
     <View style={{ paddingHorizontal: GUTTER }}>
       <Animated.View entering={FadeInDown.duration(motion.slow)}>
@@ -125,78 +78,24 @@ export function CountdownHero({ stats }: CountdownHeroProps) {
           {time.released ? 'Doomsday has landed' : 'Doomsday in'}
         </Marker>
 
-        <View style={{ flexDirection: 'row', alignItems: 'baseline', marginTop: space.sm }}>
-          <Text style={{ ...type.hero, color: palette.ink, fontVariant: ['tabular-nums'] }}>
-            {time.days}
-          </Text>
-          <Text style={{ ...type.title, color: palette.inkFaint, marginLeft: space.sm }}>
-            {time.days === 1 ? 'day' : 'days'}
-          </Text>
-        </View>
-
-        {/* The clock. Large, tabular, seconds accented and pulsing. */}
+        {/* One counter: days, hours, minutes, seconds, ticking together. */}
         <Animated.View
-          entering={FadeIn.delay(motion.base)}
-          style={{ flexDirection: 'row', alignItems: 'center', marginTop: space.md }}
+          entering={FadeIn.delay(motion.stagger).duration(motion.base)}
+          style={{ flexDirection: 'row', alignItems: 'flex-end', marginTop: space.md }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'baseline', flex: 1 }}>
-            <Text
-              style={{
-                ...type.title,
-                color: clockColor,
-                fontVariant: ['tabular-nums'],
-                letterSpacing: -0.5,
-              }}
-            >
-              {pad(time.hours)}
-              <Text style={{ color: palette.inkFaint }}>:</Text>
-              {pad(time.minutes)}
-              <Text style={{ color: palette.inkFaint }}>:</Text>
-            </Text>
-            <Animated.Text
-              style={[
-                {
-                  ...type.title,
-                  color: time.released ? palette.inkFaint : palette.marvel,
-                  fontVariant: ['tabular-nums'],
-                  letterSpacing: -0.5,
-                },
-                secondsStyle,
-              ]}
-            >
-              {pad(time.seconds)}
-            </Animated.Text>
-          </View>
-
-          <Pressable
-            accessibilityRole="switch"
-            accessibilityState={{ checked: ticking }}
-            accessibilityLabel={ticking ? 'Silence the countdown' : 'Let the countdown tick'}
-            onPress={toggleTicking}
-            hitSlop={12}
-            style={{
-              width: 34,
-              height: 34,
-              borderRadius: radius.pill,
-              borderWidth: HAIRLINE,
-              borderColor: ticking ? palette.marvel : palette.line,
-              backgroundColor: ticking ? `${palette.marvel}1A` : 'transparent',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Ionicons
-              name={ticking ? 'volume-medium' : 'volume-mute-outline'}
-              size={16}
-              color={ticking ? palette.marvel : palette.inkFaint}
-            />
-          </Pressable>
+          <Segment value={String(time.days)} label={time.days === 1 ? 'day' : 'days'} lead />
+          <Segment value={pad(time.hours)} label="hrs" />
+          <Segment value={pad(time.minutes)} label="min" />
+          <Segment
+            value={pad(time.seconds)}
+            label="sec"
+            tint={time.released ? undefined : palette.marvel}
+            pulse={pulse}
+          />
         </Animated.View>
 
-        {/* Say out loud what the clock is counting to. */}
-        <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.sm }}>
+        <Text style={{ ...type.small, color: palette.inkFaint, marginTop: space.md }}>
           {releaseDayLabel()} · {releaseMomentLabel()}
-          {ticking && !hasTickAudio() ? ' · ticking by touch' : ''}
         </Text>
       </Animated.View>
 
@@ -217,6 +116,48 @@ export function CountdownHero({ stats }: CountdownHeroProps) {
           </Text>
         </View>
       </Animated.View>
+    </View>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * One unit of the counter
+ * ------------------------------------------------------------------ */
+
+interface SegmentProps {
+  value: string;
+  label: string;
+  /** The days segment carries the weight; the rest are supporting. */
+  lead?: boolean;
+  tint?: string;
+  /** Only the seconds beat. Passed in rather than styled from outside, so the
+   *  animated style is built by the component that actually renders it. */
+  pulse?: SharedValue<number>;
+}
+
+function Segment({ value, label, lead = false, tint, pulse }: SegmentProps) {
+  const palette = usePalette();
+  const beat = useAnimatedStyle(() => ({ transform: [{ scale: pulse ? pulse.value : 1 }] }));
+
+  // Segments share the row evenly, so a three-digit day count early on and a
+  // single-digit one in the last week both stay on one line.
+  return (
+    <View style={{ flex: lead ? 1.15 : 1, alignItems: 'flex-start' }}>
+      <Animated.Text
+        style={[
+          {
+            ...(lead ? type.hero : type.display),
+            fontSize: lead ? 52 : 34,
+            lineHeight: lead ? 54 : 38,
+            color: tint ?? palette.ink,
+            fontVariant: ['tabular-nums'],
+          },
+          beat,
+        ]}
+      >
+        {value}
+      </Animated.Text>
+      <Marker style={{ marginTop: space.xs }}>{label}</Marker>
     </View>
   );
 }
